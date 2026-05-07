@@ -1,0 +1,72 @@
+/* ============================================================
+ * Markmap — dark-mode legibility
+ *
+ * markmap-view renders an <svg> whose nodes are <foreignObject>
+ * wrappers around real HTML (the node label, links, inline code,
+ * tables, etc). foreignObject content inherits CSS `color` like
+ * normal HTML, so we can theme the text via our --color-*
+ * tokens — and because tokens are remapped at :root on theme
+ * toggle, this also follows the runtime `themechange` broadcast
+ * without needing a JS rerender hook.
+ *
+ * Known limitation (still): the branch <path> strokes are coloured
+ * inline at render time from a d3 categorical palette by
+ * markmap-view, so they do NOT flip on toggle. The categorical
+ * palette is saturated enough to remain legible on either bg, so
+ * we leave it alone. See .trellis/spec/frontend/themed-components.md §4.
+ * ============================================================ */
+
+.markmap-container {
+  color: var(--color-fg);
+}
+
+/* foreignObject body — labels, paragraphs, list items, etc. */
+.markmap-foreign,
+.markmap-foreign div,
+.markmap-foreign p,
+.markmap-foreign span,
+.markmap-foreign li,
+.markmap-foreign strong,
+.markmap-foreign em {
+  color: var(--color-fg);
+}
+
+.markmap-foreign a {
+  color: var(--color-link);
+  text-decoration-color: var(--color-border-strong);
+}
+.markmap-foreign a:hover {
+  color: var(--color-accent);
+}
+
+.markmap-foreign code,
+.markmap-foreign pre {
+  background: var(--color-bg-sunken);
+  color: var(--color-fg);
+}
+
+.markmap-foreign mark {
+  background: var(--color-accent-soft);
+  color: var(--color-fg);
+}
+
+.markmap-foreign del {
+  color: var(--color-fg-subtle);
+}
+
+.markmap-foreign table,
+.markmap-foreign th,
+.markmap-foreign td {
+  border-color: var(--color-border);
+}
+
+/* markmap-toolbar (if shown via mm-toolbar) */
+.mm-toolbar {
+  color: var(--color-fg);
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+}
+.mm-toolbar-brand,
+.mm-toolbar-item {
+  color: var(--color-fg);
+}

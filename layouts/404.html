@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <section class="page-404">
+    <div class="page-404-num" aria-hidden="true">404</div>
+    <h1>{{ i18n "error_404_title" }}</h1>
+    <p>{{ i18n "error_404_desc" }}</p>
+    <ul>
+      <li><a href="{{ "/" | relLangURL }}">{{ i18n "nav_back_to_home" }}</a></li>
+      <li><a href="{{ "/posts/" | relLangURL }}">{{ i18n "nav_view_posts" }}</a></li>
+      <li><a href="{{ "/archive/" | relLangURL }}">{{ i18n "nav_view_archive" }}</a></li>
+    </ul>
+  </section>
+{{ end }}

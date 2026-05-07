@@ -1,0 +1,53 @@
+/* T10/S2: lightbox interactive styles. (Legacy `:root.reading-mode`
+ * system retired — reader-mode is now driven by `body.immersive-page`
+ * via immersive.js + posts.css. See posts.css `body.immersive-page`
+ * rules and assets/js/immersive.js for the surviving implementation.) */
+
+/* === Lightbox === */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 0.85);
+  padding: var(--space-8);
+}
+.lightbox-overlay.is-open {
+  display: flex;
+  flex-direction: column;
+}
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--radius-3);
+}
+.lightbox-caption {
+  color: rgb(255 255 255 / 0.7);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  text-align: center;
+  max-width: 90vw;
+}
+.lightbox-overlay button {
+  position: absolute;
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-overlay button:hover { background: rgb(255 255 255 / 0.15); }
+.lightbox-overlay button:disabled { opacity: 0.3; cursor: default; }
+.lightbox-close { top: var(--space-6); right: var(--space-6); }
+.lightbox-prev  { top: 50%; left: var(--space-6); transform: translateY(-50%); }
+.lightbox-next  { top: 50%; right: var(--space-6); transform: translateY(-50%); }

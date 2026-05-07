@@ -1,0 +1,200 @@
+/* ============================================================
+ * Design tokens — T3
+ * Tailwind v4 @theme block: variables auto-exposed as CSS custom
+ * properties AND as utility classes (e.g. --color-accent →
+ * `bg-accent` / `text-accent` / `border-accent`).
+ *
+ * Sources: Inkstone visual signatures + CN baseline.
+ * ============================================================ */
+
+@import "./fonts.css";
+
+@theme {
+  /* ============================================================
+   * Color
+   * ============================================================ */
+  --color-bg:            #fffefc;   /* warm white */
+  --color-bg-soft:       #faf8f3;   /* sidebar / callout-soft */
+  --color-bg-sunken:     #f5f4ef;   /* code block / callout-info */
+  --color-fg:            #292524;   /* primary text */
+  --color-fg-muted:      #57534e;   /* meta / secondary */
+  --color-fg-subtle:     #78716c;   /* timestamps / placeholders */
+  --color-border:        #e7e5e4;   /* default rule */
+  --color-border-strong: #d6d3d1;   /* hover / focus */
+  --color-accent:        #b91c1c;   /* 朱砂红 — link hover, tag, focus ring */
+  --color-accent-soft:   #fef2f2;   /* tag bg, callout-warn bg */
+  --color-link:          #292524;   /* default = fg, dashed underline */
+
+  /* dark mode tokens (S2: wired below to canonical names via
+   * @media (prefers-color-scheme) and :root[data-theme]) */
+  --color-bg-dark:            #1c1917;
+  --color-bg-soft-dark:       #292524;
+  --color-bg-sunken-dark:     #0f0e0c;
+  --color-fg-dark:            #f5f5f4;
+  --color-fg-muted-dark:      #a8a29e;
+  --color-fg-subtle-dark:     #78716c;
+  --color-border-dark:        #44403c;
+  --color-border-strong-dark: #57534e;
+  --color-accent-dark:        #f87171;
+  --color-accent-soft-dark:   #450a0a;
+
+  /* ============================================================
+   * Typography — font stacks
+   * ============================================================ */
+  --font-serif:
+    "Noto Serif SC", "Songti SC", "STSong", Georgia,
+    "Times New Roman", serif;
+  --font-deco:
+    "LXGW WenKai Lite", "Kaiti SC", KaiTi, "STKaiti", serif;
+  --font-mono:
+    "JetBrains Mono", "SF Mono", "Menlo", "Consolas",
+    "Liberation Mono", monospace;
+  --font-system:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+
+  /* size scale */
+  --text-xs:   0.75rem;   /* 12px — meta, footnote */
+  --text-sm:   0.875rem;  /* 14px — caption, sidebar */
+  --text-base: 1rem;      /* 16px — body */
+  --text-lg:   1.125rem;  /* 18px — lead paragraph */
+  --text-xl:   1.25rem;   /* 20px — h4 */
+  --text-2xl:  1.5rem;    /* 24px — h3 */
+  --text-3xl:  1.875rem;  /* 30px — h2 */
+  --text-4xl:  2.25rem;   /* 36px — h1 (post title) */
+
+  /* line height */
+  --leading-tight:  1.2;
+  --leading-snug:   1.4;
+  --leading-normal: 1.7;   /* prose body — readable CJK */
+  --leading-loose:  1.9;
+
+  /* letter spacing (CJK 不加 tracking，仅 latin heading) */
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.02em;
+
+  /* ============================================================
+   * Space (4px grid, named by multiplier)
+   * ============================================================ */
+  --space-1:   0.25rem;   /* 4 */
+  --space-2:   0.5rem;    /* 8 */
+  --space-3:   0.75rem;   /* 12 */
+  --space-4:   1rem;      /* 16 */
+  --space-5:   1.25rem;   /* 20 */
+  --space-6:   1.5rem;    /* 24 */
+  --space-8:   2rem;      /* 32 */
+  --space-12:  3rem;      /* 48 */
+  --space-16:  4rem;      /* 64 */
+
+  /* ============================================================
+   * Layout (shell dims — implemented by T5)
+   * ============================================================ */
+  --shell-max:   1100px;  /* full container max-width */
+  --sidebar-w:   220px;   /* left rail */
+  --content-max: 900px;   /* prose max-width */
+  --shell-pad:   3rem;    /* 48px outer padding */
+  --shell-gap:   3rem;    /* 48px sidebar↔content gap */
+
+  /* ============================================================
+   * Right TOC — Notion-style hover panel (05-03-c2)
+   * Viewport-fixed; does NOT affect .shell grid.
+   * Bar widths encode heading depth (H2 widest → H4 narrowest).
+   * ============================================================ */
+  --toc-panel-w: 240px;
+  --toc-bar-h2:  24px;
+  --toc-bar-h3:  16px;
+  --toc-bar-h4:  10px;
+
+  /* ============================================================
+   * Radius (signature scale: 4 / 6 / 8 / 10 / 12 / 14 / 18 / 999)
+   * ============================================================ */
+  --radius-1:    4px;
+  --radius-2:    6px;
+  --radius-3:    8px;
+  --radius-4:    10px;
+  --radius-5:    12px;
+  --radius-6:    14px;
+  --radius-7:    18px;
+  --radius-pill: 999px;
+
+  /* ============================================================
+   * Shadow — restrained, used only for lightbox/modal layers
+   * ============================================================ */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.06);
+
+  /* ============================================================
+   * Motion
+   * ============================================================ */
+  --ease-out:        cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:         cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout:      cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+}
+
+/* ============================================================
+ * Theme wiring — S2
+ *
+ * Strategy: canonical token names (--color-bg, --color-fg, …) hold
+ * the *light* values inside @theme. Below we remap them to the
+ * dark-suffixed values when (a) the system prefers dark, OR (b) the
+ * user has explicitly toggled [data-theme=dark] on <html>.
+ *
+ * [data-theme] is set by assets/js/theme.js on toggle and persisted to
+ * localStorage["theme"]; the inline bootstrap in head.html hydrates it
+ * before first paint to avoid FOUC. Once the user picks a theme, it
+ * sticks across reloads / tabs until they pick the other one (system
+ * preference is consulted only on first visit). See
+ * .trellis/tasks/05-04-theme-persist/ for the ADR.
+ * Specificity: :root[data-theme=…] (0,1,1) beats both :root inside
+ * @theme and :root inside the media query (both 0,0,1), so explicit
+ * override wins regardless of source order.
+ * ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:            var(--color-bg-dark);
+    --color-bg-soft:       var(--color-bg-soft-dark);
+    --color-bg-sunken:     var(--color-bg-sunken-dark);
+    --color-fg:            var(--color-fg-dark);
+    --color-fg-muted:      var(--color-fg-muted-dark);
+    --color-fg-subtle:     var(--color-fg-subtle-dark);
+    --color-border:        var(--color-border-dark);
+    --color-border-strong: var(--color-border-strong-dark);
+    --color-accent:        var(--color-accent-dark);
+    --color-accent-soft:   var(--color-accent-soft-dark);
+    --color-link:          var(--color-fg-dark);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg:            var(--color-bg-dark);
+  --color-bg-soft:       var(--color-bg-soft-dark);
+  --color-bg-sunken:     var(--color-bg-sunken-dark);
+  --color-fg:            var(--color-fg-dark);
+  --color-fg-muted:      var(--color-fg-muted-dark);
+  --color-fg-subtle:     var(--color-fg-subtle-dark);
+  --color-border:        var(--color-border-dark);
+  --color-border-strong: var(--color-border-strong-dark);
+  --color-accent:        var(--color-accent-dark);
+  --color-accent-soft:   var(--color-accent-soft-dark);
+  --color-link:          var(--color-fg-dark);
+}
+
+:root[data-theme="light"] {
+  --color-bg:            #fffefc;
+  --color-bg-soft:       #faf8f3;
+  --color-bg-sunken:     #f5f4ef;
+  --color-fg:            #292524;
+  --color-fg-muted:      #57534e;
+  --color-fg-subtle:     #78716c;
+  --color-border:        #e7e5e4;
+  --color-border-strong: #d6d3d1;
+  --color-accent:        #b91c1c;
+  --color-accent-soft:   #fef2f2;
+  --color-link:          #292524;
+}

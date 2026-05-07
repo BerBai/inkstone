@@ -1,0 +1,22 @@
+{
+  "name": "inkstone",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "A minimal bilingual Hugo theme for longreads. Tailwind v4 + 25 built-in shortcodes.",
+  "homepage": "https://github.com/BerBai/inkstone",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BerBai/inkstone.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "hugo server -s exampleSite --themesDir ../..",
+    "build": "hugo --gc --minify -s exampleSite --themesDir ../..",
+    "clean": "rm -rf exampleSite/public exampleSite/resources resources public"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0"
+  }
+}

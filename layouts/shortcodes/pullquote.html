@@ -1,0 +1,7 @@
+{{/* 05-04-e8: pullquote shortcode.
+     Inner is markdown-rendered (typically yields a <p>); author becomes
+     <cite> which prose.css already styles inside .prose blockquote.pullquote. */}}
+<blockquote class="pullquote">
+  {{ .Inner | $.Page.RenderString }}
+  {{ with .Get "author" }}<cite>— {{ . }}</cite>{{ end }}
+</blockquote>

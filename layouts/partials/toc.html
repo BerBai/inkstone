@@ -1,0 +1,47 @@
+{{/*
+  05-03-c2 — Notion-style right-edge Table of Contents.
+
+  Renders a viewport-fixed `<nav class="toc">` containing one `<a>` per
+  heading (H2/H3/H4 per hugo.toml [markup.tableOfContents]). Each anchor
+  carries `data-depth="2|3|4"` to drive bar width and label indent in
+  toc.css; scrollspy `.is-active` is toggled by toc.js.
+
+  Bail-out rule: if the page has < 2 headings, render nothing — no
+  `<nav>`, no DOM. posts/single.html applies a matching guard for the
+  `has-toc` body class so both stay in sync.
+
+  Heading source: .Fragments.Headings (Hugo ≥ 0.111). Project is on
+  v0.161.
+
+  Tree shape note: `.Fragments.Headings` returns a virtual root entry
+  with Level=0 (no title, no ID); real headings live under its
+  `.Headings` (top-level H2s) and recursively under those. We skip the
+  root and start the recursion at depth 1.
+*/}}
+
+{{- $flat := slice -}}
+{{- range .Fragments.Headings -}}
+  {{- range .Headings -}}
+    {{- /* depth 1 — typically H2 */ -}}
+    {{- $flat = $flat | append . -}}
+    {{- range .Headings -}}
+      {{- /* depth 2 — typically H3 */ -}}
+      {{- $flat = $flat | append . -}}
+      {{- range .Headings -}}
+        {{- /* depth 3 — typically H4 */ -}}
+        {{- $flat = $flat | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if ge (len $flat) 2 -}}
+<nav class="toc" aria-label="{{ i18n "toc_label" }}">
+  {{- range $flat -}}
+    <a class="toc-link" href="#{{ .ID }}" data-depth="{{ .Level }}">
+      <span class="toc-bar" aria-hidden="true"></span>
+      <span class="toc-label">{{ .Title }}</span>
+    </a>
+  {{- end -}}
+</nav>
+{{- end -}}

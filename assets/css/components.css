@@ -1,0 +1,164 @@
+/* ============================================================
+ * Components — T9
+ * Callout / Pullquote / Figure / external-link mark.
+ * Targets are produced by:
+ *   shortcodes/callout.html, shortcodes/pullquote.html,
+ *   _default/_markup/render-image.html, _default/_markup/render-link.html
+ * ============================================================ */
+
+@layer components {
+  /* === Callout =============================================== */
+  .callout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    margin: var(--space-6) 0;
+    border-radius: var(--radius-3);
+    border-left: 3px solid var(--color-border-strong);
+    background: var(--color-bg-soft);
+  }
+  .callout-icon {
+    color: var(--color-fg-muted);
+    /* Match icon's optical center to title's first-line center.
+     * Title line-height = --leading-normal (1.7) × 15px = 25.5px,
+     * so its optical center sits ~12.75px from the top of the line
+     * box. Icon SVG is 20px; with no top padding the visual center
+     * is at 10px. (25.5 - 20) / 2 ≈ 2.75px puts it at 12.75px. */
+    padding-top: 0.175rem;
+  }
+  .callout-icon svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+
+  .callout-note    { border-left-color: var(--color-fg-muted); }
+
+  /* tip / warn backgrounds are tinted overlays on top of the soft
+   * surface token so they adapt to dark mode automatically. Without
+   * this, hardcoded #f0f7f0 / #fff8e1 fights --color-fg in dark mode
+   * and renders near-invisible text. note / danger already use
+   * mode-aware tokens. */
+  .callout-tip     { border-left-color: #3a7d3a; background: color-mix(in srgb, #3a7d3a 12%, var(--color-bg-soft)); }
+  .callout-tip   .callout-icon { color: #3a7d3a; }
+
+  .callout-warn    { border-left-color: #b8860b; background: color-mix(in srgb, #b8860b 12%, var(--color-bg-soft)); }
+  .callout-warn  .callout-icon { color: #b8860b; }
+
+  .callout-danger  { border-left-color: var(--color-accent); background: var(--color-accent-soft); }
+  .callout-danger .callout-icon { color: var(--color-accent); }
+
+  /* === Pullquote ============================================ */
+  /* Pullquote styles moved to prose.css (see 05-04-e1/e8) as
+   * `.prose blockquote.pullquote`. The shortcode now outputs
+   * <blockquote class="pullquote"> + <cite> directly, matching
+   * the prose pullquote pattern. */
+
+  /* === Figure (markdown image) ============================== */
+  /* Figure styles moved to prose.css (see 05-04-e7) so they
+   * scope to .prose context. */
+
+  /* === External link arrow ================================== */
+  .external-mark {
+    display: inline-block;
+    margin-left: 0.15em;
+    font-size: 0.85em;
+    color: var(--color-fg-subtle);
+    vertical-align: super;
+    line-height: 0;
+  }
+
+  /* === WeChat QR popover ==================================== */
+  /* Inline OA name with a QR popover that reveals on hover (desktop)
+   * or focus (touch tap, since the wrapper carries tabindex="0").
+   * Token-driven, no JS. Source: shortcodes/wechat-qr.html */
+  .wechat-qr {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    cursor: pointer;
+    outline: none;
+  }
+  .wechat-qr-name {
+    border-bottom: 1px dashed var(--color-border-strong);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+  .wechat-qr:hover .wechat-qr-name,
+  .wechat-qr:focus-visible .wechat-qr-name {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  .wechat-qr-popover {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + var(--space-2));
+    transform: translateX(-50%) translateY(4px) scale(0.96);
+    transform-origin: bottom center;
+    width: 256px;            /* 240 img + 2 × var(--space-2) padding */
+    padding: var(--space-2);
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-3);
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      visibility var(--duration-fast);
+    z-index: 20;
+    text-align: center;
+  }
+  .wechat-qr-popover img {
+    display: block;
+    width: 240px;
+    height: 240px;
+    /* Defeat `.prose img { max-width: 75% }` which would otherwise
+     * cap the QR to 75% of the popover, shrinking it again. Same
+     * for the auto margin which is harmless but redundant here. */
+    max-width: none;
+    margin: 0;
+    border-radius: var(--radius-2);
+    /* Keep QR on white so scanners read it cleanly even when the
+     * popover surface goes dark in dark-mode. */
+    background: #fff;
+  }
+  .wechat-qr-caption {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-fg-muted);
+  }
+  .wechat-qr-popover::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--color-border-strong);
+  }
+  .wechat-qr:hover .wechat-qr-popover,
+  .wechat-qr:focus-within .wechat-qr-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* Callout title margins live OUTSIDE @layer components on purpose.
+ * `.prose p { margin: 12px 0 }` in prose.css is unlayered (so Tailwind
+ * utilities can win), and unlayered rules beat any layered rule
+ * regardless of specificity. Without this escape, the title `<p>`
+ * picks up a 12px top margin and visually drops below the icon. */
+.callout-title {
+  font-weight: 600;
+  margin: 0 0 var(--space-1);
+}
+.callout-body > p:first-child { margin-top: 0; }
+.callout-body > p:last-child  { margin-bottom: 0; }

@@ -1,0 +1,56 @@
+{{/* 05-04-e3 + e13: `article-page` enables posts-route page styling
+     (and gates the sidebar #reading-mode-toggle visibility — see
+     shell.css). `immersive-page` is opt-in: added by immersive.js when
+     the user clicks the sidebar toggle, removed via #reader-exit / ESC.
+     Default is non-immersive so users land on a regular article view
+     and consciously enter reading mode if they want it.
+
+     05-03-c2: also emit `has-toc` when the page has ≥ 2 headings —
+     consumed only by potential future styling hooks; toc.html itself
+     decides rendering independently via the same count. The flag stays
+     consistent because both paths consume `.Fragments.Headings`, which
+     Hugo caches per page. */}}
+{{ define "body-class" -}}
+  {{- $count := 0 -}}
+  {{- range .Fragments.Headings -}}
+    {{- range .Headings -}}
+      {{- $count = add $count 1 -}}
+      {{- range .Headings -}}
+        {{- $count = add $count 1 -}}
+        {{- range .Headings -}}{{- $count = add $count 1 -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  article-page{{ if ge $count 2 }} has-toc{{ end }}
+{{- end }}
+
+{{ define "main" }}
+  <article data-pagefind-body>
+    <header class="article-header reader-exit-anchor">
+      <h1 class="page-title" data-pagefind-meta="title">{{ .Title }}</h1>
+      <button
+        id="reader-exit"
+        class="icon-button reader-exit"
+        type="button"
+        aria-label="{{ i18n "posts_exit_reading" }}"
+        title="{{ i18n "posts_exit_reading" }}"
+        aria-hidden="true"
+        tabindex="-1"
+        data-pagefind-ignore
+      >
+        {{ partial "icon.html" "reader-exit" }}
+      </button>
+      {{ partial "meta-line.html" (dict "page" .) }}
+    </header>
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </article>
+
+  {{ partial "prev-next.html" . }}
+
+  {{/* 05-03-c2: Notion-style right-edge TOC. Partial bails on its own
+       when the page has < 2 headings, so non-noisy posts emit no DOM. */}}
+  {{ partial "toc.html" . }}
+{{ end }}

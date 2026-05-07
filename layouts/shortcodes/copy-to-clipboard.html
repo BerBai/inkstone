@@ -1,0 +1,16 @@
+{{- if not ($.Page.Store.Get "shortcode-copy-to-clipboard") }}
+  {{- $.Page.Store.Set "shortcode-copy-to-clipboard" 1 }}
+  <link rel="stylesheet" type="text/css" href="/css/_shortcodes/button.css" />
+{{- end }}
+
+{{- $text := .Get "text" | default (i18n "shortcode_copy_label") }}
+{{- $icon := .Get "icon" }}
+{{- $successMessage := .Get "success-message" | default (i18n "shortcode_copy_success") }}
+{{- $errorMessage := .Get "error-message" | default (i18n "shortcode_copy_failure") }}
+
+<a class="shortcode-copy-to-clipboard" data-clipboard-text="{{ .Inner }}" data-clipboard-success-message="{{ $successMessage }}" data-clipboard-error-message="{{ $errorMessage }}" role="button">
+  {{- if $icon }}
+    <i class="icon-mask {{ $icon }}"></i>
+  {{- end }}
+  {{- $text }}
+</a>

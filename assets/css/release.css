@@ -1,0 +1,107 @@
+/* T12: print stylesheet — strip chrome, simplify content for paper. */
+
+@media print {
+  .sidebar,
+  .sidebar-actions,
+  .skip-link,
+  .prev-next,
+  .footer,
+  .lightbox-overlay {
+    display: none !important;
+  }
+
+  .shell {
+    display: block;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .content {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-family: "Noto Serif SC", Georgia, serif;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+    border-bottom: 1px solid black !important;
+  }
+
+  /* Show full URL after external links so paper readers can follow them. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+    border-bottom: none;
+  }
+
+  pre,
+  code {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd;
+    color: black;
+  }
+
+  pre {
+    page-break-inside: avoid;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  figure img,
+  .shortcode-figure img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  blockquote,
+  .callout,
+  .pullquote {
+    page-break-inside: avoid;
+  }
+}
+
+/* T12: 404 page — vermilion 4-0-4 numerals + friendly nav. */
+
+.page-404 {
+  text-align: center;
+  padding: var(--space-16) 0;
+}
+
+.page-404-num {
+  font-family: var(--font-deco);
+  font-size: 8rem;
+  line-height: 1;
+  color: var(--color-accent);
+  opacity: 0.4;
+  margin-bottom: var(--space-6);
+}
+
+.page-404 h1 {
+  margin-bottom: var(--space-4);
+}
+
+.page-404 ul {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  list-style: none;
+  padding: 0;
+}

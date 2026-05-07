@@ -1,0 +1,79 @@
+/* ============================================================
+ * Taxonomy + archive — T8
+ * /tags/ tag cloud, /tags/<term>/ reuses posts list,
+ * /archive/ adds inline mini-tags into the existing item grid.
+ * ============================================================ */
+
+/* ---------- /tags/ index — tag cloud ---------- */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tag-cloud .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  /* override base.css dotted underline on links */
+  border-bottom: 1px solid var(--color-border);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.tag-cloud .tag:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+.tag-count {
+  font-size: var(--text-xs);
+  color: var(--color-fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- /tags/<term>/ — back link ---------- */
+.back-link {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  border-bottom: 1px dashed var(--color-border-strong);
+}
+.back-link:hover {
+  color: var(--color-accent);
+}
+
+/* ---------- /archive/ — inline mini tags inside .posts-item ----------
+ * .posts-item base grid is `4rem 1fr`. Add a third auto column so the
+ * tag span flows on the same row as the title instead of wrapping under.
+ */
+.archive-list .posts-item {
+  grid-template-columns: 4rem 1fr auto;
+}
+.posts-item-tags {
+  font-size: var(--text-xs);
+  color: var(--color-fg-subtle);
+}
+.tag-mini {
+  color: var(--color-fg-subtle);
+  border-bottom: none;
+  margin-left: var(--space-1);
+}
+.tag-mini:hover {
+  color: var(--color-accent);
+}
+
+/* On narrow viewports tags wrap to a new row inside the second column. */
+@media (max-width: 640px) {
+  .archive-list .posts-item {
+    grid-template-columns: 4rem 1fr;
+  }
+  .posts-item-tags {
+    grid-column: 2;
+    margin-top: var(--space-1);
+  }
+}

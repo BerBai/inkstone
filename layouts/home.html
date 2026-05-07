@@ -1,0 +1,20 @@
+{{ define "main" }}
+  <div class="home-intro prose">
+    <h1>{{ .Site.Title }}</h1>
+    {{ with .Site.Params.tagline }}<p class="page-desc">{{ . }}</p>{{ end }}
+    {{ .Content }}
+  </div>
+
+  <section class="home-recent">
+    <h2>{{ i18n "home_recent" }}</h2>
+    <ul class="posts-list-year">
+      {{ range first 5 (where .Site.RegularPages "Section" "posts") }}
+        <li class="posts-item">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </li>
+      {{ end }}
+    </ul>
+    <p class="home-recent-more"><a href="{{ "/posts/" | relLangURL }}">{{ i18n "home_view_all" }}</a></p>
+  </section>
+{{ end }}

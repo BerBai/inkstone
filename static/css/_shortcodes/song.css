@@ -1,0 +1,34 @@
+:root {
+  --color-shortcode-song-background: #eeeeee;
+}
+
+/* Theme wiring — see admonition.css for the full contract rationale.
+ * Earlier `.dark { … }` selector was dead code. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-shortcode-song-background: #383838;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-shortcode-song-background: #383838;
+}
+
+:root[data-theme="light"] {
+  --color-shortcode-song-background: #eeeeee;
+}
+
+.aplayer {
+  margin: 1em auto !important;
+  border-radius: 0.25rem !important;
+  background: var(--color-shortcode-song-background) !important;
+  box-shadow: none !important;
+}
+
+.aplayer .aplayer-lrc:before {
+  display: none !important;
+}
+
+.aplayer .aplayer-lrc:after {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--color-shortcode-song-background) 100%) !important;
+}

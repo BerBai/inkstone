@@ -1,0 +1,26 @@
+# Iframe theme bridge whitelist — single source of truth.
+#
+# layouts/shortcodes/iframe.html and layouts/partials/scripts.html both
+# render this list into JS literals at build time. To add a host:
+#   1. confirm the host accepts a query param to force light/dark theme
+#   2. add a [[host]] entry below
+#   3. no other code changes — both render sites pick it up automatically
+#
+# See .trellis/tasks/05-05-iframe-darkmode-bridge/research/host-theme-params.md
+# for the verified-working list and confirmed-NO list.
+
+[[host]]
+  match = "codepen.io"
+  param = "theme-id"
+
+[[host]]
+  match = "codesandbox.io"
+  param = "theme"
+
+[[host]]
+  match = "stackblitz.com"
+  param = "theme"
+
+[[host]]
+  match = "replit.com"
+  param = "theme"

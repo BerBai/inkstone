@@ -1,0 +1,33 @@
+/* T11c: minimal CSS for shortcode-button + shortcode-copy-to-clipboard.
+   Ported from _archive/shortcode-css/shortcode.css (which was tailwind-@apply
+   form). Rewritten as plain CSS using Inkstone token vars. */
+
+.shortcode-button,
+.shortcode-copy-to-clipboard {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2, 0.375rem);
+  background-color: var(--color-bg-soft);
+  background-clip: padding-box;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-fg);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.shortcode-button:hover,
+.shortcode-copy-to-clipboard:hover {
+  background-color: var(--color-bg-elevated, var(--color-bg-soft));
+  border-color: var(--color-fg-muted);
+}

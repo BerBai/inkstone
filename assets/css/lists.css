@@ -1,0 +1,276 @@
+/* ============================================================
+ * Lists — 05-04-e5
+ * Provides the `.list` flex column + `.list-item--link` cards
+ * used by /posts and (later) /archive listings.
+
+ * Token mapping (from earlier component vars to canonical names):
+ *   --text             → --color-fg
+ *   --muted            → --color-fg-muted
+ *   --border           → --color-border
+ *   --faint            → --color-fg-subtle
+ *   --code-header-bg   → --color-bg-soft   (hover background)
+ *   --card-pad         → var(--space-4)    (16px)
+ *
+ * `.meta-line` styles live in posts.css (added by 05-04-e2);
+ * archive-row variants and tag-search panel are intentionally
+ * deferred to 05-04-e6.
+ * ============================================================ */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: var(--space-4);
+}
+
+.list-item {
+  padding: 18px 0;
+}
+
+.list-item--link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: none;
+  border-radius: var(--radius-6);
+  padding: var(--space-4);
+  transition:
+    background var(--duration-fast) var(--ease-out);
+}
+
+.list-item--link:hover,
+.list-item--link:focus-visible {
+  background: var(--color-bg-soft);
+  border-bottom-color: transparent;
+  outline: 2px solid transparent;
+}
+
+.list-item--link:focus-visible {
+  outline-color: var(--color-accent);
+  outline-offset: 2px;
+}
+
+.list-item__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.list-item__heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.list-item__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-fg);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.list-item--link:hover .list-item__title,
+.list-item--link:focus-visible .list-item__title {
+  color: var(--color-accent);
+}
+
+.list-item__excerpt {
+  margin: 10px 0 0;
+  color: var(--color-fg-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  font-family: var(--font-deco);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* Tighter meta-line spacing inside a card. */
+.list-item .meta-line {
+  margin-top: 12px;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+/* ---------- Badge ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: var(--color-fg-muted);
+  background: var(--color-bg-soft);
+  position: relative;
+  top: 1px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .list-item {
+    padding: 16px 0;
+  }
+
+  .list-item__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* ============================================================
+ * Page header (listing variant) — 05-04-e6
+ * Provides `.page-header` + `.page-heading` + `.page-actions` +
+ * `.page-subtitle` + `.icon-link`. Scoped to
+ * `.page-header--listing` so leaf pages (about / cv) using bare
+ * `.page-header` keep their current block layout (page.css).
+ * ============================================================ */
+
+.page-header--listing {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.page-header--listing .page-heading {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.page-header--listing .page-title {
+  margin: 0;
+}
+
+.page-header--listing .page-actions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: baseline;
+}
+
+.page-header--listing .page-subtitle {
+  margin: 0;
+  color: var(--color-fg-muted);
+  font-family: var(--font-deco);
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* icon-link: ghost icon anchor used in page-actions (e.g. RSS).
+ * Distinct from .icon-button (in posts.css) which is a circular
+ * outlined button for reader-exit / theme toggle. */
+.page-header--listing .icon-link {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-3);
+  background: transparent;
+  color: var(--color-fg-muted);
+  border-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.page-header--listing .icon-link:hover,
+.page-header--listing .icon-link:focus-visible {
+  color: var(--color-fg);
+  background: var(--color-bg-soft);
+  border-bottom: 0;
+}
+
+.page-header--listing .icon-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.page-header--listing .icon-link svg,
+.page-header--listing .icon-link .icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .page-header--listing {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header--listing .page-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .page-header--listing .page-actions {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+}
+
+/* ============================================================
+ * Pagination — 05-04-e6
+ * `.pagination__inner` flex with prev / next links.
+ * `--next` pushes to the right via margin-left:auto.
+ * ============================================================ */
+
+.pagination {
+  margin-top: var(--space-6);
+  padding-top: var(--space-3);
+}
+
+.pagination__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pagination__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-5);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-sunken);
+  color: var(--color-fg);
+  font-family: var(--font-deco);
+  font-size: 13px;
+  border-bottom: 1px solid var(--color-border);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.pagination__link:hover,
+.pagination__link:focus-visible {
+  background: var(--color-bg-soft);
+  border-bottom-color: transparent;
+  outline: 2px solid transparent;
+}
+
+.pagination__link:focus-visible {
+  outline-color: var(--color-accent);
+  outline-offset: 2px;
+}
+
+.pagination__link--next {
+  margin-left: auto;
+}

@@ -1,0 +1,87 @@
+{{- $src := .Get "src" }}
+{{- $ratio := .Get "ratio" | default 0.5625 }}
+{{- $ratio = mul $ratio 100 }}
+
+{{- /* Host theme bridge: rewrite src query so the remote page renders in
+       the matching theme, for hosts that accept a theme URL param. The
+       whitelist lives in data/iframe_theme_hosts.toml — single source of
+       truth for both this shortcode and the global themechange listener
+       in partials/scripts.html. See .trellis/spec/frontend/themed-components.md
+       §3.5 for the contract.
+
+       Hosts NOT in the whitelist (YouTube/Bilibili/Vimeo/Notion/Gist/...)
+       silently fall through to the plain iframe path; the --color-bg +
+       color-scheme tokens still cover the load/cross-origin/empty-src
+       window so dark mode doesn't show UA-default white. */}}
+{{- $hosts := site.Data.iframe_theme_hosts.host }}
+{{- $matched := false }}
+{{- range $hosts }}
+  {{- if strings.Contains $src .match }}{{ $matched = true }}{{ end }}
+{{- end }}
+
+{{- /* Theme: container + iframe both fall back to --color-bg so dark mode
+       isn't broken by the UA default white during load / cross-origin
+       block / empty-src moments. `color-scheme: light dark` lets the
+       browser pick a dark default for iframe chrome when the embedded
+       page doesn't set its own body background. We can't override the
+       remote page's CSS (cross-origin), but we control everything up
+       to the moment its body paints. */}}
+<div
+  style="
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: {{ $ratio }}%;
+    background: var(--color-bg);
+  "
+>
+  {{- if $matched }}
+    {{- $.Page.Store.Set "hasIframeBridge" 1 }}
+    <iframe
+      data-src="{{ $src }}"
+      data-theme-bridge
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--color-bg);
+        color-scheme: light dark;
+      "
+      frameborder="0"
+      allowfullscreen="true"
+    ></iframe>
+    <script>
+      (function (el) {
+        var HOSTS = {{ $hosts | jsonify | safeJS }};
+        var theme = (window.getTheme && window.getTheme()) || 'light';
+        try {
+          var u = new URL(el.dataset.src);
+          var host = HOSTS.find(function (h) { return u.host.indexOf(h.match) !== -1; });
+          if (host) u.searchParams.set(host.param, theme === 'dark' ? 'dark' : 'light');
+          el.src = u.toString();
+        } catch (_) { el.src = el.dataset.src; }
+      })(document.currentScript.previousElementSibling);
+    </script>
+  {{- else }}
+    <iframe
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--color-bg);
+        color-scheme: light dark;
+      "
+      frameborder="0"
+      src="{{ $src }}"
+      allowfullscreen="true"
+    ></iframe>
+  {{- end }}
+</div>

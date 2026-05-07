@@ -1,0 +1,29 @@
+{{/* 05-04-e4: prev-next nav for the post detail page
+     (replaces the older `.post-nav` partial). When only one
+     direction exists, the empty side renders an
+     aria-hidden placeholder so the two-column flex layout stays
+     symmetric. */}}
+{{- if or .PrevInSection .NextInSection -}}
+<nav class="prev-next" aria-label="{{ i18n "post_nav_label" }}">
+  <div class="prev-next__item">
+    {{- with .PrevInSection -}}
+      <a class="prev-next__link prev-next__link--prev" href="{{ .RelPermalink }}" rel="prev">
+        <span class="prev-next__label">{{ i18n "post_prev" }}</span>
+        <span class="prev-next__title">{{ .Title }}</span>
+      </a>
+    {{- else -}}
+      <span class="prev-next__placeholder" aria-hidden="true"></span>
+    {{- end -}}
+  </div>
+  <div class="prev-next__item">
+    {{- with .NextInSection -}}
+      <a class="prev-next__link prev-next__link--next" href="{{ .RelPermalink }}" rel="next">
+        <span class="prev-next__label">{{ i18n "post_next" }}</span>
+        <span class="prev-next__title">{{ .Title }}</span>
+      </a>
+    {{- else -}}
+      <span class="prev-next__placeholder" aria-hidden="true"></span>
+    {{- end -}}
+  </div>
+</nav>
+{{- end -}}

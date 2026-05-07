@@ -1,0 +1,9 @@
+{{- /* 05-06-s1: data-pagefind-ignore on the source <pre> so Mermaid
+       diagram source (graph syntax, node labels) doesn't leak into the
+       Pagefind excerpt. The visible diagram lives in an inline <svg>
+       Mermaid replaces this <pre> with at runtime; that <svg> is also
+       outside the index because Pagefind only indexes text nodes. */ -}}
+<pre class="mermaid" data-pagefind-ignore>
+  {{ .Inner | htmlEscape | safeHTML }}
+</pre>
+{{ .Page.Store.Set "hasMermaid" true }}

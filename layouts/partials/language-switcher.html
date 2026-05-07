@@ -1,0 +1,57 @@
+{{/*
+  Language switcher — emits one link per non-current language.
+  Behavior:
+    - If the current page has a translation in <other>, link to that translation
+    - Otherwise, link to the home page of <other> (so readers always land somewhere
+      that matches the new language; never a 404)
+  Bails to nothing when only one language is configured.
+
+  Default language detection: first entry of hugo.Sites (sorted by language
+  weight). hugo.Sites is the project-level collection introduced in v0.156
+  to replace site.Languages, which carried a misleading per-site contract.
+  See partials/head.html hreflang block for the same convention.
+*/}}
+{{- $cur := . -}}
+{{- if gt (len hugo.Sites) 1 -}}
+  {{- $defaultLang := (index hugo.Sites 0).Language.Lang -}}
+  {{- /* Per-language icon. Keyed by full Hugo Lang code so future regional
+        variants (e.g. en-gb) can map distinctly. Falls back to the generic
+        `languages` glyph when an unmapped language is added — fail visible
+        rather than fail blank. */ -}}
+  {{- $iconMap := dict "zh-cn" "lang-zh" "en" "lang-en" -}}
+  {{- /* translationKey-paired relative URLs for the current page, indexed by
+        Lang. RelPermalink (not Permalink) keeps the link decoupled from
+        baseURL — a placeholder baseURL like https://inkstone.example/ would
+        otherwise punt the user off-site on every language switch. hreflang
+        in head.html still uses Permalink, which is correct for that spec. */ -}}
+  {{- $translations := dict -}}
+  {{- range .Translations -}}
+    {{- $translations = merge $translations (dict .Lang .RelPermalink) -}}
+  {{- end -}}
+  <div class="language-switcher" role="group" aria-label="{{ i18n "language_switcher_label" }}">
+    {{- range hugo.Sites -}}
+      {{- $lang := .Language -}}
+      {{- if ne $lang.Lang $cur.Language.Lang -}}
+        {{- $href := index $translations $lang.Lang -}}
+        {{- if not $href -}}
+          {{- /* No translation for this page; link to that language's home.
+                With defaultContentLanguageInSubdir=false the default language
+                lives at /, every other language at /<lang>/. */ -}}
+          {{- if eq $lang.Lang $defaultLang -}}
+            {{- $href = "/" -}}
+          {{- else -}}
+            {{- $href = printf "/%s/" $lang.Lang -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $iconName := index $iconMap $lang.Lang -}}
+        {{- if not $iconName -}}{{- $iconName = "languages" -}}{{- end -}}
+        <a class="language-switcher__link"
+           href="{{ $href }}"
+           hreflang="{{ $lang.Lang }}"
+           lang="{{ $lang.Lang }}"
+           aria-label="{{ $lang.Label }}"
+           title="{{ $lang.Label }}">{{ partial "icon.html" $iconName }}</a>
+      {{- end -}}
+    {{- end -}}
+  </div>
+{{- end -}}

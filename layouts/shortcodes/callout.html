@@ -1,0 +1,11 @@
+{{- $type := .Get "type" | default "note" -}}
+{{- $title := .Get "title" -}}
+<div class="callout callout-{{ $type }}" role="note">
+  <div class="callout-icon" aria-hidden="true">
+    {{- partial "icon.html" (printf "callout-%s" $type) -}}
+  </div>
+  <div class="callout-body">
+    {{- with $title }}<p class="callout-title">{{ . }}</p>{{ end }}
+    {{ .Inner | $.Page.RenderString }}
+  </div>
+</div>

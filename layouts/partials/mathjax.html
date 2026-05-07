@@ -1,0 +1,38 @@
+{{- /*
+  T11a — auto-inject MathJax CDN script when page content uses math syntax.
+  Pulled from baseline 5d689b7 layouts/_partials/mathjax.html, adapted to
+  this project's params layout. Token adaptation deferred to T12.
+*/ -}}
+{{- if and (not .Params.disable_math) .IsPage (or (strings.Contains .Content "\\(") (strings.Contains .Content "$")) }}
+  <script>
+    MathJax = {
+      loader: {
+        load: ["[tex]/boldsymbol"],
+      },
+      options: {
+        enableEnrichment: false,
+        enableExplorer: false,
+      },
+      output: {
+        displayOverflow: "scroll",
+      },
+      tex: {
+        tags: "all",
+        inlineMath: [
+          ["$", "$"],
+          ["\\(", "\\)"],
+        ],
+        displayMath: [["$$", "$$"]],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+          "[+]": ["boldsymbol"],
+        },
+      },
+    };
+  </script>
+  <script
+    src="{{ $.Site.Params.jsdelivrMirror }}/npm/mathjax@{{ $.Site.Params.mathjaxVersion }}/tex-chtml.js"
+    crossorigin="anonymous"
+  ></script>
+{{- end }}

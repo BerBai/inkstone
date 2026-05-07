@@ -1,0 +1,44 @@
+{{- if $.Page.Store.Get "shortcode-image-compare" }}
+  <script src="{{ $.Site.Params.jsdelivrMirror }}/npm/image-compare-viewer@{{ $.Site.Params.imageCompareViewerVersion }}/dist/image-compare-viewer.min.js"></script>
+  <script type="text/javascript">
+    (function (d) {
+      // data-* attrs are always strings. Restore types before handing them
+      // to ImageCompare — `"false"` is truthy, so a naive `|| default` keeps
+      // booleans stuck on. parseBool returns undefined when the attr is
+      // missing so the `??` fallback below picks the library default.
+      function parseBool(v) {
+        if (v === undefined) return undefined;
+        if (v === "true") return true;
+        if (v === "false") return false;
+        return Boolean(v);
+      }
+      function parseNum(v, fallback) {
+        if (v === undefined) return fallback;
+        const n = Number(v);
+        return Number.isFinite(n) ? n : fallback;
+      }
+      d.querySelectorAll(".shortcode-image-compare").forEach(function (el) {
+        const ds = el.dataset;
+        const options = {
+          controlColor: ds.controlColor || "#ffffff",
+          controlShadow: parseBool(ds.controlShadow) ?? true,
+          addCircle: parseBool(ds.addCircle) ?? false,
+          addCircleBlur: parseBool(ds.addCircleBlur) ?? true,
+          showLabels: parseBool(ds.showLabels) ?? false,
+          labelOptions: {
+            before: ds.labelBefore || "Before",
+            after: ds.labelAfter || "After",
+            onHover: parseBool(ds.labelOnHover) ?? false,
+          },
+          smoothing: parseBool(ds.smoothing) ?? true,
+          smoothingAmount: parseNum(ds.smoothingAmount, 100),
+          hoverStart: parseBool(ds.hoverStart) ?? false,
+          verticalMode: parseBool(ds.verticalMode) ?? false,
+          startingPoint: parseNum(ds.startingPoint, 50),
+          fluidMode: parseBool(ds.fluidMode) ?? false,
+        };
+        new ImageCompare(el, options).mount();
+      });
+    })(document);
+  </script>
+{{- end }}

@@ -1,0 +1,10 @@
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+{{- $src := .Destination -}}
+<figure class="figure">
+  <a href="{{ $src }}" data-lightbox="{{ $src }}" data-alt="{{ $alt }}">
+    <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  </a>
+  {{- with $title }}<figcaption class="figure-caption">{{ . }}</figcaption>{{ end -}}
+  {{- if and (not $title) $alt }}<figcaption class="figure-caption figure-caption-alt">{{ $alt }}</figcaption>{{ end -}}
+</figure>

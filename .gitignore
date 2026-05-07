@@ -1,0 +1,29 @@
+# Build artifacts
+public/
+resources/
+.hugo_build.lock
+
+# exampleSite build artifacts
+exampleSite/public/
+exampleSite/resources/
+exampleSite/.hugo_build.lock
+
+# Node toolchain (Tailwind v4 CLI)
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Hugo Modules
+go.sum

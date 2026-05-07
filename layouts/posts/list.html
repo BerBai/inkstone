@@ -1,0 +1,62 @@
+{{ define "main" }}
+  {{/* 05-04-e6: page-header (title + subtitle + RSS),
+       Hugo paginator-driven list, and pagination nav at foot. */}}
+  {{ $pages := where .Site.RegularPages "Section" "posts" }}
+  {{ $sorted := $pages.ByDate.Reverse }}
+  {{ $paginator := .Paginate $sorted }}
+  {{ $total := len $pages }}
+
+  <header class="page-header page-header--listing">
+    <div class="page-heading">
+      <h1 class="page-title">{{ .Title }}</h1>
+      <p class="page-subtitle">
+        {{- if gt $paginator.TotalPages 1 -}}
+          {{ i18n "posts_subtitle_paged" (dict "Count" $total "Page" $paginator.PageNumber "Total" $paginator.TotalPages) }}
+        {{- else -}}
+          {{ i18n "posts_subtitle" (dict "Count" $total) }}
+        {{- end -}}
+      </p>
+    </div>
+    <div class="page-actions">
+      <a class="icon-link" href="{{ "/posts/index.xml" | relLangURL }}" aria-label="{{ i18n "sidebar_rss_label" }}" title="{{ i18n "posts_subscribe_rss" }}">
+        {{ partial "icon.html" "rss" }}
+      </a>
+    </div>
+  </header>
+
+  {{ with .Description }}<p class="page-desc">{{ . }}</p>{{ end }}
+  {{ with .Content }}{{ . }}{{ end }}
+
+  {{/* 05-04-e5: `.list` of `.list-item--link` cards.
+       Each card renders badge + title + excerpt + meta-line(list). */}}
+  <div class="list">
+    {{ range $paginator.Pages }}
+      {{ $badge := or .Params.badge (i18n "posts_default_badge") }}
+      <a class="list-item list-item--link" href="{{ .RelPermalink }}" data-entry-item data-slug="{{ .Slug }}">
+        <div class="list-item__row">
+          <div class="list-item__heading">
+            <span class="badge">{{ $badge }}</span>
+            <h2 class="list-item__title">{{ .Title }}</h2>
+          </div>
+        </div>
+        {{ with .Summary }}
+          <p class="list-item__excerpt">{{ . | plainify }}</p>
+        {{ end }}
+        {{ partial "meta-line.html" (dict "page" . "variant" "list") }}
+      </a>
+    {{ end }}
+  </div>
+
+  {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pagination" aria-label="{{ i18n "posts_pagination_label" }}">
+      <div class="pagination__inner">
+        {{ if $paginator.HasPrev }}
+          <a class="pagination__link pagination__link--prev" rel="prev" href="{{ $paginator.Prev.URL }}">{{ i18n "pagination_prev" }}</a>
+        {{ end }}
+        {{ if $paginator.HasNext }}
+          <a class="pagination__link pagination__link--next" rel="next" href="{{ $paginator.Next.URL }}">{{ i18n "pagination_next" }}</a>
+        {{ end }}
+      </div>
+    </nav>
+  {{ end }}
+{{ end }}

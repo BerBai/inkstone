@@ -1,0 +1,108 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ block "title" . }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}{{ end }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta name="author" content="{{ .Site.Params.author }}">
+
+{{/* Open Graph */}}
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ .Site.Params.ogLocale | default "zh_CN" }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+
+{{/* Twitter Card */}}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+
+{{/* Favicon */}}
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+
+{{/* Canonical + sitemap */}}
+<link rel="canonical" href="{{ .Permalink }}">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+{{/* hreflang alternates — emits one <link rel="alternate"> per language that
+     exists for this page (including self) plus an x-default pointing at the
+     site's default language version. Skipped entirely for pages with only
+     one language version (Hugo includes the page itself in .AllTranslations
+     only when sibling translations exist, but Hugo's behavior here has
+     changed across versions; the explicit `gt 1` guard keeps the output
+     correct even if that contract shifts again).
+
+     Default language is identified as the first entry of hugo.Sites — Hugo
+     sorts that slice by language weight (config gives the default language
+     weight=1). hugo.Sites is the project-level collection that replaced
+     `site.Languages` in v0.156. */}}
+{{- $allT := .AllTranslations -}}
+{{- if gt (len $allT) 1 -}}
+  {{- $defaultLang := (index hugo.Sites 0).Language.Lang -}}
+  {{- range $allT -}}
+    <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{- end -}}
+  {{- range $allT -}}
+    {{- if eq .Lang $defaultLang -}}
+      <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+    {{- end -}}
+  {{- end -}}
+{{- end }}
+{{/* T11a: tiny early-bootstrap so inline shortcode scripts (antv-g2 etc.) find
+     the globals they expect from the legacy baseline. Token-aware theme wiring
+     comes in T12; for now we honor the user's data-theme attribute / OS hint.
+
+     05-04-theme-persist: hydrate `data-theme` from localStorage BEFORE the
+     stylesheet link below, so the very first paint already reflects the
+     user's saved choice (no FOUC). theme.js handles writing localStorage
+     on click. See .trellis/tasks/05-04-theme-persist/prd.md. */}}
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") {
+        document.documentElement.dataset.theme = saved;
+      }
+    } catch (_) { /* private mode / storage disabled — fall back to prefers-color-scheme */ }
+  })();
+  window.antvG2Charts = window.antvG2Charts || [];
+  window.getTheme = window.getTheme || function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") return saved;
+    } catch (_) {}
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr === "dark" || attr === "light") return attr;
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  };
+</script>
+{{ with resources.Get "css/main.css" | css.TailwindCSS }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}">
+{{ end }}
+{{ with .OutputFormats.Get "rss" }}
+  <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ $.Site.Title }}">
+{{ end }}
+
+{{/* T10: interactivity JS — independent ES modules, defer-loaded.
+     Reading-mode (legacy `:root.reading-mode` + localStorage) was retired
+     in favor of `body.immersive-page` driven by immersive.js below. */}}
+{{ with resources.Get "js/lightbox.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/theme.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+
+{{/* 05-04-e9: code-copy button — appended to every .prose pre. */}}
+{{ with resources.Get "js/code-copy.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+
+{{/* 05-04-e11: reader-exit + immersive-page toggle (article pages). */}}
+{{ with resources.Get "js/immersive.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+
+{{/* 05-03-c2: right-edge Notion-style TOC scrollspy (single posts only;
+     toc.js bails if .toc is absent — non-post pages pay zero cost). */}}
+{{ with resources.Get "js/toc.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+
+{{/* 05-06-s2: ⌘K search modal (Pagefind index lazy-imported on first open). */}}
+{{ with resources.Get "js/search.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+
+{{/* T11a: MathJax CDN injected when post content uses math delimiters. */}}
+{{ partial "mathjax.html" . }}

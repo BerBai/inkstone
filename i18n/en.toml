@@ -1,0 +1,212 @@
+# English (en) UI strings.
+#
+# See i18n/zh-cn.toml for conventions and rules. Keep keys in lockstep
+# between both files. Order should mirror the Chinese file for diffability.
+
+# ─── Navigation ────────────────────────────────────────────────────────────
+[nav_skip_to_main]
+other = "Skip to main content"
+
+[nav_main_label]
+other = "Main navigation"
+
+[nav_back_to_home]
+other = "Back to home"
+
+[nav_view_posts]
+other = "View posts"
+
+[nav_view_archive]
+other = "View archive"
+
+[nav_more]
+other = "More"
+
+# ─── Home ──────────────────────────────────────────────────────────────────
+[home_recent]
+other = "Recent"
+
+[home_view_all]
+other = "View all →"
+
+# ─── 404 ───────────────────────────────────────────────────────────────────
+[error_404_title]
+other = "Page not found"
+
+[error_404_desc]
+other = "Nothing lives at this URL right now — moved away, or never existed."
+
+# ─── Posts list / single ───────────────────────────────────────────────────
+[posts_subtitle]
+other = "{{ .Count }} posts"
+
+[posts_subtitle_paged]
+other = "{{ .Count }} posts · page {{ .Page }} of {{ .Total }}"
+
+[posts_default_badge]
+other = "Essay"
+
+[posts_pagination_label]
+other = "Posts pagination"
+
+[posts_subscribe_rss]
+other = "Subscribe via RSS"
+
+[posts_exit_reading]
+other = "Exit reading"
+
+# ─── Pagination (posts list) ───────────────────────────────────────────────
+[pagination_prev]
+other = "Previous"
+
+[pagination_next]
+other = "Next"
+
+# ─── Post-to-post navigation (prev-next.html) ──────────────────────────────
+[post_prev]
+other = "Previous"
+
+[post_next]
+other = "Next"
+
+[post_nav_label]
+other = "Previous/next post"
+
+# ─── Meta line (word count / reading time) ─────────────────────────────────
+[meta_word_count]
+other = "{{ .Count }} words"
+
+[meta_reading_time]
+other = "{{ .Minutes }} min read"
+
+# ─── Tags ──────────────────────────────────────────────────────────────────
+[tags_count_in_term]
+other = "{{ .Count }} posts."
+
+[tags_back_to_all]
+other = "← All tags"
+
+[tags_count_total]
+other = "{{ .Count }} tags total."
+
+# ─── Archive ───────────────────────────────────────────────────────────────
+[archive_count]
+other = "{{ .Count }} posts in total."
+
+[archive_year_count]
+other = "{{ .Count }} posts"
+
+# ─── Sidebar actions ───────────────────────────────────────────────────────
+[sidebar_toggle_reading_mode]
+other = "Toggle reading mode"
+
+[sidebar_reading_mode_label]
+other = "Reading mode"
+
+[sidebar_toggle_theme]
+other = "Toggle theme"
+
+[sidebar_theme_label]
+other = "Theme"
+
+[sidebar_rss_aria]
+other = "Subscribe via RSS"
+
+[sidebar_rss_label]
+other = "RSS"
+
+# ─── Search (⌘K modal) ─────────────────────────────────────────────────────
+[search_button_aria]
+other = "Search posts"
+
+[search_button_label]
+other = "Search"
+
+[search_input_placeholder]
+other = "Search posts..."
+
+[search_kbd_hint_select]
+other = "select"
+
+[search_kbd_hint_open]
+other = "open"
+
+[search_kbd_hint_close]
+other = "close"
+
+[search_recent_title]
+other = "Recent searches"
+
+[search_recent_empty]
+other = "Start typing above to search."
+
+[search_recent_clear]
+other = "Clear"
+
+[search_no_results_title]
+other = "No matching posts"
+
+[search_no_results_hint]
+other = "Try a broader keyword."
+
+[toc_label]
+other = "Table of contents"
+
+[language_switcher_label]
+other = "Switch language"
+
+# ─── Admonition titles ─────────────────────────────────────────────────────
+[admonition_note]
+other = "Note"
+
+[admonition_abstract]
+other = "Abstract"
+
+[admonition_info]
+other = "Info"
+
+[admonition_tip]
+other = "Tip"
+
+[admonition_success]
+other = "Success"
+
+[admonition_question]
+other = "Question"
+
+[admonition_warning]
+other = "Warning"
+
+[admonition_failure]
+other = "Failure"
+
+[admonition_danger]
+other = "Danger"
+
+[admonition_bug]
+other = "Bug"
+
+[admonition_example]
+other = "Example"
+
+[admonition_quote]
+other = "Quote"
+
+# ─── Other shortcode defaults ──────────────────────────────────────────────
+[shortcode_pseudocode_title_prefix]
+other = "Algorithm"
+
+[shortcode_copy_label]
+other = "Copy"
+
+[shortcode_copy_success]
+other = "Copied"
+
+[shortcode_copy_failure]
+other = "Copy failed"
+
+[shortcode_video_no_js]
+other = "Please enable JavaScript and use a browser that supports HTML5 video to watch this video"
+
+[shortcode_bilibili_default_title]
+other = "Bilibili video"

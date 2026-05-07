@@ -1,0 +1,33 @@
+{
+  "justifiedGalleryOptions": {
+    "rowHeight": 160,
+    "margins": 6,
+    "lastRow": "nojustify"
+  },
+  "lightGalleryOptions": {
+    "speed": 300
+  },
+  "items": [
+    {
+      "src": "https://placehold.co/1200x800/orange/white?text=One",
+      "thumb": "https://placehold.co/400x267/orange/white?text=One",
+      "alt": "Placeholder one",
+      "title": "Placeholder one",
+      "subHtml": "<h4>Smoke fixture #1</h4><p>First placeholder image.</p>"
+    },
+    {
+      "src": "https://placehold.co/1200x800/teal/white?text=Two",
+      "thumb": "https://placehold.co/400x267/teal/white?text=Two",
+      "alt": "Placeholder two",
+      "title": "Placeholder two",
+      "subHtml": "<h4>Smoke fixture #2</h4><p>Second placeholder image.</p>"
+    },
+    {
+      "src": "https://placehold.co/1200x800/slate/white?text=Three",
+      "thumb": "https://placehold.co/400x267/slate/white?text=Three",
+      "alt": "Placeholder three",
+      "title": "Placeholder three",
+      "subHtml": "<h4>Smoke fixture #3</h4><p>Third placeholder image.</p>"
+    }
+  ]
+}

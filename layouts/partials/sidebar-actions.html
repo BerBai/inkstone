@@ -1,0 +1,50 @@
+<div class="sidebar-actions">
+  <a href="{{ "/posts/" | relLangURL }}"
+     data-action="search"
+     aria-label="{{ i18n "search_button_aria" }}"
+     title="{{ i18n "search_button_label" }}">
+    {{ partial "icon.html" "search" }}
+  </a>
+  <button type="button" id="reading-mode-toggle"
+          aria-label="{{ i18n "sidebar_toggle_reading_mode" }}" title="{{ i18n "sidebar_reading_mode_label" }}"
+          data-action="reading-mode">
+    {{ partial "icon.html" "book-open" }}
+  </button>
+  {{/*
+    Resolve a sensible RSS feed for the current page.
+    Order: current page's own RSS → section's RSS → site home RSS.
+    This keeps single posts / about / cv / archive showing a meaningful link
+    even though hugo.toml only enables RSS output for home & section.
+  */}}
+  {{- $rss := "" -}}
+  {{- with .OutputFormats.Get "rss" -}}
+    {{- $rss = .RelPermalink -}}
+  {{- else -}}
+    {{- with .Section -}}
+      {{- with site.GetPage (printf "/%s" .) -}}
+        {{- with .OutputFormats.Get "rss" -}}
+          {{- $rss = .RelPermalink -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if not $rss -}}
+      {{- with site.Home.OutputFormats.Get "rss" -}}
+        {{- $rss = .RelPermalink -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{ with $rss }}
+    <a href="{{ . }}" aria-label="{{ i18n "sidebar_rss_aria" }}" title="{{ i18n "sidebar_rss_label" }}">
+      {{ partial "icon.html" "rss" }}
+    </a>
+  {{ end }}
+  <button type="button" id="theme-toggle"
+          aria-label="{{ i18n "sidebar_toggle_theme" }}" title="{{ i18n "sidebar_theme_label" }}"
+          data-action="theme">
+    {{/* Both icons rendered; CSS shows the one matching current theme.
+         Light mode → moon (click to go dark). Dark mode → sun (click to go light). */}}
+    <span class="theme-icon theme-icon--moon">{{ partial "icon.html" "moon" }}</span>
+    <span class="theme-icon theme-icon--sun">{{ partial "icon.html" "sun" }}</span>
+  </button>
+  {{ partial "language-switcher.html" . }}
+</div>

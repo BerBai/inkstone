@@ -1,0 +1,197 @@
+/* ============================================================
+ * Right TOC — Notion-style hover panel (05-03-c2)
+ *
+ * Viewport-fixed at right edge, vertically centered. Default state
+ * shows a thin bar stack — width encodes heading depth. Hovering or
+ * focusing inside the panel widens it and reveals labeled links.
+ * Active section (set by toc.js) is highlighted.
+ *
+ * Layout philosophy: TOC does NOT participate in the .shell grid.
+ * Parent PRD's old "3-col grid + --shell-max bump" was superseded —
+ * this is a floating panel only. See task 05-03-c2-right-toc-module.
+ *
+ * Visibility (05-05-toc-sidebar-yield):
+ *   post has ≥ 2 headings                        → visible at all viewports
+ *   body.immersive-page (reading mode)           → hidden
+ *   posts with < 2 headings                      → not rendered (partial bail)
+ *
+ * Why no viewport-based hide: layout priority is TOC > sidebar. The
+ * sidebar collapses to a top bar at <1024 (shell.css) so the TOC
+ * never has to compete for horizontal real estate. The TOC itself is
+ * 48px wide (border-box) and sits inside the shell's right padding —
+ * so it never overlaps content geometry, even at viewport 768. The
+ * expanded hover panel (240px) overlays content as a drawer, which is
+ * the intended Notion-style interaction.
+ * ============================================================ */
+
+.toc {
+  /* Viewport-fixed, right edge, vertically centered. */
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 40;             /* above content; below modals/lightbox */
+
+  /* Layout: a tight vertical stack of bars/links. The *expanded*
+   * panel width is `--toc-panel-w`; collapsed width is just enough
+   * for the longest bar (--toc-bar-h2) plus right padding. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;   /* bars hug the right edge */
+  gap: var(--space-2);     /* 8px between bars */
+
+  width: calc(var(--toc-bar-h2) + var(--space-6)); /* 24 + 24 = 48px collapsed */
+  padding: var(--space-3) var(--space-4);          /* 12px 16px */
+
+  /* Background hidden in collapsed state; appears on expand. */
+  background: transparent;
+  border-radius: var(--radius-3) 0 0 var(--radius-3);
+  box-shadow: none;
+
+  /* Smooth expand. Reduced-motion override below. */
+  transition:
+    width var(--duration-normal) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out),
+    padding var(--duration-normal) var(--ease-out);
+}
+
+.toc-link {
+  /* The clickable wrapper for one heading.
+   * Collapsed: only the .toc-bar inside is visible.
+   * Expanded: .toc-label slides in to the left of the bar. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;  /* bar hugs the right; label expands left */
+  gap: var(--space-3);
+
+  width: 100%;
+  min-height: 16px;            /* generous click target across depths */
+
+  text-decoration: none;
+  color: var(--color-fg-muted);
+  font-family: var(--font-system);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+
+  /* Outline reset — re-enabled on focus-visible. */
+  outline: none;
+}
+
+.toc-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-1);
+}
+
+/* ----- Bar (collapsed-state visual) ----- */
+.toc-bar {
+  flex: 0 0 auto;
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-fg-muted);
+  opacity: 0.45;
+
+  transition:
+    width var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+
+.toc-link[data-depth="2"] .toc-bar { width: var(--toc-bar-h2); }
+.toc-link[data-depth="3"] .toc-bar { width: var(--toc-bar-h3); }
+.toc-link[data-depth="4"] .toc-bar { width: var(--toc-bar-h4); }
+
+/* ----- Label (expanded-state visual) ----- */
+.toc-label {
+  /* Hidden by default; revealed on hover/focus-within of `.toc`. */
+  flex: 1 1 auto;
+  min-width: 0;            /* allow truncation */
+
+  opacity: 0;
+  transform: translateX(8px);
+  pointer-events: none;    /* don't intercept hover until expanded */
+
+  /* Single-line truncation — long Chinese titles otherwise wrap. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  /* Indent by depth so hierarchy reads visually. */
+  text-align: left;
+
+  transition:
+    opacity var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.toc-link[data-depth="3"] .toc-label { padding-left: 14px; }
+.toc-link[data-depth="4"] .toc-label { padding-left: 28px; }
+
+/* ----- Hover / focus state — expand the panel ----- */
+.toc:hover,
+.toc:focus-within {
+  width: var(--toc-panel-w);
+  background: var(--color-bg-soft);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-4) var(--space-5);
+}
+
+.toc:hover .toc-link,
+.toc:focus-within .toc-link {
+  justify-content: flex-start;  /* label leads, bar trails */
+}
+
+.toc:hover .toc-bar,
+.toc:focus-within .toc-bar {
+  /* Bars become subtle ticks — depth is now encoded in label indent. */
+  opacity: 0.25;
+}
+
+.toc:hover .toc-label,
+.toc:focus-within .toc-label {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* ----- Hover affordance for individual links inside expanded panel ----- */
+.toc:hover .toc-link:hover .toc-label,
+.toc:focus-within .toc-link:hover .toc-label,
+.toc:focus-within .toc-link:focus-visible .toc-label {
+  color: var(--color-fg);
+}
+
+/* ----- Active state — set by toc.js IntersectionObserver ----- */
+.toc-link.is-active .toc-bar {
+  background: var(--color-accent);
+  opacity: 1;
+  /* +2px width signal; absolute pixels (not depth-relative) keep the
+   * "currently here" cue strong even on H4. */
+  width: calc(var(--toc-bar-h2) + 2px);
+}
+.toc-link.is-active[data-depth="3"] .toc-bar { width: calc(var(--toc-bar-h3) + 2px); }
+.toc-link.is-active[data-depth="4"] .toc-bar { width: calc(var(--toc-bar-h4) + 2px); }
+
+.toc-link.is-active .toc-label {
+  color: var(--color-fg);
+  font-weight: 500;
+}
+
+/* ----- Hide on immersive mode (user-opt-in reading mode) -----
+ * 05-05-toc-sidebar-yield removed the prior `@media (max-width: 1280px)`
+ * blanket hide — TOC now stays visible across all viewports. See file
+ * header for rationale. */
+body.immersive-page .toc { display: none; }
+
+/* ----- Reduced-motion: instant transitions ----- */
+@media (prefers-reduced-motion: reduce) {
+  .toc,
+  .toc-bar,
+  .toc-label {
+    transition: none;
+  }
+}

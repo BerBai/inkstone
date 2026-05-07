@@ -1,0 +1,111 @@
+baseURL = "https://example.com/"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+title = "Inkstone Demo"
+theme = "inkstone"
+enableEmoji = true
+enableRobotsTXT = true
+hasCJKLanguage = true
+
+[languages]
+  [languages.en]
+    label = "English"
+    locale = "en"
+    weight = 1
+    [languages.en.params]
+      description = "A minimal bilingual Hugo template for longreads."
+      tagline = "A quiet writing space. Notes, thoughts, longreads."
+      ogLocale = "en_US"
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        name = "Posts"
+        url  = "/posts/"
+        weight = 1
+      [[languages.en.menu.main]]
+        name = "Archive"
+        url  = "/archive/"
+        weight = 2
+      [[languages.en.menu.main]]
+        name = "About"
+        url  = "/about/"
+        weight = 3
+      [[languages.en.menu.main]]
+        name = "Shortcodes"
+        url  = "/shortcodes-demo/"
+        weight = 4
+
+  [languages.zh-cn]
+    label = "中文"
+    locale = "zh-cn"
+    weight = 2
+    [languages.zh-cn.params]
+      description = "极简双语 Hugo 写作模板，为长读、慢写而生。"
+      tagline = "一方极简的写字处。笔记、思考、长读。"
+      ogLocale = "zh_CN"
+    [languages.zh-cn.menu]
+      [[languages.zh-cn.menu.main]]
+        name = "文章"
+        url  = "/posts/"
+        weight = 1
+      [[languages.zh-cn.menu.main]]
+        name = "归档"
+        url  = "/archive/"
+        weight = 2
+      [[languages.zh-cn.menu.main]]
+        name = "关于"
+        url  = "/about/"
+        weight = 3
+      [[languages.zh-cn.menu.main]]
+        name = "Shortcodes"
+        url  = "/shortcodes-demo/"
+        weight = 4
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.parser]
+      wrapStandAloneImageWithinParagraph = false
+  [markup.highlight]
+    noClasses = false
+    style = "github"
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+[permalinks]
+  posts = "/:slug/"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[taxonomies]
+  tag = "tags"
+
+[params]
+  author = "Inkstone Author"
+
+  # CDN versions for shortcode integrations
+  jsdelivrMirror   = "https://cdn.jsdmirror.com"
+  g2Version        = "5.4.8"
+  mathjaxVersion   = "4"
+  mermaidVersion   = "11.14.0"
+  markmapVersion   = "0.18.12"
+  pseudocodeVersion = "latest"
+
+  # Media embed integrations
+  videojsVersion             = "8.10.0"
+  swiperVersion              = "11.1.4"
+  imageCompareViewerVersion  = "1.6.2"
+
+  # Content/utility integrations
+  jQueryVersion              = "3.7.1"
+  justifiedgalleryVersion    = "3.8.1"
+  lightgalleryVersion        = "2.9.0"
+  APlayerVersion             = "1.10.1"
+  metingjsVersion            = "2.0.2"
+  metingApi                  = "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r"
+  clipboardjsVersion         = "2.0.11"
+  tippyVersion               = "6.3.7"
+  popperVersion              = "2.11.8"

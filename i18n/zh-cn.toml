@@ -1,0 +1,226 @@
+# Chinese (zh-cn) UI strings.
+#
+# Conventions:
+#   - Use table form `[key]` + `other = "..."` for everything (canonical Hugo
+#     i18n form, forward-compatible for plurals).
+#   - Key naming: `<group>_<purpose>` with snake_case. Group prefixes match
+#     template ownership (nav / home / posts / tags / archive / pagination /
+#     post / meta / sidebar / shortcode / admonition / error_404).
+#   - Brand-identifier strings (e.g., 豆瓣评分 inside douban-card) stay
+#     hardcoded in their shortcode — do NOT add them here.
+#
+# Single source of truth: when adding a new UI string, add the key to BOTH
+# this file and i18n/en.toml in the same commit. Missing-key fallback in
+# Hugo: returns the default-language value when the requested language has
+# no entry, so en-missing keys silently degrade to Chinese (acceptable
+# during migration, audit before release).
+
+# ─── Navigation ────────────────────────────────────────────────────────────
+[nav_skip_to_main]
+other = "跳到正文"
+
+[nav_main_label]
+other = "主导航"
+
+[nav_back_to_home]
+other = "回到首页"
+
+[nav_view_posts]
+other = "看文章列表"
+
+[nav_view_archive]
+other = "看归档"
+
+[nav_more]
+other = "更多"
+
+# ─── Home ──────────────────────────────────────────────────────────────────
+[home_recent]
+other = "最近"
+
+[home_view_all]
+other = "查看全部 →"
+
+# ─── 404 ───────────────────────────────────────────────────────────────────
+[error_404_title]
+other = "找不到这个页面"
+
+[error_404_desc]
+other = "这个 URL 现在没东西。可能是搬走了，可能从没存在过。"
+
+# ─── Posts list / single ───────────────────────────────────────────────────
+[posts_subtitle]
+other = "共 {{ .Count }} 篇"
+
+[posts_subtitle_paged]
+other = "共 {{ .Count }} 篇 · 第 {{ .Page }} / {{ .Total }} 页"
+
+[posts_default_badge]
+other = "随笔"
+
+[posts_pagination_label]
+other = "文章列表分页"
+
+[posts_subscribe_rss]
+other = "订阅 RSS"
+
+[posts_exit_reading]
+other = "退出阅读"
+
+# ─── Pagination (posts list) ───────────────────────────────────────────────
+[pagination_prev]
+other = "上一页"
+
+[pagination_next]
+other = "下一页"
+
+# ─── Post-to-post navigation (prev-next.html) ──────────────────────────────
+[post_prev]
+other = "上一篇"
+
+[post_next]
+other = "下一篇"
+
+[post_nav_label]
+other = "上一篇/下一篇"
+
+# ─── Meta line (word count / reading time) ─────────────────────────────────
+[meta_word_count]
+other = "共 {{ .Count }} 字"
+
+[meta_reading_time]
+other = "约 {{ .Minutes }} 分钟"
+
+# ─── Tags ──────────────────────────────────────────────────────────────────
+[tags_count_in_term]
+other = "{{ .Count }} 篇文章。"
+
+[tags_back_to_all]
+other = "← 所有标签"
+
+[tags_count_total]
+other = "共 {{ .Count }} 个标签。"
+
+# ─── Archive ───────────────────────────────────────────────────────────────
+[archive_count]
+other = "共 {{ .Count }} 篇文章。"
+
+[archive_year_count]
+other = "{{ .Count }} 篇"
+
+# ─── Sidebar actions ───────────────────────────────────────────────────────
+[sidebar_toggle_reading_mode]
+other = "切换阅读模式"
+
+[sidebar_reading_mode_label]
+other = "阅读模式"
+
+[sidebar_toggle_theme]
+other = "切换主题"
+
+[sidebar_theme_label]
+other = "主题"
+
+[sidebar_rss_aria]
+other = "RSS 订阅"
+
+[sidebar_rss_label]
+other = "RSS"
+
+# ─── Search (⌘K modal) ─────────────────────────────────────────────────────
+[search_button_aria]
+other = "搜索文章"
+
+[search_button_label]
+other = "搜索"
+
+[search_input_placeholder]
+other = "搜索文章..."
+
+[search_kbd_hint_select]
+other = "选择"
+
+[search_kbd_hint_open]
+other = "打开"
+
+[search_kbd_hint_close]
+other = "关闭"
+
+[search_recent_title]
+other = "最近搜索"
+
+[search_recent_empty]
+other = "在上方输入开始搜索。"
+
+[search_recent_clear]
+other = "清空"
+
+[search_no_results_title]
+other = "没有匹配的文章"
+
+[search_no_results_hint]
+other = "试试更宽泛的关键词。"
+
+[toc_label]
+other = "目录"
+
+[language_switcher_label]
+other = "切换语言"
+
+# ─── Admonition titles (default when shortcode invoked without title=) ─────
+# Migrated from [params.lang.admonition.*] in hugo.toml. PR2 will switch the
+# admonition shortcode to read these via `i18n "admonition_<type>"`.
+[admonition_note]
+other = "注意"
+
+[admonition_abstract]
+other = "摘要"
+
+[admonition_info]
+other = "信息"
+
+[admonition_tip]
+other = "提示"
+
+[admonition_success]
+other = "成功"
+
+[admonition_question]
+other = "问题"
+
+[admonition_warning]
+other = "警告"
+
+[admonition_failure]
+other = "失败"
+
+[admonition_danger]
+other = "危险"
+
+[admonition_bug]
+other = "错误"
+
+[admonition_example]
+other = "示例"
+
+[admonition_quote]
+other = "引用"
+
+# ─── Other shortcode defaults ──────────────────────────────────────────────
+[shortcode_pseudocode_title_prefix]
+other = "算法"
+
+[shortcode_copy_label]
+other = "复制"
+
+[shortcode_copy_success]
+other = "复制成功"
+
+[shortcode_copy_failure]
+other = "复制失败"
+
+[shortcode_video_no_js]
+other = "请启用 JavaScript 并升级到支持 HTML5 视频的浏览器以观看此视频"
+
+[shortcode_bilibili_default_title]
+other = "Bilibili 视频"

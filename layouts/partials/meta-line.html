@@ -1,0 +1,71 @@
+{{/*
+  meta-line.html — 05-04-e2
+  Renders article metadata inline (date · tags · word-count · reading-time)
+  for the ArticleLayout / EssayCard `.meta-line` component.
+
+  Params (dict):
+    page              — *.Page (required). Pulls Date, tags, WordCount, ReadingTime.
+    variant           — "article" (default) | "list"
+                        list variant suppresses word-count and reading-time
+                        and tightens spacing via parent .list-item context.
+    showDate          — bool, default true
+    showTags          — bool, default true
+    showWordCount     — bool, default true (article only)
+    showReadingTime   — bool, default true (article only)
+
+  Usage:
+    {{ partial "meta-line.html" (dict "page" .) }}
+    {{ partial "meta-line.html" (dict "page" . "variant" "list") }}
+    {{ partial "meta-line.html" (dict "page" . "showWordCount" false) }}
+*/}}
+{{- $page := .page -}}
+{{- $variant := or .variant "article" -}}
+{{- $showDate := cond (isset . "showDate") .showDate true -}}
+{{- $showTags := cond (isset . "showTags") .showTags true -}}
+{{- $showWordCount := cond (isset . "showWordCount") .showWordCount true -}}
+{{- $showReadingTime := cond (isset . "showReadingTime") .showReadingTime true -}}
+
+{{- if eq $variant "list" -}}
+  {{- $showWordCount = false -}}
+  {{- $showReadingTime = false -}}
+{{- end -}}
+
+{{- $tags := $page.Params.tags | default slice -}}
+{{- $hasMeta := false -}}
+{{- if $showDate }}{{- $hasMeta = true -}}{{- end -}}
+{{- if and $showTags (gt (len $tags) 0) }}{{- $hasMeta = true -}}{{- end -}}
+{{- if $showWordCount }}{{- $hasMeta = true -}}{{- end -}}
+{{- if $showReadingTime }}{{- $hasMeta = true -}}{{- end -}}
+
+{{- if $hasMeta -}}
+<div class="meta-line meta-line--items">
+  {{- if $showDate }}
+    <span class="meta-line__item">
+      <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "2006-01-02" }}</time>
+    </span>
+  {{- end }}
+  {{- if and $showTags (gt (len $tags) 0) }}
+    <span class="meta-line__item meta-line__item--tags">
+      {{- range $tags }}
+        {{- if eq $variant "list" }}
+          {{/* List variant lives inside a card-wide <a class="list-item">.
+               HTML5 forbids nested <a>, and the parser will silently lift
+               our inner <a class="tag"> out of the wrapping <span>, leaving
+               an empty tags container and breaking any flex/gap rule that
+               targets it. Render as <span> here so tags stay nested where
+               our CSS expects them. The whole card is already clickable. */}}
+          <span class="tag">#{{ . }}</span>
+        {{- else }}
+          <a class="tag" href="/tags/{{ . | urlize }}/">#{{ . }}</a>
+        {{- end }}
+      {{- end }}
+    </span>
+  {{- end }}
+  {{- if $showWordCount }}
+    <span class="meta-line__item meta-line__item--desktop-meta">{{ i18n "meta_word_count" (dict "Count" (lang.FormatNumber 0 $page.WordCount)) }}</span>
+  {{- end }}
+  {{- if $showReadingTime }}
+    <span class="meta-line__item meta-line__item--desktop-meta">{{ i18n "meta_reading_time" (dict "Minutes" $page.ReadingTime) }}</span>
+  {{- end }}
+</div>
+{{- end -}}

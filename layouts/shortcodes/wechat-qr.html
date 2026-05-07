@@ -1,0 +1,16 @@
+{{- /* WeChat OA name with hover/focus QR popover.
+       Usage: {{< wechat-qr name="鳄鱼儿" image="/img/wechat-qr.png" >}}
+       Default image is /img/wechat-qr.png (Hugo serves static/img/*).
+       Desktop: hover. Touch: tap (tabindex makes wrapper focusable;
+       :focus-within reveals the popover). No JS. */ -}}
+{{- $name := .Get "name" | default "WeChat" -}}
+{{- $image := .Get "image" | default "/img/wechat-qr.png" -}}
+{{- $caption := .Get "caption" | default "微信扫码关注" -}}
+{{- $alt := printf "%s 公众号二维码" $name -}}
+<span class="wechat-qr" tabindex="0" role="button" aria-label="{{ $alt }}">
+  <span class="wechat-qr-name">{{ $name }}</span>
+  <span class="wechat-qr-popover" role="tooltip" aria-hidden="true">
+    <img src="{{ $image }}" alt="{{ $alt }}" loading="lazy" decoding="async" width="240" height="240" />
+    <span class="wechat-qr-caption">{{ $caption }}</span>
+  </span>
+</span>

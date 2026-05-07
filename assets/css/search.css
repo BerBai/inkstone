@@ -1,0 +1,288 @@
+/* 05-06-s2: ⌘K search modal.
+ *
+ * Layout: viewport-fixed overlay with centered panel. Mobile (≤640px)
+ * widens panel to full screen. Tokens: reuse shell color/radius/space —
+ * no new tokens. Backdrop uses semi-opaque fg-muted for both themes
+ * since accent-soft would tint warm in light, cold in dark. */
+
+.search-modal[hidden] {
+  display: none;
+}
+
+.search-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgb(0 0 0 / 0.4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(var(--space-8), 12vh, var(--space-16));
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+  /* Smooth open/close — paired with .is-open below. */
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.search-modal.is-open {
+  opacity: 1;
+}
+
+.search-modal__panel {
+  width: 100%;
+  max-width: 640px;
+  max-height: min(70vh, 560px);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-5);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.search-modal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-modal__icon {
+  display: inline-flex;
+  color: var(--color-fg-subtle);
+}
+.search-modal__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.search-input {
+  flex: 1 1 auto;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-fg);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  padding: var(--space-2) 0;
+}
+.search-input::placeholder {
+  color: var(--color-fg-subtle);
+}
+/* Hide the native search clear (X) button — we have our own close button. */
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-2);
+  transition: color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+.search-close:hover,
+.search-close:focus-visible {
+  color: var(--color-accent);
+  background: var(--color-bg-soft);
+  outline: none;
+}
+.search-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.search-results {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--space-2);
+  /* Keep an empty list layout-neutral so the panel collapses to header
+   * + footer when no query is typed. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.search-results:empty {
+  padding: 0;
+}
+
+.search-result {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-3);
+  text-decoration: none;
+  color: var(--color-fg);
+  border-bottom: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+.search-result:hover,
+.search-result.is-active {
+  background: var(--color-bg-soft);
+  color: var(--color-fg);
+}
+.search-result__title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-1);
+}
+.search-result__excerpt {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+  line-height: var(--leading-snug);
+  /* Pagefind emits <mark> around hits — accent it via design tokens
+   * instead of the browser default yellow which clashes with the
+   *朱砂红 palette. */
+}
+.search-result__excerpt mark {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 0 0.15em;
+  border-radius: var(--radius-1);
+}
+
+/* Recent searches (empty-query state). Rendered into .search-results
+ * by JS; matches result-list visual rhythm but uses muted colors so
+ * it reads as ambient context, not a primary action. */
+.search-recent {
+  padding: var(--space-2) var(--space-2) var(--space-3);
+}
+.search-recent__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-fg-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.search-recent__clear {
+  background: transparent;
+  border: none;
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.search-recent__clear:hover,
+.search-recent__clear:focus-visible {
+  color: var(--color-accent);
+  outline: none;
+}
+.search-recent__list {
+  display: flex;
+  flex-direction: column;
+}
+.search-recent__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  border-radius: var(--radius-3);
+  transition: background-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+.search-recent__item:hover,
+.search-recent__item:focus-visible {
+  background: var(--color-bg-soft);
+  color: var(--color-fg);
+  outline: none;
+}
+.search-recent__icon {
+  color: var(--color-fg-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+.search-recent__text {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+}
+
+/* Empty states: no-history hint and no-results message share the same
+ * centered layout with title (optional) + hint copy. */
+.search-empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--color-fg-subtle);
+}
+.search-empty__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--color-fg-muted);
+  margin-bottom: var(--space-2);
+}
+.search-empty__hint {
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+.search-modal__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-fg-subtle);
+  background: var(--color-bg-soft);
+}
+.search-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.search-kbd kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2em;
+  padding: 0 0.35em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-bg);
+  color: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+/* ≤640px: full-bleed sheet so the soft keyboard never crowds the input. */
+@media (max-width: 640px) {
+  .search-modal {
+    padding: 0;
+  }
+  .search-modal__panel {
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+  .search-modal__footer {
+    /* Wrap on narrow screens so kbd hints don't overflow horizontally. */
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}

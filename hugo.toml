@@ -1,0 +1,29 @@
+# Inkstone theme — root hugo.toml.
+#
+# This file is NOT used to configure a Hugo site. It declares Hugo version
+# compatibility for theme consumers (Hugo Modules / submodule users) and
+# default markup config that mirrors common preferences.
+#
+# Site authors should override these in their own hugo.toml as needed.
+# The actual demo site config lives in exampleSite/hugo.toml.
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min      = "0.128.0"
+    # No `max` — forward compatibility preferred. Hugo Themes Gallery
+    # currently builds on 0.161.x; bump min only when a breaking
+    # change forces it.
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.parser]
+      wrapStandAloneImageWithinParagraph = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel   = 4
+  [markup.highlight]
+    noClasses = false
+    style     = "github"

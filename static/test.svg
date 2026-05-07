@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Inkstone 占位图">
+  <rect width="800" height="450" fill="#faf8f3"/>
+  <rect x="40" y="40" width="720" height="370" fill="none" stroke="#d6d3d1" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="400" y="225" text-anchor="middle" font-family="Georgia, serif" font-size="36" fill="#78716c">Inkstone · 占位图</text>
+  <text x="400" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#a8a29e">800 × 450</text>
+  <circle cx="730" cy="70" r="8" fill="#b91c1c" opacity="0.6"/>
+</svg>

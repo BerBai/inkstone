@@ -1,0 +1,109 @@
+{{- /*
+  T11a — centralized late-load script bundle for shortcode integrations.
+  Each block is conditional on Page.Store flags or content sniffing so pages
+  that don't use a feature pay zero JS cost.
+*/ -}}
+
+{{- /* Mermaid: render-codeblock-mermaid markup hook sets hasMermaid */ -}}
+{{- if .Page.Store.Get "hasMermaid" }}
+  <script type="module">
+    import mermaid from "{{ $.Site.Params.jsdelivrMirror }}/npm/mermaid@{{ $.Site.Params.mermaidVersion }}/dist/mermaid.esm.min.mjs";
+
+    document.querySelectorAll(".mermaid").forEach((el) => {
+      el.setAttribute("data-text", el.innerHTML);
+    });
+
+    const mermaidThemeFor = (t) => (t === "dark" ? "dark" : "neutral");
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: mermaidThemeFor(document.documentElement.dataset.theme),
+      fontFamily: "var(--font-sans)",
+    });
+
+    await mermaid.run({ querySelector: ".mermaid" });
+    window.mermaid = mermaid;
+
+    // 05-04-theme-broadcast: re-render every .mermaid block when theme.js
+    // fires `themechange`. We restore each element's source from data-text,
+    // strip mermaid's `data-processed` marker so it re-renders, then run
+    // again. See .trellis/spec/themed-components.md.
+    document.addEventListener("themechange", async (e) => {
+      const theme = e.detail && e.detail.theme === "dark" ? "dark" : "light";
+      const blocks = document.querySelectorAll(".mermaid");
+      blocks.forEach((el) => {
+        const src = el.getAttribute("data-text");
+        if (src != null) el.innerHTML = src;
+        el.removeAttribute("data-processed");
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: mermaidThemeFor(theme),
+        fontFamily: "var(--font-sans)",
+      });
+      try {
+        await mermaid.run({ querySelector: ".mermaid" });
+      } catch (_) { /* mermaid handles its own rendering errors */ }
+    });
+  </script>
+{{- end }}
+
+{{- /* Markmap: render-codeblock-markmap markup hook sets hasMarkmap */ -}}
+{{- if .Page.Store.Get "hasMarkmap" }}
+  <script>
+    window.markmap = {
+      autoLoader: {
+        provider: (path) => `{{ $.Site.Params.jsdelivrMirror }}/npm/${path}`,
+      },
+    };
+  </script>
+  <script src="{{ $.Site.Params.jsdelivrMirror }}/npm/markmap-autoloader@{{ $.Site.Params.markmapVersion }}"></script>
+{{- end }}
+
+{{- /* Pseudocode: shortcode sets shortcode-pseudocode store flag inside its template */ -}}
+{{- partial "shortcode_pseudocode.html" . }}
+
+{{- /* T11b: video.js — shortcode-video flag set by video.html */ -}}
+{{- partial "shortcode_video.html" . }}
+
+{{- /* T11b: image-compare-viewer — shortcode-image-compare flag set by image-compare.html */ -}}
+{{- partial "shortcode_image_compare.html" . }}
+
+{{- /* T11c: gallery (jquery + justifiedGallery + lightGallery) — shortcode-gallery flag set by gallery.html */ -}}
+{{- partial "shortcode_gallery.html" . }}
+
+{{- /* T11c: tab radio sync — shortcode-tab flag set by tab.html */ -}}
+{{- partial "shortcode_tab.html" . }}
+
+{{- /* T11c: copy-to-clipboard (clipboard.js + popper + tippy) — shortcode-copy-to-clipboard flag set by copy-to-clipboard.html */ -}}
+{{- partial "shortcode_copy_to_clipboard.html" . }}
+
+{{- /* 05-05-iframe-darkmode-bridge: rewrite iframe src on themechange for
+       hosts that accept a theme URL param (CodePen / CodeSandbox /
+       StackBlitz / Replit). First-paint sync happens inline in
+       layouts/shortcodes/iframe.html so the iframe never loads with the
+       wrong theme. This listener handles subsequent toggles only.
+       Whitelist source of truth: data/iframe_theme_hosts.toml. */ -}}
+{{- if .Page.Store.Get "hasIframeBridge" }}
+  <script>
+    document.addEventListener("themechange", function (e) {
+      var theme = e.detail && e.detail.theme === "dark" ? "dark" : "light";
+      var HOSTS = {{ site.Data.iframe_theme_hosts.host | jsonify | safeJS }};
+      document.querySelectorAll("iframe[data-theme-bridge]").forEach(function (el) {
+        try {
+          var u = new URL(el.src);
+          var host = HOSTS.find(function (h) { return u.host.indexOf(h.match) !== -1; });
+          if (!host) return;
+          if (u.searchParams.get(host.param) === theme) return;
+          u.searchParams.set(host.param, theme);
+          el.src = u.toString();
+        } catch (_) { /* malformed src — leave it alone */ }
+      });
+    });
+  </script>
+{{- end }}
+
+{{- /* Math.js: convert single-$ wrapped <code> to MathJax-friendly delimiters. */ -}}
+{{- if and (not .Params.disable_math) .IsPage (or (strings.Contains .Content "\\(") (strings.Contains .Content "$")) }}
+  <script src="/js/math.js"></script>
+{{- end }}

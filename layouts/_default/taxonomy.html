@@ -1,0 +1,21 @@
+{{/*
+  Taxonomy index page — e.g. /tags/
+  Lists every term in the taxonomy. Each .Pages here is a *term*, and
+  each term's own .Pages is the list of posts under it.
+*/}}
+{{ define "main" }}
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    <p class="page-desc">{{ i18n "tags_count_total" (dict "Count" (len .Pages)) }}</p>
+  </header>
+
+  <ul class="tag-cloud">
+    {{ range .Pages.ByTitle }}
+      <li>
+        <a class="tag" href="{{ .RelPermalink }}">
+          #{{ .Title }} <span class="tag-count">{{ len .Pages }}</span>
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

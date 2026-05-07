@@ -1,0 +1,376 @@
+/* ============================================================
+ * Shell + Sidebar — T5
+ * Two-column layout: sticky sidebar + flowing content,
+ * collapses to single-column under 768px.
+ *
+ * Layout tokens come from variable.css:
+ *   --shell-max 1100 / --sidebar-w 220 / --content-max 900
+ *   --shell-pad 48   / --shell-gap 48
+ * ============================================================ */
+
+/* 05-05-fix-sidebar-layout-shift: reserve the vertical scrollbar gutter
+ * at the root so `.shell` (centered with `margin: 0 auto`) lands on the
+ * same pixel column whether or not the current page overflows the
+ * viewport. Without this, short pages (e.g. /tags/, sparse home) render
+ * with no scrollbar while long pages (/posts/, single articles) render
+ * with one, and the centered shell — including the sidebar — jumps
+ * horizontally by ~half-scrollbar-width when navigating between them.
+ *
+ * `stable` is preferred over `overflow-y: scroll` because overlay-
+ * scrollbar platforms (mobile Safari, default macOS) don't trigger the
+ * shift in the first place, and `stable` correctly reserves nothing on
+ * them — no empty scrollbar track on short pages. */
+html {
+  scrollbar-gutter: stable;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: var(--shell-gap);
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  padding: var(--shell-pad);
+  min-height: 100vh;
+}
+
+/* 05-05-toc-sidebar-yield: when a TOC is rendered, bump the shell's
+ * right padding by 16px so the article column never sits flush against
+ * the TOC bar at the right edge. The TOC itself (`position: fixed;
+ * right: 0; width: 48px`) lives inside the standard --shell-pad gutter,
+ * so without this rule content text would touch the TOC at narrow
+ * viewports. Scoped to .has-toc bodies so non-TOC pages keep their
+ * symmetric padding. */
+body.has-toc .shell {
+  padding-right: calc(var(--shell-pad) + 16px);
+}
+
+/* ============================================================
+ * Sidebar
+ * ============================================================ */
+.sidebar {
+  position: sticky;
+  top: var(--shell-pad);
+  height: max-content;
+  min-height: calc(100vh - 2 * var(--shell-pad));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-right: var(--space-8);
+  border-right: 1px solid var(--color-border);
+}
+
+.sidebar-brand {
+  text-align: right;
+}
+
+.sidebar-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-3);
+  color: var(--color-fg);
+}
+.sidebar-title a {
+  border-bottom: none;
+  color: inherit;
+}
+.sidebar-title a:hover {
+  color: var(--color-accent);
+  border-bottom: none;
+}
+
+.sidebar-tagline {
+  font-style: italic;
+  color: var(--color-fg-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  margin: 0 0 var(--space-3);
+}
+
+/* ---------- Sidebar nav ---------- */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+.sidebar-nav a {
+  border-bottom: none;
+  padding: var(--space-1) 0;
+  color: var(--color-fg-muted);
+  font-size: var(--text-sm);
+  transition:
+    color     var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+/* Bullet suffix after every nav item — each link reads "随笔 ·".
+ * Subtle color so the bullet doesn't compete with the active-state
+ * weight bump. */
+.sidebar-nav a::after {
+  content: " ·";
+  color: var(--color-fg-subtle);
+}
+.sidebar-nav a:hover {
+  color: var(--color-accent);
+  border-bottom: none;
+  transform: translateX(2px);
+}
+.sidebar-nav a.active {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+/* ---------- Sidebar actions (T10 wires JS) ----------
+ * Flat SVG glyphs, no surrounding chip. Hover swaps color only.
+ */
+.sidebar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-6);
+}
+.sidebar-actions button,
+.sidebar-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.sidebar-actions a {
+  /* Override base.css <a> dashed border */
+  border-bottom: none;
+}
+.sidebar-actions button:hover,
+.sidebar-actions a:hover,
+.sidebar-actions button:focus-visible,
+.sidebar-actions a:focus-visible {
+  color: var(--color-accent);
+  outline: none;
+}
+.sidebar-actions svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Language switcher lives inside .sidebar-actions and now renders as an icon
+ * link, so it inherits sizing from `.sidebar-actions svg` and color/hover
+ * from `.sidebar-actions a`. We only need to neutralize inline-link metrics
+ * so the SVG sits flush with the icon-button siblings. */
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+}
+.language-switcher__link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+/* Theme toggle icon swap — mirrors variable.css theme strategy.
+ * Default (light): show moon (click → dark).
+ * System dark / [data-theme=dark]: show sun (click → light).
+ * Specificity ordering matches variable.css: :root[data-theme=…] (0,1,1)
+ * beats the prefers-color-scheme media query (0,0,1), so explicit override
+ * always wins regardless of system preference. */
+.theme-icon {
+  display: none;
+  line-height: 0;
+}
+.theme-icon--moon {
+  display: inline-flex;
+}
+@media (prefers-color-scheme: dark) {
+  .theme-icon--moon { display: none; }
+  .theme-icon--sun  { display: inline-flex; }
+}
+:root[data-theme="dark"] .theme-icon--moon { display: none; }
+:root[data-theme="dark"] .theme-icon--sun  { display: inline-flex; }
+:root[data-theme="light"] .theme-icon--moon { display: inline-flex; }
+:root[data-theme="light"] .theme-icon--sun  { display: none; }
+
+/* Reading-mode toggle is article-only — `immersive-page` styles
+ * (sidebar collapse, single-column shell, reader-exit affordance)
+ * only apply on body.article-page. Hide the button elsewhere to
+ * avoid a UX dead-end with no exit affordance. JS guards too. */
+body:not(.article-page) #reading-mode-toggle {
+  display: none;
+}
+
+/* ---------- Overflow menu (narrow-viewport only) ----------
+ * Wide-viewport sidebar already shows secondary items inline (vertical
+ * column has plenty of room), so the <details> overflow affordance is
+ * suppressed here. Narrow block below re-enables it.
+ */
+.sidebar-nav-more {
+  display: none;
+}
+
+/* ============================================================
+ * Content column
+ * ============================================================ */
+.content {
+  max-width: var(--content-max);
+  min-width: 0;
+}
+
+/* ============================================================
+ * Footer
+ * ============================================================ */
+.footer {
+  margin-top: var(--space-16);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  color: var(--color-fg-subtle);
+  text-align: center;
+}
+.footer a {
+  color: var(--color-fg-muted);
+}
+
+/* ============================================================
+ * Narrow viewport (≤ 1023px): horizontal top bar
+ *
+ * Single-column shell where `.sidebar` becomes a 3-zone bar:
+ *   [ brand ]      [ nav · nav · 更多 ▾ ]      [ icons ]
+ *
+ * Tagline is hidden — the bar is one row. Secondary nav items
+ * (menu params: priority=secondary) collapse into a <details>
+ * overflow menu so 320–375px widths never wrap.
+ *
+ * Breakpoint history (05-05-toc-sidebar-yield): the cutoff was 768px,
+ * which left a "dead zone" between 769–1280 where the sidebar stayed
+ * as a sticky left rail but the TOC was hidden by toc.css. We lifted
+ * the cutoff to 1023 so the sidebar yields to the top-bar layout at
+ * narrower widths — TOC > sidebar in layout priority. At viewport
+ * ≥ 1024 the 2-col rail + TOC layout still has ~640px content width;
+ * below that, content needs the full row.
+ * ============================================================ */
+@media (max-width: 1023px) {
+  .shell {
+    grid-template-columns: 1fr;
+    /* Pin sidebar row to content-size, let content absorb remaining 100vh.
+     * Without this, align-content defaults to stretch and splits the leftover
+     * height equally between both auto rows — the sidebar row grows past its
+     * top-bar contents and leaves a tall blank gap before the article. */
+    grid-template-rows: auto 1fr;
+    padding: var(--space-6);
+    gap: var(--space-8);
+  }
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 0;
+    padding: 0 0 var(--space-4);
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sidebar-brand {
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .sidebar-title {
+    font-size: var(--text-xl);
+    margin: 0;
+  }
+  .sidebar-tagline {
+    display: none;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: 0;
+  }
+  .sidebar-nav a {
+    white-space: nowrap;
+  }
+  /* Drop the trailing " ·" bullet in horizontal mode — items already read
+   * left-to-right and the bullet pushes the row wider for no benefit. */
+  .sidebar-nav a::after {
+    content: none;
+  }
+  /* Secondary items are surfaced via <details> "更多 ▾" instead of inline. */
+  .sidebar-nav .nav-secondary {
+    display: none;
+  }
+
+  /* Overflow menu — native <details>, zero-JS. */
+  .sidebar-nav-more {
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .sidebar-nav-more > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: var(--space-1) 0;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .sidebar-nav-more > summary::-webkit-details-marker {
+    display: none;
+  }
+  .sidebar-nav-more > summary::after {
+    content: " ▾";
+    color: var(--color-fg-subtle);
+  }
+  .sidebar-nav-more > summary:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-nav-more[open] > summary {
+    color: var(--color-fg);
+  }
+  .sidebar-nav-more-list {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 7rem;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    z-index: 10;
+  }
+  .sidebar-nav-more-list a {
+    border-bottom: none;
+    color: var(--color-fg-muted);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+  .sidebar-nav-more-list a:hover,
+  .sidebar-nav-more-list a.active {
+    color: var(--color-fg);
+  }
+
+  .sidebar-actions {
+    margin-top: 0;
+    padding-top: 0;
+    flex-shrink: 0;
+    /* Wide-mode 16px gap is too generous when 3 icons share a row with
+     * brand + 4 nav items at 375px — tighten so nothing wraps. */
+    gap: var(--space-3);
+  }
+}

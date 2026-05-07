@@ -1,0 +1,56 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1 class="sidebar-title">
+      <a href="{{ "/" | relLangURL }}">{{ .Site.Title }}</a>
+    </h1>
+    {{ with .Site.Params.tagline }}
+      <p class="sidebar-tagline">{{ . }}</p>
+    {{ end }}
+  </div>
+
+  <nav class="sidebar-nav" aria-label="{{ i18n "nav_main_label" }}">
+    {{ $currentURL := .RelPermalink }}
+    {{ $currentSection := .Section }}
+    {{ range .Site.Menus.main }}
+      {{ $url := .URL | relLangURL }}
+      {{/* Derive section name from menu URL like "/posts/" → "posts". */}}
+      {{ $menuSection := strings.Trim $url "/" }}
+      {{ $isActive := or
+          (eq $currentURL $url)
+          (and (ne $url "/") (hasPrefix $currentURL $url))
+          (and (ne $menuSection "") (eq $menuSection $currentSection))
+      }}
+      {{ $isSecondary := eq (.Params.priority | default "") "secondary" }}
+      <a href="{{ $url }}"
+         class="{{ if $isActive }}active{{ end }}{{ if $isSecondary }} nav-secondary{{ end }}">{{ .Name }}</a>
+    {{ end }}
+
+    {{/* Narrow-viewport overflow menu — DOM is always rendered, CSS hides
+         it ≥ 769px. Only items flagged priority=secondary appear inside. */}}
+    {{ $hasSecondary := false }}
+    {{ range .Site.Menus.main }}
+      {{ if eq (.Params.priority | default "") "secondary" }}{{ $hasSecondary = true }}{{ end }}
+    {{ end }}
+    {{ if $hasSecondary }}
+      <details class="sidebar-nav-more">
+        <summary>{{ i18n "nav_more" }}</summary>
+        <div class="sidebar-nav-more-list">
+          {{ range .Site.Menus.main }}
+            {{ if eq (.Params.priority | default "") "secondary" }}
+              {{ $url := .URL | relLangURL }}
+              {{ $menuSection := strings.Trim $url "/" }}
+              {{ $isActive := or
+                  (eq $currentURL $url)
+                  (and (ne $url "/") (hasPrefix $currentURL $url))
+                  (and (ne $menuSection "") (eq $menuSection $currentSection))
+              }}
+              <a href="{{ $url }}"{{ if $isActive }} class="active"{{ end }}>{{ .Name }}</a>
+            {{ end }}
+          {{ end }}
+        </div>
+      </details>
+    {{ end }}
+  </nav>
+
+  {{ partial "sidebar-actions.html" . }}
+</aside>

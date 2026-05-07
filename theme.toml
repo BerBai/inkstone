@@ -1,0 +1,23 @@
+# Hugo Themes Gallery metadata.
+# See: https://github.com/gohugoio/hugoThemesSiteBuilder
+#
+# Required for submission to https://themes.gohugo.io/. Hugo version
+# compatibility now lives in hugo.toml [module.hugoVersion]; min_version
+# below is kept as a legacy fallback only.
+# Submission also requires images/screenshot.{png,jpg} (>= 1500x1000)
+# and images/tn.{png,jpg} (>= 900x600), both at 3:2 aspect ratio.
+
+name = "Inkstone"
+license = "MIT"
+licenselink = "https://github.com/BerBai/inkstone/blob/main/LICENSE"
+description = "A minimal bilingual Hugo template for longreads. Opinionated about CJK typography and 25 built-in content shortcodes."
+homepage = "https://github.com/BerBai/inkstone"
+# demosite — fill in after deploying exampleSite to GitHub Pages
+# demosite = "https://berbai.github.io/inkstone/"
+tags = ["minimal", "bilingual", "multilingual", "i18n", "blog", "writing", "longreads", "cjk", "tailwind", "personal"]
+features = ["i18n", "multilingual", "responsive", "shortcodes", "rss", "tags", "syntax-highlighting", "math"]
+min_version = "0.128.0"
+
+[author]
+  name = "Jason"
+  homepage = "https://github.com/BerBai"

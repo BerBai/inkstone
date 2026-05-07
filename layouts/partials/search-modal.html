@@ -1,0 +1,39 @@
+{{/* 05-06-s2 + s3: ⌘K search modal mounted once per page in baseof.html.
+     Hidden by default; assets/js/search.js wires open/close + Pagefind +
+     history. Pre-render is empty (results / history injected by JS) so
+     non-JS visitors see nothing — they reach search via the sidebar <a>
+     fallback which links to /posts/.
+
+     i18n strings travel via data-* attributes on the root so search.js
+     can stay framework-free (no server-side JS templating). */}}
+<div id="search-modal" class="search-modal" role="dialog" aria-modal="true"
+     aria-labelledby="search-modal-title" hidden data-pagefind-ignore
+     data-i18n-recent-title="{{ i18n "search_recent_title" }}"
+     data-i18n-recent-empty="{{ i18n "search_recent_empty" }}"
+     data-i18n-recent-clear="{{ i18n "search_recent_clear" }}"
+     data-i18n-no-results-title="{{ i18n "search_no_results_title" }}"
+     data-i18n-no-results-hint="{{ i18n "search_no_results_hint" }}">
+  <div class="search-modal__panel" role="document">
+    <div class="search-modal__header">
+      <span class="search-modal__icon" aria-hidden="true">{{ partial "icon.html" "search" }}</span>
+      <input type="search"
+             class="search-input"
+             id="search-modal-title"
+             autocomplete="off"
+             autocapitalize="off"
+             autocorrect="off"
+             spellcheck="false"
+             placeholder="{{ i18n "search_input_placeholder" }}"
+             aria-label="{{ i18n "search_input_placeholder" }}">
+      <button type="button" class="search-close" aria-label="{{ i18n "search_kbd_hint_close" }}">
+        {{ partial "icon.html" "reader-exit" }}
+      </button>
+    </div>
+    <div class="search-results" role="listbox" aria-label="{{ i18n "search_button_label" }}"></div>
+    <div class="search-modal__footer">
+      <span class="search-kbd"><kbd>↑</kbd><kbd>↓</kbd> {{ i18n "search_kbd_hint_select" }}</span>
+      <span class="search-kbd"><kbd>↵</kbd> {{ i18n "search_kbd_hint_open" }}</span>
+      <span class="search-kbd"><kbd>Esc</kbd> {{ i18n "search_kbd_hint_close" }}</span>
+    </div>
+  </div>
+</div>
