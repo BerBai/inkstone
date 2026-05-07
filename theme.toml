@@ -12,8 +12,7 @@ license = "MIT"
 licenselink = "https://github.com/BerBai/inkstone/blob/main/LICENSE"
 description = "A minimal bilingual Hugo template for longreads. Opinionated about CJK typography and 25 built-in content shortcodes."
 homepage = "https://github.com/BerBai/inkstone"
-# demosite — fill in after deploying exampleSite to GitHub Pages
-# demosite = "https://berbai.github.io/inkstone/"
+demosite = "https://inkstone.125520.xyz/"
 tags = ["minimal", "bilingual", "multilingual", "i18n", "blog", "writing", "longreads", "cjk", "tailwind", "personal"]
 features = ["i18n", "multilingual", "responsive", "shortcodes", "rss", "tags", "syntax-highlighting", "math"]
 min_version = "0.128.0"
