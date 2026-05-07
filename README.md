@@ -61,11 +61,77 @@ hugo server
 ## 依赖要求
 
 - **Hugo extended ≥ 0.128**（用 `css.TailwindCSS`）
-- **Tailwind v4 CLI**（任选其一）：
-  - `npm install -D tailwindcss @tailwindcss/cli`，Hugo 会从 `node_modules/.bin/tailwindcss` 调用
-  - 或装 [tailwindlabs/tailwindcss standalone CLI](https://github.com/tailwindlabs/tailwindcss/releases)，放在 `PATH` 中
+- **Tailwind v4 CLI**（详见下方 [Tailwind v4 Setup](#tailwind-v4-setup) 章节）
 - **Node.js**（仅当用 npm 装 Tailwind 时；standalone CLI 无需 Node）
 - **Pagefind**（可选，仅用搜索时）：`npm install -D pagefind`，构建时 `pagefind --site public`
+
+## Tailwind v4 Setup
+
+主题用 Hugo 0.128+ 内建的 `css.TailwindCSS` 函数处理 Tailwind v4。这个函数需要在 `PATH` 中找到 `tailwindcss` 二进制。三种路径，按推荐度排序：
+
+### 路径 A：npm 安装（开发常用）
+
+最常见的方式，与 Hugo 生态最融合：
+
+```bash
+# 在你的站点根目录
+npm init -y    # 如果还没有 package.json
+npm install -D tailwindcss @tailwindcss/cli
+```
+
+Hugo 会自动从 `./node_modules/.bin/tailwindcss` 调用。无需手动配置 `PATH`，Hugo 0.128+ 会优先查 `node_modules/.bin`。
+
+**优点**：版本可锁定（`package-lock.json`），与 npm/CI workflow 兼容
+**缺点**：需要 Node.js + npm 环境（约 200MB `node_modules/`）
+
+### 路径 B：standalone CLI（零 Node）
+
+Tailwind 官方提供独立二进制，从 [tailwindlabs/tailwindcss releases](https://github.com/tailwindlabs/tailwindcss/releases) 下载：
+
+```bash
+# macOS arm64 示例（按你的平台换 URL）
+curl -fsSL https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64 \
+  -o /usr/local/bin/tailwindcss
+chmod +x /usr/local/bin/tailwindcss
+
+# 验证
+tailwindcss --help
+```
+
+或用 Homebrew：
+
+```bash
+brew install tailwindcss
+```
+
+**优点**：无 Node.js 依赖；CI 镜像可保持精简（不装 Node 就行）
+**缺点**：版本不通过 `package.json` 管理，需要手动同步；不同机器/CI 间版本可能漂移
+
+### 路径 C：CI 配置示例
+
+GitHub Actions 跑 Hugo build：
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+- run: npm install         # 拉 tailwindcss 到 node_modules
+- uses: peaceiris/actions-hugo@v3
+  with:
+    hugo-version: '0.161.1'
+    extended: true
+- run: hugo --gc --minify  # 自动从 node_modules/.bin 找 tailwindcss
+```
+
+注意：`peaceiris/actions-hugo` 不会把 `node_modules/.bin` 加到 PATH，但 Hugo 内部会查找 `node_modules/.bin/tailwindcss`，所以这种顺序工作。
+
+### 故障排查
+
+`hugo` 报错 `binary with name "tailwindcss" not found in PATH`：
+
+1. 检查 `which tailwindcss` 是否能找到。如果用 npm 安装，临时 export：`export PATH="./node_modules/.bin:$PATH"`
+2. 检查 `tailwindcss --help` 能否运行（macOS 第一次跑可能要 `chmod +x`）
+3. 检查 Hugo 版本 ≥ 0.128：`hugo version`
 
 ## Configuration
 

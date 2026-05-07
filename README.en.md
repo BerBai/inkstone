@@ -61,11 +61,77 @@ hugo server
 ## Requirements
 
 - **Hugo extended ≥ 0.128** (for `css.TailwindCSS`)
-- **Tailwind v4 CLI** (pick one):
-  - `npm install -D tailwindcss @tailwindcss/cli`, Hugo invokes from `node_modules/.bin/tailwindcss`
-  - Or install [tailwindlabs/tailwindcss standalone CLI](https://github.com/tailwindlabs/tailwindcss/releases) and put it on `PATH`
+- **Tailwind v4 CLI** (see [Tailwind v4 Setup](#tailwind-v4-setup) below)
 - **Node.js** (only if installing Tailwind via npm; standalone CLI needs no Node)
 - **Pagefind** (optional, only for search): `npm install -D pagefind`, then `pagefind --site public` after `hugo`
+
+## Tailwind v4 Setup
+
+The theme uses Hugo 0.128+'s built-in `css.TailwindCSS` function for Tailwind v4 processing. The function needs the `tailwindcss` binary on `PATH`. Three paths, ranked by recommendation:
+
+### Path A: npm install (most common)
+
+Best for development environments already using Node tooling:
+
+```bash
+# In your site root
+npm init -y    # if package.json doesn't exist
+npm install -D tailwindcss @tailwindcss/cli
+```
+
+Hugo automatically picks up `./node_modules/.bin/tailwindcss`. No PATH config needed — Hugo 0.128+ searches `node_modules/.bin` first.
+
+**Pros**: version locked via `package-lock.json`; integrates with npm/CI workflows
+**Cons**: requires Node.js + npm (~200MB `node_modules/`)
+
+### Path B: standalone CLI (zero Node)
+
+Tailwind ships an official single binary at [tailwindlabs/tailwindcss releases](https://github.com/tailwindlabs/tailwindcss/releases):
+
+```bash
+# macOS arm64 example (replace URL for your platform)
+curl -fsSL https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64 \
+  -o /usr/local/bin/tailwindcss
+chmod +x /usr/local/bin/tailwindcss
+
+# Verify
+tailwindcss --help
+```
+
+Or via Homebrew:
+
+```bash
+brew install tailwindcss
+```
+
+**Pros**: no Node.js dependency; CI images stay small (skip Node entirely)
+**Cons**: version not managed via `package.json`; manual sync; potential drift across machines/CI
+
+### Path C: CI example
+
+GitHub Actions running Hugo build:
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+- run: npm install         # fetches tailwindcss into node_modules
+- uses: peaceiris/actions-hugo@v3
+  with:
+    hugo-version: '0.161.1'
+    extended: true
+- run: hugo --gc --minify  # finds tailwindcss in node_modules/.bin automatically
+```
+
+Note: `peaceiris/actions-hugo` doesn't add `node_modules/.bin` to PATH, but Hugo internally searches there, so this order works.
+
+### Troubleshooting
+
+`hugo` errors with `binary with name "tailwindcss" not found in PATH`:
+
+1. Check `which tailwindcss` — if installed via npm, temp-export: `export PATH="./node_modules/.bin:$PATH"`
+2. Check `tailwindcss --help` runs (macOS first run may need `chmod +x`)
+3. Check Hugo version ≥ 0.128: `hugo version`
 
 ## Configuration
 
