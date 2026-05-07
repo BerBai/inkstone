@@ -1,0 +1,99 @@
+# Deploy exampleSite/ as the inkstone theme demo to GitHub Pages.
+# Custom domain: inkstone.125520.xyz (via CNAME file in exampleSite/static/).
+#
+# Trigger: any push to main that touches theme code or exampleSite.
+# Also runs on tag pushes (semver releases) and manual dispatch.
+
+name: Deploy demo site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'layouts/**'
+      - 'assets/**'
+      - 'static/**'
+      - 'i18n/**'
+      - 'archetypes/**'
+      - 'data/**'
+      - 'exampleSite/**'
+      - 'hugo.toml'
+      - 'theme.toml'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-demo.yml'
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one in-flight deploy at a time. Cancel queued runs but let the
+# current run complete so we don't end up with a half-deployed site.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: '0.161.1'
+  NODE_VERSION: '22'
+  DEMO_BASE_URL: 'https://inkstone.125520.xyz/'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Tailwind v4 CLI
+        run: npm install --no-audit --no-fund
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build exampleSite
+        env:
+          # Hugo's css.TailwindCSS finds tailwindcss in node_modules/.bin
+          PATH_PREPEND: ${{ github.workspace }}/node_modules/.bin
+        run: |
+          export PATH="$PATH_PREPEND:$PATH"
+          which tailwindcss
+          cd exampleSite
+          hugo \
+            --themesDir ../.. \
+            --baseURL "$DEMO_BASE_URL" \
+            --gc \
+            --minify
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: exampleSite/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
