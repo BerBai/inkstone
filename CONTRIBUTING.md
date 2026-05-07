@@ -1,110 +1,105 @@
-# Contributing to Inkstone
+# Contributing
 
-Thanks for considering a contribution! Inkstone is a small, opinionated theme — the bar for new features is intentionally high, but bug fixes and docs are always welcome.
+> [中文](./CONTRIBUTING.md) · [English](./CONTRIBUTING.en.md)
 
-## Reporting issues
+欢迎 issue / PR。Inkstone 是个小项目，流程从简。
 
-Open an issue at [github.com/BerBai/inkstone/issues](https://github.com/BerBai/inkstone/issues).
+## 提 Issue
 
-Please include:
+提 issue 前先搜索 [现有 issue](https://github.com/BerBai/inkstone/issues)，避免重复。
 
-- **Hugo version**: `hugo version` (must be ≥ 0.128 extended)
-- **Theme version**: tag or commit SHA
-- **Tailwind setup**: npm `@tailwindcss/cli` / standalone CLI / other
-- **Reproduction**: minimal `hugo new site` + steps to trigger
-- **Expected vs actual**: what you expected, what you saw
+### Bug 报告
 
-For visual bugs, attach a screenshot.
+请包含：
 
-## Asking questions
+- Hugo 版本（`hugo version`，确认是 extended）
+- Inkstone 版本（tag / commit hash）
+- Tailwind 安装路径（npm / standalone CLI）
+- 复现步骤（最小 `hugo.toml` + 触发问题的内容片段）
+- 期望行为 vs 实际行为
+- 浏览器 + 版本（如果是前端渲染问题）
 
-Issues are for actionable problems. For "how do I configure X" questions, check:
+### Feature Request
 
-1. [README](./README.md) — main docs
-2. [exampleSite](./exampleSite/) — working examples of every shortcode and layout
-3. Hugo's official [docs](https://gohugo.io/documentation/)
+请说明：
 
-If those don't answer it, open an issue tagged `question`.
+- 使用场景：你在写什么样的内容时需要这个？
+- 替代方案：能否用现有 shortcode / CSS override 实现？为什么不够？
+- API 草案：如果是新 shortcode，参数怎么传？
 
-## Pull requests
+## 提 PR
 
-Before opening a PR for a new feature, **open an issue first** to discuss scope. PRs that add features without prior discussion may be closed.
+### 前置
 
-PRs that fix bugs or improve docs can go straight to PR — no pre-discussion needed.
+1. Fork → 在自己 fork 的 `main` 拉一个 feature 分支：`git checkout -b feat/short-description`
+2. 改动尽量小、聚焦单一 topic；大重构请先开 issue 讨论
+3. 保持双语同步：改动涉及 README / i18n / 文档时，CN + EN 一起改
 
-### PR checklist
-
-- [ ] Branch off `main`
-- [ ] Commit message follows [Conventional Commits](https://www.conventionalcommits.org/):
-  - `feat: add X shortcode`
-  - `fix: correct CJK reading time on en pages`
-  - `docs: clarify Tailwind setup`
-  - `chore: bump Hugo min version`
-- [ ] If adding a shortcode: ship the layout in `layouts/shortcodes/<name>.html` AND a demo entry in `exampleSite/content/shortcodes-demo.md`
-- [ ] If adding CSS: scope it under a clear class (avoid global selectors); use Tailwind utilities first, escape to `assets/css/<area>.css` only when utilities can't express the rule
-- [ ] If changing layouts: build `exampleSite` locally and verify nothing visually regresses
-- [ ] If adding i18n strings: add to BOTH `i18n/en.toml` and `i18n/zh-cn.toml`. Other languages are best-effort.
-
-### Local development
+### 本地验证
 
 ```bash
-git clone https://github.com/<your-fork>/inkstone
-cd inkstone
-npm install   # tailwindcss + @tailwindcss/cli
-cd exampleSite
-hugo server --themesDir ../.. -D
+# 在 inkstone repo 根目录
+hugo server -s exampleSite --themesDir ../..
+# 浏览器开 http://localhost:1313
 ```
 
-The `exampleSite/` is the canonical test bed. If your change requires editing `exampleSite/content/`, do it.
+逐项确认：
 
-### Testing
+- [ ] exampleSite 首页 + about + posts 列表正常渲染
+- [ ] `/shortcodes-demo/` 页面所有 shortcode 渲染无报错
+- [ ] 中英文切换 + 菜单链接正常
+- [ ] 深色模式切换 + persistence 正常
+- [ ] `⌘K` 搜索 modal 打开（搜索结果需要先 `npm run build` 跑 Pagefind）
+- [ ] 浏览器 console 无 error
 
-There's no formal test suite. Manual verification:
+### Commit 规范
 
-1. `cd exampleSite && hugo --themesDir ../..` exits 0
-2. Visit `/`, `/posts/`, `/about/`, `/shortcodes-demo/`, `/tags/` — none should 404
-3. Toggle dark mode (sidebar button) — should persist on reload
-4. Trigger `⌘K` — search modal should open
+用 [Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/)：
 
-If your change adds a shortcode, ensure it appears in `/shortcodes-demo/` with a working example.
+- `feat(shortcode): add image-compare slider variant`
+- `fix(search): debounce input to avoid index thrash`
+- `docs(readme): add Tailwind v4 standalone install path`
+- `refactor(css): extract callout tokens to variable.css`
+- `chore(deps): bump tailwindcss to 4.1.x`
 
-## Code style
+主题相关 scope 建议：`shortcode` / `layout` / `css` / `i18n` / `search` / `build` / `docs` / `deps`。
 
-### Hugo templates
+### PR 描述
 
-- 4-space indent inside `{{ }}` blocks
-- Use `partial` for anything reused 3+ times
-- Page Store pattern for one-time CDN loaders: `{{ if not ($.Page.Store.Get "shortcode-foo") }}<script>...</script>{{ $.Page.Store.Set "shortcode-foo" true }}{{ end }}`
-- `i18n` for any user-facing string: `{{ i18n "post_reading_time" }}`
+至少包含：
 
-### CSS
+- **What**：改了什么
+- **Why**：为什么改（关联 issue 编号）
+- **Screenshot / GIF**：UI 变更必附（移动 + 桌面双 viewport）
+- **Test plan**：上面的本地验证清单复制过来勾掉
 
-- Tailwind v4 utilities for layout/spacing/color
-- `@theme` design tokens for site-wide values (in `assets/css/variable.css`)
-- Component CSS only when utilities don't express the rule (e.g., `.prose`, animation keyframes)
-- No CSS-in-JS, no styled-components, no runtime CSS theming
+### Review 节奏
 
-### JavaScript
+- Maintainer 通常 3 天内回复
+- 如果讨论后决定不合并，会说明原因
+- 长期 stale 的 PR（30 天无作者回应）会被关闭，欢迎重新打开
 
-- ES modules in `assets/js/`
-- No bundler; Hugo serves them as `<script type="module">` directly
-- No external runtime dependencies (CDN libs are loaded by individual shortcodes, scoped per-page)
-- Progressive enhancement: feature detect, fail silently if unsupported
+## 本地开发环境
 
-## Forks vs PRs
+```bash
+git clone https://github.com/BerBai/inkstone
+cd inkstone
 
-Inkstone is intentionally minimal. If you want a feature that doesn't fit the philosophy ("opinionated about CJK longreads"), forking is the right move. Forks must:
+# 装 Tailwind（任选一种，详见 README.md「Tailwind v4 Setup」）
+npm install -D tailwindcss @tailwindcss/cli
+# 或下载 standalone CLI
 
-- Keep the MIT license (per [original LICENSE](./LICENSE))
-- Acknowledge upstream in your README
-- Use a different theme `name` in `theme.toml` to avoid confusion in themes.gohugo.io
+# 跑 demo 站
+hugo server -s exampleSite --themesDir ../..
+```
 
-## License
+## 代码风格
 
-By contributing, you agree your contributions are licensed under the [MIT license](./LICENSE).
+- HTML / Hugo 模板：2 空格缩进，`{{ }}` 内首尾各一空格
+- CSS：Tailwind utility 优先；无法 utility 时写到 `assets/css/components/<name>.css` 并用 `@layer components`
+- JS：原生 ES module，无打包；浏览器 baseline 见 README
+- 文件命名：kebab-case，shortcode `assets/snippets/<name>.html` 与 `layouts/shortcodes/<name>.html` 同名
 
-## Code of conduct
+## 许可
 
-Be kind. Disagree about code, not people.
-
-Issues with personal attacks, harassment, or hostile language will be closed without further engagement.
+提交 PR 即视为同意你的改动以 [MIT License](./LICENSE) 发布。

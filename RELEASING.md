@@ -1,117 +1,99 @@
-# Releasing Inkstone
+# Releasing
 
-> Maintainer-facing checklist for cutting a new release.
-> Public users: see [README](./README.md) for installation.
+> [中文](./RELEASING.md) · [English](./RELEASING.en.md)
 
-## Versioning
+发版流程。Inkstone 走 [SemVer](https://semver.org/lang/zh-CN/)，标签前缀 `v`（如 `v0.1.0`）。
 
-Inkstone follows [Semantic Versioning](https://semver.org/):
+## 版本号约定
 
-- **MAJOR** (e.g., 1.0.0): incompatible changes — removed shortcodes, changed config keys, layout slot renames that break user overrides
-- **MINOR** (e.g., 0.2.0): new shortcodes, new layout features, new i18n strings — backwards compatible
-- **PATCH** (e.g., 0.1.1): bug fixes, doc updates, dependency bumps — no behavior changes
+- **MAJOR**（`v1.0.0` → `v2.0.0`）：破坏性变更。partial / shortcode 接口删除或不向后兼容、`hugo.toml` 必填配置项变化、CSS 变量删除。
+- **MINOR**（`v0.1.0` → `v0.2.0`）：向后兼容的新增。新 shortcode、新 i18n 字符串、新 `[params]` 选项、新 layout block。
+- **PATCH**（`v0.1.0` → `v0.1.1`）：bug 修复、文档更新、依赖升级（不改公共接口）。
 
-While at `0.x`, breaking changes can land in MINOR bumps; document them clearly in the release notes.
+`0.x` 阶段允许在 MINOR 内做小破坏（Hugo 主题生态惯例），但需在 release note 顶部用 ⚠️ 醒目标注。
 
-## Pre-release checklist
+## 发版前检查清单
 
-Before tagging:
+- [ ] `exampleSite/` 在 basic Hugo（无 npm/Pagefind）下 `hugo server -s exampleSite --themesDir ../..` 能起，shortcode-demo 页所有 shortcode 渲染正常
+- [ ] `theme.toml` 的 `min_version` 与 `hugo.toml` 的 `[module.hugoVersion].min` 一致
+- [ ] `images/screenshot.png`（≥1500×1000，3:2）+ `images/tn.png`（≥900×600，3:2）尺寸校验通过
+- [ ] README.md / README.en.md 双语同步、所有图片用 `https://raw.githubusercontent.com/BerBai/inkstone/main/...` 绝对路径
+- [ ] 破坏性变更已在 release note 顶部 ⚠️ 标注 + 提供 migration 步骤
+- [ ] 本地 `git status` 干净，所有改动已合并到 `main`
 
-- [ ] All planned changes merged into `main`
-- [ ] `theme.toml` `description` / `tags` / `features` still accurate
-- [ ] `hugo.toml` `[module.hugoVersion].min` reflects actual minimum (don't bump unless a new feature requires it)
-- [ ] `images/screenshot.png` reshot if visual layout has changed
-- [ ] `exampleSite/` builds: `cd exampleSite && hugo --themesDir ../..` exits 0
-- [ ] `exampleSite/content/shortcodes-demo.md` still renders all shortcodes
-- [ ] README cross-links still valid (no 404 on internal anchors)
-- [ ] CHANGELOG entries written for every notable change since last release
-
-## Cutting the release
+## 打 tag + 发 Release
 
 ```bash
-# 1. Determine next version
-git tag --list 'v*' --sort=-v:refname | head -3
-NEXT=v0.1.1   # or v0.2.0 / v1.0.0 per semver
+# 1. 确认 main 在期望 commit
+git checkout main
+git pull --ff-only
 
-# 2. Update version-stamped files (if any)
-# (none currently — package.json version is decoupled from theme tag)
+# 2. 打带签名的 annotated tag
+git tag -a v0.2.0 -m "Inkstone v0.2.0"
 
-# 3. Tag
-git tag -a "$NEXT" -m "Inkstone $NEXT — <one-line summary>"
-
-# 4. Push tag
-git push origin "$NEXT"
-
-# 5. Create GitHub Release (use gh CLI)
-gh release create "$NEXT" \
-  -R BerBai/inkstone \
-  -t "$NEXT — <title>" \
-  --notes-file ./.github/release-notes/$NEXT.md
+# 3. 推送 tag
+git push origin v0.2.0
 ```
 
-## Release notes template
+GitHub Release 通过 `gh` CLI 创建（或在 web UI 手动建）：
+
+```bash
+gh release create v0.2.0 \
+  --title "v0.2.0" \
+  --notes-file CHANGELOG-draft.md \
+  --verify-tag
+```
+
+## Release Note 模板
 
 ```markdown
-## $VERSION
+## Highlights
 
-### Added
-- New shortcode `<name>` for <use case>
+- 一句话 headline 改动
 
-### Changed
-- `<file>`: <what changed>
+## ⚠️ Breaking Changes
 
-### Fixed
-- `<bug>`: <fix description>
+- 列出所有破坏点 + migration 步骤；无破坏时整段删除
 
-### Compatibility
-- Hugo extended ≥ X.Y.Z
-- Tailwind v4 (no change since v0.1.0)
+## Added
 
-### Breaking
-- (none)
+- 新 shortcode / 新 partial / 新 i18n 字符串 / 新 `[params]` 选项
+
+## Changed
+
+- 现有功能行为调整（非破坏）
+
+## Fixed
+
+- bug 修复
+
+## Hugo / Tailwind 兼容性
+
+- Hugo extended ≥ 0.128
+- Tailwind v4
+
+## 升级方式
+
+git submodule:
+
+\`\`\`bash
+cd themes/inkstone && git fetch --tags && git checkout v0.2.0
+cd ../.. && git add themes/inkstone && git commit -m "chore: bump inkstone to v0.2.0"
+\`\`\`
+
+Hugo Modules:
+
+\`\`\`bash
+hugo mod get github.com/BerBai/inkstone@v0.2.0
+\`\`\`
 ```
 
-Save under `.github/release-notes/v0.X.Y.md`. Reuse for the GitHub Release body.
+## hugoThemesSiteBuilder 同步
 
-## After release
+themes.gohugo.io 每天 UTC 00:00 重新构建一次，自动拉 inkstone 最新 release。新版上线后第二天即可在主题站看到更新。**无需**重新提 PR 到 hugoThemesSiteBuilder。
 
-- [ ] Verify `https://github.com/BerBai/inkstone/releases/tag/$NEXT` displays correctly
-- [ ] Verify Hugo Modules can pull the new tag: `go mod download github.com/BerBai/inkstone@$NEXT`
-- [ ] [Optional] Tweet / post about the release with screenshot link
-- [ ] Bump submodule pin in any consuming sites (e.g., personal lifelog uses this theme)
+如果 release note 引入了新 screenshot，确认 `images/screenshot.png` 与 `images/tn.png` 都已更新到 `main`，再打 tag —— 构建器从 release-tagged commit 拉文件。
 
-## Demosite update (when relevant)
+## 失活预警
 
-The `exampleSite/` is currently statically deployed via [GitHub Pages](https://berbai.github.io/inkstone/) (configured in `.github/workflows/deploy-demo.yml` if present; otherwise this is a TODO).
-
-After a release that changes visual output:
-
-```bash
-git checkout "$NEXT"
-cd exampleSite
-hugo --themesDir ../.. --baseURL https://berbai.github.io/inkstone/ --gc --minify
-# Push to gh-pages branch via the deploy workflow or manual gh-pages push
-```
-
-## Yanking a release
-
-If a release ships with a critical bug:
-
-1. **Do not delete the tag** — Hugo Modules clients have it cached; pulling a deleted tag can corrupt their checksums
-2. Cut a patch release immediately (`v0.X.Y+1`)
-3. Mark the broken release as a pre-release on GitHub: `gh release edit "$BAD" -R BerBai/inkstone --prerelease`
-4. Edit the broken release's body to point at the patch: "**Yanked. Use vX.Y.Z+1 instead.**"
-
-## Compatibility windows
-
-- Default: support the latest Hugo extended version + the previous two minor versions
-- If a new feature requires a Hugo bump, document it in the release notes and bump `[module.hugoVersion].min` in `hugo.toml`
-- Tailwind v4 is the floor; Tailwind v3 is not supported (different `@theme`/`@utility` syntax)
-
-## hugoThemesSiteBuilder rebuild
-
-The themes.gohugo.io site rebuilds daily at UTC 00:00. New releases appear on the next rebuild cycle. The build picks the latest tag within the current major version, so:
-
-- v0.1.x → v0.1.x (highest patch)
-- v0.2.0 released → switches to v0.2.x
-- v1.0.0 released → switches to v1.x.x (major bump signals breaking change to users)
+themes.gohugo.io 18 个月无更新会自动下架。每个自然年至少发一次 PATCH release（哪怕只是依赖升级）以保活。
