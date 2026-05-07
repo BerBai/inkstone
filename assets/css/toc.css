@@ -10,18 +10,19 @@
  * Parent PRD's old "3-col grid + --shell-max bump" was superseded —
  * this is a floating panel only. See task 05-03-c2-right-toc-module.
  *
- * Visibility (05-05-toc-sidebar-yield):
- *   post has ≥ 2 headings                        → visible at all viewports
+ * Visibility:
+ *   post has ≥ 2 headings, viewport ≥ 1024px     → visible
+ *   viewport ≤ 1023px                            → hidden (mobile reclaim)
  *   body.immersive-page (reading mode)           → hidden
  *   posts with < 2 headings                      → not rendered (partial bail)
  *
- * Why no viewport-based hide: layout priority is TOC > sidebar. The
- * sidebar collapses to a top bar at <1024 (shell.css) so the TOC
- * never has to compete for horizontal real estate. The TOC itself is
- * 48px wide (border-box) and sits inside the shell's right padding —
- * so it never overlaps content geometry, even at viewport 768. The
- * expanded hover panel (240px) overlays content as a drawer, which is
- * the intended Notion-style interaction.
+ * Mobile rationale: on touch viewports the right-edge bar stack
+ * costs ~17% of horizontal real estate (48px panel + 16px shell
+ * gutter on a 375px screen) for a hover-driven affordance that
+ * doesn't translate to touch — taps fall through to the anchor and
+ * never expand the panel. We yield it on mobile and rely on
+ * top-to-bottom reading; desktop ≥1024px keeps the Notion-style
+ * right-edge interaction.
  * ============================================================ */
 
 .toc {
@@ -181,11 +182,15 @@
   font-weight: 500;
 }
 
-/* ----- Hide on immersive mode (user-opt-in reading mode) -----
- * 05-05-toc-sidebar-yield removed the prior `@media (max-width: 1280px)`
- * blanket hide — TOC now stays visible across all viewports. See file
- * header for rationale. */
+/* ----- Hide on immersive mode (user-opt-in reading mode) ----- */
 body.immersive-page .toc { display: none; }
+
+/* ----- Hide on narrow viewports (touch / mobile) -----
+ * Restores full content width on ≤1023px. See file header for why
+ * the right-edge panel doesn't earn its keep on touch. */
+@media (max-width: 1023px) {
+  .toc { display: none; }
+}
 
 /* ----- Reduced-motion: instant transitions ----- */
 @media (prefers-reduced-motion: reduce) {

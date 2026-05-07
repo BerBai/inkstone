@@ -40,9 +40,15 @@ html {
  * right: 0; width: 48px`) lives inside the standard --shell-pad gutter,
  * so without this rule content text would touch the TOC at narrow
  * viewports. Scoped to .has-toc bodies so non-TOC pages keep their
- * symmetric padding. */
-body.has-toc .shell {
-  padding-right: calc(var(--shell-pad) + 16px);
+ * symmetric padding.
+ *
+ * Gated to ≥1024px because toc.css hides the panel on mobile — the
+ * extra gutter would otherwise just steal width from a column that
+ * has no TOC to dodge. */
+@media (min-width: 1024px) {
+  body.has-toc .shell {
+    padding-right: calc(var(--shell-pad) + 16px);
+  }
 }
 
 /* ============================================================
