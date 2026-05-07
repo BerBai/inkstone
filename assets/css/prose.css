@@ -218,7 +218,18 @@
 }
 
 .prose table {
-  display: table;
+  /* `display: block` makes the table itself behave like a scrollable
+   * block container so cell intrinsic widths (long headers, nowrap
+   * content) cannot stretch the page. Cells still lay out as a table
+   * inside — block here only governs the table's outer box.
+   * Without this, `width:100%` + `table-layout:auto` is not a hard
+   * constraint: when content forces columns wider than the parent,
+   * the table overflows and pushes the document horizontally. At
+   * desktop widths where the table fits, the rule is a no-op (no
+   * scrollbar appears). */
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   margin: 1.35rem 0;
   max-width: 100%;
