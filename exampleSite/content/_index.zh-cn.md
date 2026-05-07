@@ -5,7 +5,7 @@ description: "极简双语 Hugo 写作模板，为长读、慢写而生。"
 
 欢迎来到 **Inkstone（砚）**——一方为长文阅读、慢速写作、中英排版而生的极简 Hugo 主题。
 
-这是一个完全运行在主题 `exampleSite/` 目录里的演示站点。可以浏览[文章](/posts/)、查看[归档](/archive/)，或探索完整的 [shortcodes 参考](/shortcodes-demo/)。
+这是一个完全运行在主题 `exampleSite/` 目录里的演示站点。可以浏览[文章](/zh-cn/posts/)、查看[归档](/zh-cn/archive/)，或探索完整的 [shortcodes 参考](/zh-cn/shortcodes-demo/)。
 
 ## 主要特性
 

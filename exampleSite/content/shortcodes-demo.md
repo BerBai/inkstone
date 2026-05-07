@@ -77,7 +77,7 @@ Wrap children in a flex container with control over direction, gap, and alignmen
 
 ### `tab` + `tab-item` — tabbed content
 
-```markdown
+````markdown
 {{</* tab */>}}
   {{</* tab-item header="Python" */>}}
 ```python
@@ -90,7 +90,20 @@ console.log("hello");
 ```
   {{</* /tab-item */>}}
 {{</* /tab */>}}
+````
+
+{{< tab >}}
+  {{< tab-item header="Python" >}}
+```python
+print("hello")
 ```
+  {{< /tab-item >}}
+  {{< tab-item header="JavaScript" >}}
+```javascript
+console.log("hello");
+```
+  {{< /tab-item >}}
+{{< /tab >}}
 
 ### `details` — collapsible disclosure
 

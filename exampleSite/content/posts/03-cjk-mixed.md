@@ -1,54 +1,42 @@
 ---
-title: "中英混排示例"
-description: "演示 Inkstone 在中英混排场景下的排版细节。"
+title: "Mixing CJK and Latin Text"
+description: "How Inkstone handles typography when Chinese, Japanese, or Korean text mixes with Latin scripts."
 date: 2026-04-15
 tags: ["cjk", "typography", "i18n"]
 ---
 
-这是一篇用来演示 **中英混排** 排版细节的文章。Inkstone 主题对 CJK 内容做了几件事：
+This post is the English companion to a real CJK demo. Inkstone is opinionated about mixed-script typography — here's what the theme does for you when an article mixes 中文 with English.
 
-1. 自动开启 `hasCJKLanguage = true`，让 `.WordCount` 按字符数（而不是空白分隔的 token 数）计算
-2. `.ReadingTime` 用 Hugo 的 CJK 常量 501 char/min（而不是 213 word/min）
-3. 字体栈优先 `LXGW WenKai`，回落到 `Noto Serif SC` 与系统衬线字体
-4. 行高为 1.7（而不是英文的 1.6），适配中文字符更高的 baseline
+## What Inkstone does for CJK
 
-## 长段落示例
+1. **Word counting respects characters, not whitespace tokens.** With `hasCJKLanguage = true` set site-wide, Hugo's `.WordCount` counts CJK characters individually instead of trying (and failing) to whitespace-tokenize them.
+2. **Reading time uses 501 chars/min on CJK pages**, the constant Hugo derives from CJK reading speed studies. Latin pages stay on the 213 word/min default.
+3. **Font stack prefers `LXGW WenKai`**, falling back through `Noto Serif SC` to system serif — chosen to keep CJK and Latin glyphs at compatible weights.
+4. **Line-height bumps to 1.7** on CJK pages (vs. 1.6 for pure Latin) to compensate for taller character bodies.
 
-读到一篇好文章，往往是从某个准确的句子开始的。比如博尔赫斯写的「我的脚踩到了你正在踩着的影子」——这里包含了一种几乎没有重量的存在论。把这种存在论翻译成 English 是困难的，因为英语的语序天然倾向 SVO，而中文允许把「踩到了」这个动作压缩到主谓之间，让影子的"被踩"瞬间放大。
+## Why this matters in practice
 
-混排时常见的问题：英文单词与中文字符之间没有空格时，浏览器有时会粘连。Inkstone 在 prose 区域加了 `font-feature-settings: "palt"` 让标点收紧，并通过 `text-spacing-trim` 处理首尾空白。
+Mixed-script paragraphs are where naive themes break. A sentence like "我读了 Borges 的 *Ficciones*" has three writing systems and an italic stretch — and most themes either let the browser produce a fake oblique on CJK glyphs (ugly) or force a single font for everything (worse).
 
-## 引用
+Inkstone scopes `font-style: normal` to the CJK-detected ranges in prose, so the Latin italics still render properly while the CJK characters stay upright in their natural form.
 
-> 「书是人类进步的阶梯。」——高尔基
+## Punctuation and spacing
 
-> "Reading furnishes the mind only with materials of knowledge; it is thinking that makes what we read ours." — John Locke
+The `.prose` region opts into:
 
-中英文引用混在同一篇文章里，typography 应该在两种风格之间无缝切换。
+- `font-feature-settings: "palt"` for proportional alternates on CJK punctuation — `，` `。` `？` `！` collapse the half-em "air" they ship with by default.
+- `text-spacing-trim` to handle leading/trailing punctuation at line breaks.
+- A 0.15em soft gap between CJK characters and adjacent Latin/numeric runs (Pangu-style), scoped to prose only — UI chrome is left alone.
 
-## 代码块
+## Try it on a real Chinese post
 
-中文注释和英文代码混合：
+The translation of this post — `03-cjk-mixed.zh-cn.md` — is where you can actually see the typography work. Switch the language toggle to view it.
 
-```python
-def calculate_reading_time(content: str, lang: str = "zh-cn") -> int:
-    """
-    根据语言计算阅读时间。
-    Hugo 的 CJK 常量是 501 字符/分钟，英文是 213 词/分钟。
-    """
-    if lang.startswith("zh"):
-        return max(1, len(content) // 501)
-    else:
-        return max(1, len(content.split()) // 213)
+```text
+content/posts/03-cjk-mixed.md         # this English post
+content/posts/03-cjk-mixed.zh-cn.md   # the Chinese demo post
 ```
 
-## 排版小细节
+## Summary
 
-- **标点压缩**：句号、逗号、问号、感叹号在 CJK 区会自动收窄
-- **数字与中文之间**：自动加 0.15em 间距（`Pangu` 风格，但只在 prose 区生效，不影响 UI）
-- **首字下沉**：可选 `class="dropcap"` 给段落，但 demo 默认不开
-- **斜体处理**：CJK 字体不支持斜体，主题在中文区域用 `font-style: normal` 回退，避免浏览器伪斜体
-
-## 总结
-
-如果你也写中英混排的长文，希望 Inkstone 的这些细节能让你少花一点心思在排版上，多花点在内容上。
+If you write a lot of bilingual prose, Inkstone aims to remove the typography distractions so you can focus on what the words are doing. Most of these decisions are scoped to `.prose` and won't bleed into UI chrome, so they're safe to compose with other themes' design tokens if you fork.
