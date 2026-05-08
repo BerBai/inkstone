@@ -226,6 +226,16 @@ body:not(.article-page) #reading-mode-toggle {
 .content {
   max-width: var(--content-max);
   min-width: 0;
+  /* Center within the parent cell. At desktop widths the cell is
+   * always narrower than --content-max (sidebar + 1fr + shell padding
+   * leaves ~644-720px), so this is a no-op. It only kicks in on the
+   * narrow single-column layout when viewport > 948px and cell width
+   * exceeds the 900px cap — without it, .content stays left-aligned
+   * and the surplus piles up as a single empty band on the right
+   * (most visible at viewport 1023 where the surplus is ~75px).
+   * The right-edge TOC used to mask that band; once it's hidden on
+   * mobile, the band became visible — so center the content. */
+  margin-inline: auto;
 }
 
 /* ============================================================
