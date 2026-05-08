@@ -78,7 +78,7 @@
     return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
   };
 </script>
-{{ with resources.Get "css/main.css" | css.TailwindCSS }}
+{{ with resources.Get "css/main.css" | css.TailwindCSS | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}">
 {{ end }}
 {{ with .OutputFormats.Get "rss" }}
@@ -88,21 +88,21 @@
 {{/* T10: interactivity JS — independent ES modules, defer-loaded.
      Reading-mode (legacy `:root.reading-mode` + localStorage) was retired
      in favor of `body.immersive-page` driven by immersive.js below. */}}
-{{ with resources.Get "js/lightbox.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
-{{ with resources.Get "js/theme.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/lightbox.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/theme.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
 {{/* 05-04-e9: code-copy button — appended to every .prose pre. */}}
-{{ with resources.Get "js/code-copy.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/code-copy.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
 {{/* 05-04-e11: reader-exit + immersive-page toggle (article pages). */}}
-{{ with resources.Get "js/immersive.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/immersive.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
 {{/* 05-03-c2: right-edge Notion-style TOC scrollspy (single posts only;
      toc.js bails if .toc is absent — non-post pages pay zero cost). */}}
-{{ with resources.Get "js/toc.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/toc.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
 {{/* 05-06-s2: ⌘K search modal (Pagefind index lazy-imported on first open). */}}
-{{ with resources.Get "js/search.js" }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
+{{ with resources.Get "js/search.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
 {{/* T11a: MathJax CDN injected when post content uses math delimiters. */}}
 {{ partial "mathjax.html" . }}

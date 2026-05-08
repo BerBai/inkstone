@@ -105,5 +105,7 @@
 
 {{- /* Math.js: convert single-$ wrapped <code> to MathJax-friendly delimiters. */ -}}
 {{- if and (not .Params.disable_math) .IsPage (or (strings.Contains .Content "\\(") (strings.Contains .Content "$")) }}
-  <script src="/js/math.js"></script>
+  {{- with resources.Get "js/math.js" | fingerprint }}
+  <script src="{{ .RelPermalink }}"></script>
+  {{- end }}
 {{- end }}
