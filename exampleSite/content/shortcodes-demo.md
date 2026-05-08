@@ -77,32 +77,34 @@ Wrap children in a flex container with control over direction, gap, and alignmen
 
 ### `tab` + `tab-item` — tabbed content
 
+The `tab-item` shortcode uses the `{{%/* %}}` markdown form so fenced code blocks inside it render correctly. The `label=` attribute sets the tab header.
+
 ````markdown
 {{</* tab */>}}
-  {{</* tab-item header="Python" */>}}
+  {{%/* tab-item label="Python" */%}}
 ```python
 print("hello")
 ```
-  {{</* /tab-item */>}}
-  {{</* tab-item header="JavaScript" */>}}
+  {{%/* /tab-item */%}}
+  {{%/* tab-item label="JavaScript" */%}}
 ```javascript
 console.log("hello");
 ```
-  {{</* /tab-item */>}}
+  {{%/* /tab-item */%}}
 {{</* /tab */>}}
 ````
 
 {{< tab >}}
-  {{< tab-item header="Python" >}}
+  {{% tab-item label="Python" %}}
 ```python
 print("hello")
 ```
-  {{< /tab-item >}}
-  {{< tab-item header="JavaScript" >}}
+  {{% /tab-item %}}
+  {{% tab-item label="JavaScript" %}}
 ```javascript
 console.log("hello");
 ```
-  {{< /tab-item >}}
+  {{% /tab-item %}}
 {{< /tab >}}
 
 ### `details` — collapsible disclosure
@@ -132,6 +134,11 @@ def fib(n):
 {{</* /highlight */>}}
 ```
 
+{{< highlight lang="python" title="fibonacci.py" >}}
+def fib(n):
+    return n if n < 2 else fib(n-1) + fib(n-2)
+{{< /highlight >}}
+
 ### `include` — inline another file (raw HTML)
 
 ```markdown
@@ -150,11 +157,13 @@ def fib(n):
 
 ### `copy-to-clipboard` — inline copy button
 
+The `text=` parameter is the button label; the inner content is what gets copied to the clipboard.
+
 ```markdown
-{{</* copy-to-clipboard text="user@example.com" */>}}
+Email: {{</* copy-to-clipboard text="Copy" */>}}user@example.com{{</* /copy-to-clipboard */>}}
 ```
 
-Email: {{< copy-to-clipboard text="user@example.com" />}}
+Email: {{< copy-to-clipboard text="Copy" >}}user@example.com{{< /copy-to-clipboard >}}
 
 ### `pseudocode` — academic pseudocode rendering
 
@@ -179,6 +188,24 @@ Renders LaTeX-style algorithm pseudocode. Lazy-loads the renderer only on pages 
 \end{algorithm}
 {{</* /pseudocode */>}}
 ```
+
+{{< pseudocode >}}
+\begin{algorithm}
+\caption{Binary Search}
+\begin{algorithmic}
+\REQUIRE sorted array $A$, target $t$
+\STATE $\ell \gets 0$, $r \gets |A| - 1$
+\WHILE{$\ell \leq r$}
+  \STATE $m \gets \lfloor (\ell + r) / 2 \rfloor$
+  \IF{$A[m] = t$} \RETURN $m$ \ENDIF
+  \IF{$A[m] < t$} \STATE $\ell \gets m + 1$
+  \ELSE \STATE $r \gets m - 1$
+  \ENDIF
+\ENDWHILE
+\RETURN $-1$
+\end{algorithmic}
+\end{algorithm}
+{{< /pseudocode >}}
 
 ### `button` — styled link as button
 
@@ -207,28 +234,30 @@ A classic is a book that has never finished saying what it has to say.
 ### `figure` — captioned image
 
 ```markdown
-{{</* figure src="https://placehold.co/1200x600/orange/white?text=Inkstone" alt="Demo image" caption="A captioned figure with alt text." */>}}
+{{</* figure src="/img/figure-demo.svg" alt="Demo image" caption="A captioned figure with alt text." */>}}
 ```
 
-{{< figure src="https://placehold.co/1200x600/orange/white?text=Inkstone" alt="Demo image" caption="A captioned figure with alt text." >}}
+{{< figure src="/img/figure-demo.svg" alt="Demo image" caption="A captioned figure with alt text." >}}
 
 ### `image-compare` — before/after slider
 
+The shortcode takes `image-before` and `image-after` (note the prefix — required by the underlying viewer).
+
 ```markdown
-{{</* image-compare before="/test/before.jpg" after="/test/after.jpg" */>}}
+{{</* image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" */>}}
 ```
 
-{{< image-compare before="/test/before.jpg" after="/test/after.jpg" >}}
+{{< image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" >}}
 
 ### `gallery` — justified grid + lightbox
 
-Driven by a JSON data file. The fixture below lives at `static/data/smoke/gallery.json`.
+Driven by a JSON data file. The fixture below lives at `static/data/smoke/gallery.json` (use an absolute path so the JS fetch resolves correctly from any page URL).
 
 ```markdown
-{{</* gallery data="data/smoke/gallery.json" */>}}
+{{</* gallery data="/data/smoke/gallery.json" */>}}
 ```
 
-{{< gallery data="data/smoke/gallery.json" >}}
+{{< gallery data="/data/smoke/gallery.json" >}}
 
 ### `video` — self-hosted MP4/WebM
 
@@ -369,10 +398,10 @@ The theme passes a `theme=light|dark` query param to known hosts (codepen.io, co
 ### `wechat-qr` — WeChat OA QR popover
 
 ```markdown
-{{</* wechat-qr name="My OA" image="/img/wechat-qr.png" */>}}
+{{</* wechat-qr name="My OA" image="/img/wechat-qr.svg" */>}}
 ```
 
-Hover or focus this element to see a QR code popover: {{< wechat-qr name="Demo OA" image="/img/wechat-qr.png" >}}
+Hover or focus this element to see a QR code popover: {{< wechat-qr name="Demo OA" image="/img/wechat-qr.svg" >}}
 
 ---
 

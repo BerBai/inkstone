@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Gallery sample 1">
+  <rect width="800" height="600" fill="#0f766e"/>
+  <circle cx="200" cy="200" r="120" fill="#fde68a" opacity="0.85"/>
+  <circle cx="600" cy="400" r="160" fill="#fb923c" opacity="0.75"/>
+  <text x="400" y="540" font-family="-apple-system, system-ui, sans-serif" font-size="40" font-weight="600" fill="#f0fdfa" text-anchor="middle">Gallery — 01</text>
+</svg>

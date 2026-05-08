@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Demo WeChat QR placeholder">
+  <rect width="240" height="240" fill="#fff"/>
+  <g fill="#000">
+    <!-- finder corners -->
+    <rect x="10" y="10" width="50" height="50"/>
+    <rect x="20" y="20" width="30" height="30" fill="#fff"/>
+    <rect x="28" y="28" width="14" height="14" fill="#000"/>
+
+    <rect x="180" y="10" width="50" height="50"/>
+    <rect x="190" y="20" width="30" height="30" fill="#fff"/>
+    <rect x="198" y="28" width="14" height="14" fill="#000"/>
+
+    <rect x="10" y="180" width="50" height="50"/>
+    <rect x="20" y="190" width="30" height="30" fill="#fff"/>
+    <rect x="28" y="198" width="14" height="14" fill="#000"/>
+
+    <!-- random data modules (decorative) -->
+    <rect x="80" y="20" width="10" height="10"/>
+    <rect x="100" y="20" width="10" height="10"/>
+    <rect x="120" y="20" width="10" height="10"/>
+    <rect x="140" y="20" width="10" height="10"/>
+    <rect x="80" y="40" width="10" height="10"/>
+    <rect x="120" y="40" width="10" height="10"/>
+    <rect x="160" y="40" width="10" height="10"/>
+    <rect x="80" y="60" width="10" height="10"/>
+    <rect x="100" y="60" width="10" height="10"/>
+    <rect x="140" y="60" width="10" height="10"/>
+    <rect x="20" y="80" width="10" height="10"/>
+    <rect x="60" y="80" width="10" height="10"/>
+    <rect x="100" y="80" width="10" height="10"/>
+    <rect x="140" y="80" width="10" height="10"/>
+    <rect x="180" y="80" width="10" height="10"/>
+    <rect x="220" y="80" width="10" height="10"/>
+    <rect x="40" y="100" width="10" height="10"/>
+    <rect x="80" y="100" width="10" height="10"/>
+    <rect x="120" y="100" width="10" height="10"/>
+    <rect x="160" y="100" width="10" height="10"/>
+    <rect x="200" y="100" width="10" height="10"/>
+    <rect x="20" y="120" width="10" height="10"/>
+    <rect x="60" y="120" width="10" height="10"/>
+    <rect x="100" y="120" width="10" height="10"/>
+    <rect x="140" y="120" width="10" height="10"/>
+    <rect x="180" y="120" width="10" height="10"/>
+    <rect x="40" y="140" width="10" height="10"/>
+    <rect x="80" y="140" width="10" height="10"/>
+    <rect x="120" y="140" width="10" height="10"/>
+    <rect x="160" y="140" width="10" height="10"/>
+    <rect x="200" y="140" width="10" height="10"/>
+    <rect x="220" y="140" width="10" height="10"/>
+    <rect x="80" y="180" width="10" height="10"/>
+    <rect x="100" y="180" width="10" height="10"/>
+    <rect x="140" y="180" width="10" height="10"/>
+    <rect x="180" y="180" width="10" height="10"/>
+    <rect x="220" y="180" width="10" height="10"/>
+    <rect x="80" y="200" width="10" height="10"/>
+    <rect x="120" y="200" width="10" height="10"/>
+    <rect x="160" y="200" width="10" height="10"/>
+    <rect x="200" y="200" width="10" height="10"/>
+    <rect x="80" y="220" width="10" height="10"/>
+    <rect x="100" y="220" width="10" height="10"/>
+    <rect x="140" y="220" width="10" height="10"/>
+    <rect x="180" y="220" width="10" height="10"/>
+  </g>
+</svg>

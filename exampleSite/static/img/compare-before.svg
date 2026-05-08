@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-label="Inkstone before sample">
+  <rect width="1200" height="600" fill="#1f2937"/>
+  <g fill="none" stroke="#4b5563" stroke-width="1">
+    <path d="M0 100h1200M0 200h1200M0 300h1200M0 400h1200M0 500h1200"/>
+    <path d="M100 0v600M200 0v600M300 0v600M400 0v600M500 0v600M600 0v600M700 0v600M800 0v600M900 0v600M1000 0v600M1100 0v600"/>
+  </g>
+  <text x="600" y="320" font-family="-apple-system, system-ui, sans-serif" font-size="120" font-weight="700" fill="#f3f4f6" text-anchor="middle">BEFORE</text>
+  <text x="600" y="400" font-family="-apple-system, system-ui, sans-serif" font-size="32" fill="#9ca3af" text-anchor="middle">cool grayscale grid</text>
+</svg>

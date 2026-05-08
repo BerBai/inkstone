@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-label="Gallery sample 2">
+  <rect width="1200" height="600" fill="#1e3a8a"/>
+  <g fill="#bfdbfe" opacity="0.85">
+    <rect x="100" y="100" width="200" height="400"/>
+    <rect x="350" y="200" width="200" height="300"/>
+    <rect x="600" y="150" width="200" height="350"/>
+    <rect x="850" y="50" width="200" height="450"/>
+  </g>
+  <text x="600" y="560" font-family="-apple-system, system-ui, sans-serif" font-size="40" font-weight="600" fill="#dbeafe" text-anchor="middle">Gallery — 02</text>
+</svg>

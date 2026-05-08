@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "src": "/img/gallery-1.svg",
+      "thumb": "/img/gallery-1.svg",
+      "alt": "Sunset circles",
+      "title": "Sunset circles",
+      "subHtml": "<h4>Sunset circles</h4><p>800 × 600 SVG fixture for the demo.</p>"
+    },
+    {
+      "src": "/img/gallery-2.svg",
+      "thumb": "/img/gallery-2.svg",
+      "alt": "Skyline blocks",
+      "title": "Skyline blocks",
+      "subHtml": "<h4>Skyline blocks</h4><p>1200 × 600 wide-aspect fixture.</p>"
+    },
+    {
+      "src": "/img/gallery-3.svg",
+      "thumb": "/img/gallery-3.svg",
+      "alt": "Concentric rings",
+      "title": "Concentric rings",
+      "subHtml": "<h4>Concentric rings</h4><p>600 × 800 portrait fixture.</p>"
+    }
+  ],
+  "justifiedGalleryOptions": {
+    "rowHeight": 220,
+    "margins": 6,
+    "lastRow": "nojustify"
+  },
+  "lightGalleryOptions": {
+    "speed": 400,
+    "download": false
+  }
+}

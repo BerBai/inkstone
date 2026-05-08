@@ -28,8 +28,9 @@
   <a href="{{ .Get "link" }}"{{ with .Get "target" }} target="{{ . }}"{{ end }}{{ with .Get "rel" }} rel="{{ . }}"{{ end }}>
   {{- end }}
   <img
-    class="lazyload"
-    data-src="{{ $src }}"
+    src="{{ $src }}"
+    loading="lazy"
+    decoding="async"
     {{- with $alt }}
     alt="{{ . | markdownify | plainify }}"
     {{- end }}
