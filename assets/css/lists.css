@@ -206,21 +206,16 @@
   display: block;
 }
 
-@media (max-width: 900px) {
-  .page-header--listing {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
+/* Stack the page-header into a column only on true phone-portrait widths.
+ * Above 640px the content area is wide enough to keep heading + RSS inline
+ * — at 700–900px the column layout left a thin "Posts / 4 posts / RSS"
+ * stack on the left with vast empty space to the right. */
+@media (max-width: 640px) {
   .page-header--listing .page-heading {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-  }
-
-  .page-header--listing .page-actions {
-    margin-left: 0;
-    align-self: flex-start;
+    /* Wrap title + count to a new line if the row gets tight, but keep
+     * the heading and RSS on the same flex row (no full column stack). */
+    flex-wrap: wrap;
+    gap: var(--space-2);
   }
 }
 

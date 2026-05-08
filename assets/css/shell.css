@@ -244,14 +244,18 @@ body:not(.article-page) #reading-mode-toggle {
 }
 
 /* ============================================================
- * Narrow viewport (≤ 1023px): horizontal top bar
+ * Narrow viewport (≤ 1023px): two-row top bar
  *
- * Single-column shell where `.sidebar` becomes a 3-zone bar:
- *   [ brand ]      [ nav · nav · 更多 ▾ ]      [ icons ]
+ *   Row 1: [ brand ]                              [ icons ]
+ *   Row 2: [ nav · nav · nav · 更多 ▾ ]
  *
- * Tagline is hidden — the bar is one row. Secondary nav items
- * (menu params: priority=secondary) collapse into a <details>
- * overflow menu so 320–375px widths never wrap.
+ * Splitting brand+icons from nav onto separate rows gives the
+ * title room to breathe at 320–375px and lets nav items left-
+ * align under the brand instead of fighting both ends for space.
+ *
+ * Tagline is hidden. Secondary nav items (menu params:
+ * priority=secondary) still collapse into a <details> overflow
+ * menu so unusually long menus don't overflow row 2.
  *
  * Breakpoint history (05-05-toc-sidebar-yield): the cutoff was 768px,
  * which left a "dead zone" between 769–1280 where the sidebar stayed
@@ -275,9 +279,12 @@ body:not(.article-page) #reading-mode-toggle {
   .sidebar {
     position: static;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
+    /* Vertical row-gap is tighter than horizontal column-gap so row 2
+     * sits close beneath row 1 without feeling like a separate strip. */
+    row-gap: var(--space-3);
+    column-gap: var(--space-3);
     min-height: 0;
     padding: 0 0 var(--space-4);
     border-right: none;
@@ -297,12 +304,22 @@ body:not(.article-page) #reading-mode-toggle {
   }
 
   .sidebar-nav {
+    /* `order: 1` + `flex: 0 0 100%` pushes nav to its own row beneath
+     * brand+actions despite source order being brand → nav → actions. */
+    order: 1;
+    flex: 0 0 100%;
     flex-direction: row;
     align-items: center;
-    gap: var(--space-3);
-    flex: 1 1 auto;
+    gap: var(--space-4);
     justify-content: center;
     min-width: 0;
+    /* Allow horizontal scroll if a long menu overflows; scrollbar hidden
+     * for visual cleanliness, swipe still works on touch devices. */
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
   }
   .sidebar-nav a {
     white-space: nowrap;
@@ -375,8 +392,11 @@ body:not(.article-page) #reading-mode-toggle {
     margin-top: 0;
     padding-top: 0;
     flex-shrink: 0;
-    /* Wide-mode 16px gap is too generous when 3 icons share a row with
-     * brand + 4 nav items at 375px — tighten so nothing wraps. */
+    /* Push to right edge of row 1 — nav has been bumped to its own row,
+     * so the only row-1 siblings are brand (left) and actions (right). */
+    margin-left: auto;
+    /* Wide-mode 16px gap is fine here now that actions own row 1 alone
+     * with brand, but tighten slightly for sub-360px viewports. */
     gap: var(--space-3);
   }
 }
