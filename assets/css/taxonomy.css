@@ -47,33 +47,26 @@
   color: var(--color-accent);
 }
 
-/* ---------- /archive/ — inline mini tags inside .posts-item ----------
- * .posts-item base grid is `4rem 1fr`. Add a third auto column so the
- * tag span flows on the same row as the title instead of wrapping under.
+/* ---------- /archive/ — tags wrap under title inside .posts-item ----------
+ * .posts-item base grid is `4rem 1fr`. Tags share column 2 with the title
+ * but get pushed to a new grid row via `grid-column: 2`, so the title is
+ * never compressed by long tag lists. (Pre-05-08 the archive used a 3-col
+ * grid on desktop and only wrapped on mobile; that crowded the title and
+ * was retired.)
  */
-.archive-list .posts-item {
-  grid-template-columns: 4rem 1fr auto;
-}
 .posts-item-tags {
+  grid-column: 2;
+  margin-top: var(--space-1);
   font-size: var(--text-xs);
   color: var(--color-fg-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
 }
 .tag-mini {
   color: var(--color-fg-subtle);
   border-bottom: none;
-  margin-left: var(--space-1);
 }
 .tag-mini:hover {
   color: var(--color-accent);
-}
-
-/* On narrow viewports tags wrap to a new row inside the second column. */
-@media (max-width: 640px) {
-  .archive-list .posts-item {
-    grid-template-columns: 4rem 1fr;
-  }
-  .posts-item-tags {
-    grid-column: 2;
-    margin-top: var(--space-1);
-  }
 }

@@ -77,6 +77,10 @@
     if (attr === "dark" || attr === "light") return attr;
     return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
   };
+  window.__inkstoneI18n = Object.assign({}, window.__inkstoneI18n, {
+    codeExpand: {{ i18n "code_expand" | jsonify | safeJS }},
+    codeCollapse: {{ i18n "code_collapse" | jsonify | safeJS }}
+  });
 </script>
 {{ with resources.Get "css/main.css" | css.TailwindCSS | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}">

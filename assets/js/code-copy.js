@@ -1,6 +1,14 @@
 // 05-04-e9: code-copy — add a copy button to every <pre> inside .prose.
+// 05-08-fold: also collapse pres taller than FOLD_THRESHOLD; expose an
+// "expand / collapse" affordance. Both run in the same forEach pass so
+// the wrapper DOM is built once.
 // Pure vanilla; runs once on DOMContentLoaded.
 (() => {
+  const FOLD_THRESHOLD = 400;
+  const i18n = (window.__inkstoneI18n) || {};
+  const expandLabel = i18n.codeExpand || 'Expand';
+  const collapseLabel = i18n.codeCollapse || 'Collapse';
+
   const init = () => {
     const pres = document.querySelectorAll('.prose pre');
     pres.forEach((pre) => {
@@ -39,6 +47,24 @@
         }
       });
       wrapper.appendChild(btn);
+
+      // Fold long blocks. scrollHeight is read after the pre is in the
+      // document so layout is final. Threshold is a fixed pixel value to
+      // keep behavior predictable across font / line-height changes.
+      if (pre.scrollHeight > FOLD_THRESHOLD) {
+        wrapper.classList.add('is-foldable');
+        const fold = document.createElement('button');
+        fold.type = 'button';
+        fold.className = 'code-fold';
+        fold.textContent = expandLabel;
+        fold.setAttribute('aria-expanded', 'false');
+        fold.addEventListener('click', () => {
+          const expanded = wrapper.classList.toggle('is-expanded');
+          fold.textContent = expanded ? collapseLabel : expandLabel;
+          fold.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        });
+        wrapper.appendChild(fold);
+      }
     });
   };
 

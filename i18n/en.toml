@@ -210,3 +210,9 @@ other = "Please enable JavaScript and use a browser that supports HTML5 video to
 
 [shortcode_bilibili_default_title]
 other = "Bilibili video"
+
+[code_expand]
+other = "Expand"
+
+[code_collapse]
+other = "Collapse"

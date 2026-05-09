@@ -433,3 +433,79 @@
 .code-copy.is-copied .icon-check {
   display: block;
 }
+
+/* ============================================================
+ * Code-block fold — 05-08
+ * `.is-foldable` is added by code-copy.js to wrappers whose <pre>
+ * exceeds FOLD_THRESHOLD (400px). The wrapper clamps height,
+ * paints a gradient veil at the bottom, and parks an "expand"
+ * button on top of the veil. Toggling .is-expanded removes both.
+ * ============================================================ */
+
+.prose .code-block.is-foldable > pre {
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.prose .code-block.is-foldable::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-bg-sunken)
+  );
+  pointer-events: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.prose .code-block.is-foldable.is-expanded > pre {
+  max-height: none;
+}
+
+.prose .code-block.is-foldable.is-expanded::after {
+  display: none;
+}
+
+.code-fold {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 4px 14px;
+  font-size: 12px;
+  font-family: var(--font-deco);
+  color: var(--color-fg-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  z-index: 1;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.code-fold:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.code-fold:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.prose .code-block.is-expanded .code-fold {
+  bottom: auto;
+  top: 8px;
+  left: auto;
+  right: 44px;
+  transform: none;
+}
