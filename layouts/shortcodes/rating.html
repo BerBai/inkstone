@@ -1,0 +1,17 @@
+{{- if not ($.Page.Store.Get "shortcode-rating") }}
+  {{- .Page.Store.Add "shortcode-rating" 1 }}
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="/css/_shortcodes/rating.css"
+  />
+{{- end }}
+{{- $value := .Get "value" | default "0" | float -}}
+{{- $max := .Get "max" | default 5 | float -}}
+{{- /* clamp + round to nearest 0.5, in [0, max] */ -}}
+{{- $rounded := math.Min $max (math.Max 0 (div (math.Round (mul $value 2)) 2.0)) -}}
+{{- $pct := mul (div $rounded $max) 100 -}}
+<span class="shortcode-rating"
+      role="img"
+      aria-label="{{ i18n "rating_aria_label" (dict "Value" $rounded "Max" $max) }}"
+      style="--rating-pct: {{ $pct }}%; --rating-max: {{ $max }};"></span>

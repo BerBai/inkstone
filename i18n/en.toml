@@ -216,3 +216,6 @@ other = "Expand"
 
 [code_collapse]
 other = "Collapse"
+
+[rating_aria_label]
+other = "{{ .Value }} out of {{ .Max }}"

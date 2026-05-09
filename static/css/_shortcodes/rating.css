@@ -1,0 +1,49 @@
+/* shortcode-rating — 通用星级评分
+ * Single <span> with mask-image (5-pointed star SVG, repeat-x) over a
+ * linear-gradient fill. The mask gives the star outlines; the gradient
+ * paints the % fraction in --color-shortcode-rating-fill and the rest
+ * in --color-shortcode-rating-empty. Width scales with --rating-max
+ * so a max=10 rating is exactly twice as wide as max=5 at the same
+ * font size.
+ *
+ * Theme wiring — see admonition.css for the full contract rationale.
+ * Three layers (system pref + explicit dark + explicit light) so the
+ * empty-star tint stays readable on both backgrounds.
+ */
+
+:root {
+  --color-shortcode-rating-fill: #daa520;
+  --color-shortcode-rating-empty: rgb(0 0 0 / 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-shortcode-rating-empty: rgb(255 255 255 / 0.15);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-shortcode-rating-empty: rgb(255 255 255 / 0.15);
+}
+
+:root[data-theme="light"] {
+  --color-shortcode-rating-empty: rgb(0 0 0 / 0.15);
+}
+
+.shortcode-rating {
+  display: inline-block;
+  width: calc(var(--rating-max) * 1em);
+  height: 1em;
+  vertical-align: -0.15em;
+  background: linear-gradient(
+    90deg,
+    var(--color-shortcode-rating-fill) var(--rating-pct),
+    var(--color-shortcode-rating-empty) var(--rating-pct)
+  );
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg>");
+  -webkit-mask-repeat: repeat-x;
+          mask-repeat: repeat-x;
+  -webkit-mask-size: 1em 100%;
+          mask-size: 1em 100%;
+}

@@ -230,3 +230,6 @@ other = "展开"
 
 [code_collapse]
 other = "收起"
+
+[rating_aria_label]
+other = "{{ .Value }} 分(满分 {{ .Max }})"

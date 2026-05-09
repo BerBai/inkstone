@@ -227,6 +227,20 @@ A classic is a book that has never finished saying what it has to say.
 A classic is a book that has never finished saying what it has to say.
 {{< /pullquote >}}
 
+### `rating` — generic star rating
+
+Display-only stars over a configurable max (default 5). Any input is rounded to the nearest 0.5 and clamped to `[0, max]`. The `aria-label` is i18n-driven and uses the rounded value so visual and screen-reader output stay in sync.
+
+```markdown
+My take: {{</* rating value="4.5" */>}} (out of 5)
+
+On a 10-point scale: {{</* rating value="8" max="10" */>}}
+```
+
+My take: {{< rating value="4.5" >}} (out of 5)
+
+On a 10-point scale: {{< rating value="8" max="10" >}}
+
 ---
 
 ## Media
