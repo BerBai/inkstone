@@ -25,6 +25,17 @@
  *     tokens. Color values reuse the GitHub light palette already in this
  *     file (no new hex codes introduced). Do NOT silently revert these by
  *     re-running `hugo gen chromastyles` over this file.
+ *   - Symmetric backfill: 5 light-only tokens (.p / .na / .nx / .nb / .bp)
+ *     backfilled with container color #e6edf3 in BOTH dark blocks — `github`
+ *     light defines these (mostly #1f2328 dark gray) but `github-dark` does
+ *     not, so the light rules leaked into dark mode and rendered punctuation
+ *     / attributes / etc. nearly invisible on the dark background. .ge made
+ *     self-complete with explicit `color:#e6edf3` + retained italic (cascade
+ *     was already covering it via specificity, but the explicit color is
+ *     safer for future maintenance). .go deliberately kept at #8b949e per
+ *     `chroma --style=github-dark` upstream's REPL-output dimming convention
+ *     (visual hierarchy with .c comment grey). Do NOT silently revert these
+ *     either.
  * ============================================================ */
 
 /* ---------- Light (default) ---------- */
@@ -128,6 +139,7 @@
   /* KeywordPseudo */ :root:not([data-theme="light"]) .chroma .kp { color:#79c0ff }
   /* KeywordReserved */ :root:not([data-theme="light"]) .chroma .kr { color:#ff7b72 }
   /* KeywordType */ :root:not([data-theme="light"]) .chroma .kt { color:#ff7b72 }
+  /* NameAttribute */ :root:not([data-theme="light"]) .chroma .na { color:#e6edf3 }
   /* NameClass */ :root:not([data-theme="light"]) .chroma .nc { color:#f0883e;font-weight:bold }
   /* NameConstant */ :root:not([data-theme="light"]) .chroma .no { color:#79c0ff;font-weight:bold }
   /* NameDecorator */ :root:not([data-theme="light"]) .chroma .nd { color:#d2a8ff;font-weight:bold }
@@ -136,7 +148,10 @@
   /* NameLabel */ :root:not([data-theme="light"]) .chroma .nl { color:#79c0ff;font-weight:bold }
   /* NameNamespace */ :root:not([data-theme="light"]) .chroma .nn { color:#ff7b72 }
   /* NameProperty */ :root:not([data-theme="light"]) .chroma .py { color:#79c0ff }
+  /* NameOther */ :root:not([data-theme="light"]) .chroma .nx { color:#e6edf3 }
   /* NameTag */ :root:not([data-theme="light"]) .chroma .nt { color:#7ee787 }
+  /* NameBuiltin */ :root:not([data-theme="light"]) .chroma .nb { color:#e6edf3 }
+  /* NameBuiltinPseudo */ :root:not([data-theme="light"]) .chroma .bp { color:#e6edf3 }
   /* NameVariable */ :root:not([data-theme="light"]) .chroma .nv { color:#79c0ff }
   /* NameVariableClass */ :root:not([data-theme="light"]) .chroma .vc { color:#79c0ff }
   /* NameVariableGlobal */ :root:not([data-theme="light"]) .chroma .vg { color:#79c0ff }
@@ -169,6 +184,7 @@
   /* LiteralNumberOct */ :root:not([data-theme="light"]) .chroma .mo { color:#a5d6ff }
   /* Operator */ :root:not([data-theme="light"]) .chroma .o { color:#ff7b72;font-weight:bold }
   /* OperatorWord */ :root:not([data-theme="light"]) .chroma .ow { color:#ff7b72;font-weight:bold }
+  /* Punctuation */ :root:not([data-theme="light"]) .chroma .p { color:#e6edf3 }
   /* Comment */ :root:not([data-theme="light"]) .chroma .c { color:#8b949e;font-style:italic }
   /* CommentHashbang */ :root:not([data-theme="light"]) .chroma .ch { color:#8b949e;font-style:italic }
   /* CommentMultiline */ :root:not([data-theme="light"]) .chroma .cm { color:#8b949e;font-style:italic }
@@ -177,7 +193,7 @@
   /* CommentPreproc */ :root:not([data-theme="light"]) .chroma .cp { color:#8b949e;font-weight:bold;font-style:italic }
   /* CommentPreprocFile */ :root:not([data-theme="light"]) .chroma .cpf { color:#8b949e;font-weight:bold;font-style:italic }
   /* GenericDeleted */ :root:not([data-theme="light"]) .chroma .gd { color:#ffa198;background-color:#490202 }
-  /* GenericEmph */ :root:not([data-theme="light"]) .chroma .ge { font-style:italic }
+  /* GenericEmph */ :root:not([data-theme="light"]) .chroma .ge { color:#e6edf3;font-style:italic }
   /* GenericError */ :root:not([data-theme="light"]) .chroma .gr { color:#ffa198 }
   /* GenericHeading */ :root:not([data-theme="light"]) .chroma .gh { color:#79c0ff;font-weight:bold }
   /* GenericInserted */ :root:not([data-theme="light"]) .chroma .gi { color:#56d364;background-color:#0f5323 }
@@ -207,6 +223,7 @@
 /* KeywordPseudo */ :root[data-theme="dark"] .chroma .kp { color:#79c0ff }
 /* KeywordReserved */ :root[data-theme="dark"] .chroma .kr { color:#ff7b72 }
 /* KeywordType */ :root[data-theme="dark"] .chroma .kt { color:#ff7b72 }
+/* NameAttribute */ :root[data-theme="dark"] .chroma .na { color:#e6edf3 }
 /* NameClass */ :root[data-theme="dark"] .chroma .nc { color:#f0883e;font-weight:bold }
 /* NameConstant */ :root[data-theme="dark"] .chroma .no { color:#79c0ff;font-weight:bold }
 /* NameDecorator */ :root[data-theme="dark"] .chroma .nd { color:#d2a8ff;font-weight:bold }
@@ -215,7 +232,10 @@
 /* NameLabel */ :root[data-theme="dark"] .chroma .nl { color:#79c0ff;font-weight:bold }
 /* NameNamespace */ :root[data-theme="dark"] .chroma .nn { color:#ff7b72 }
 /* NameProperty */ :root[data-theme="dark"] .chroma .py { color:#79c0ff }
+/* NameOther */ :root[data-theme="dark"] .chroma .nx { color:#e6edf3 }
 /* NameTag */ :root[data-theme="dark"] .chroma .nt { color:#7ee787 }
+/* NameBuiltin */ :root[data-theme="dark"] .chroma .nb { color:#e6edf3 }
+/* NameBuiltinPseudo */ :root[data-theme="dark"] .chroma .bp { color:#e6edf3 }
 /* NameVariable */ :root[data-theme="dark"] .chroma .nv { color:#79c0ff }
 /* NameVariableClass */ :root[data-theme="dark"] .chroma .vc { color:#79c0ff }
 /* NameVariableGlobal */ :root[data-theme="dark"] .chroma .vg { color:#79c0ff }
@@ -248,6 +268,7 @@
 /* LiteralNumberOct */ :root[data-theme="dark"] .chroma .mo { color:#a5d6ff }
 /* Operator */ :root[data-theme="dark"] .chroma .o { color:#ff7b72;font-weight:bold }
 /* OperatorWord */ :root[data-theme="dark"] .chroma .ow { color:#ff7b72;font-weight:bold }
+/* Punctuation */ :root[data-theme="dark"] .chroma .p { color:#e6edf3 }
 /* Comment */ :root[data-theme="dark"] .chroma .c { color:#8b949e;font-style:italic }
 /* CommentHashbang */ :root[data-theme="dark"] .chroma .ch { color:#8b949e;font-style:italic }
 /* CommentMultiline */ :root[data-theme="dark"] .chroma .cm { color:#8b949e;font-style:italic }
@@ -256,7 +277,7 @@
 /* CommentPreproc */ :root[data-theme="dark"] .chroma .cp { color:#8b949e;font-weight:bold;font-style:italic }
 /* CommentPreprocFile */ :root[data-theme="dark"] .chroma .cpf { color:#8b949e;font-weight:bold;font-style:italic }
 /* GenericDeleted */ :root[data-theme="dark"] .chroma .gd { color:#ffa198;background-color:#490202 }
-/* GenericEmph */ :root[data-theme="dark"] .chroma .ge { font-style:italic }
+/* GenericEmph */ :root[data-theme="dark"] .chroma .ge { color:#e6edf3;font-style:italic }
 /* GenericError */ :root[data-theme="dark"] .chroma .gr { color:#ffa198 }
 /* GenericHeading */ :root[data-theme="dark"] .chroma .gh { color:#79c0ff;font-weight:bold }
 /* GenericInserted */ :root[data-theme="dark"] .chroma .gi { color:#56d364;background-color:#0f5323 }
