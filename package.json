@@ -1,6 +1,6 @@
 {
   "name": "inkstone",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "type": "module",
   "description": "A minimal bilingual Hugo theme for longreads. Tailwind v4 + 25 built-in shortcodes.",
