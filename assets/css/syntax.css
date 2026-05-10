@@ -11,11 +11,25 @@
  * Background-color rules are stripped — .prose pre already sets
  * background to var(--color-bg-sunken) and we want syntax colors
  * to layer on top of the site palette, not GitHub's grey.
+ *
+ * Deliberate divergence from upstream `chroma --style=github`:
+ *   - .err: dropped `background-color:#82071e` (kept only `color:#82071e`)
+ *     so partial code snippets (e.g. ```json with non-JSON head) don't
+ *     render a glaring red block in light mode. Mirrors dark's
+ *     color-only `.err`.
+ *   - .w: changed from `#fff` (clashed with --color-bg-sunken) to a
+ *     low-contrast neutral so whitespace is visible-but-quiet.
+ *   - Backfilled .ne / .l / .ld / .py / .gr / .gh / .gp / .gs / .gu / .gt
+ *     in the light block — these exist in `github-dark` but were absent
+ *     from `github`, leaving the light theme silently un-styled for those
+ *     tokens. Color values reuse the GitHub light palette already in this
+ *     file (no new hex codes introduced). Do NOT silently revert these by
+ *     re-running `hugo gen chromastyles` over this file.
  * ============================================================ */
 
 /* ---------- Light (default) ---------- */
 /* PreWrapper */ .chroma { -webkit-text-size-adjust:none }
-/* Error */ .chroma .err { color:#f6f8fa;background-color:#82071e }
+/* Error */ .chroma .err { color:#82071e }
 /* LineLink */ .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }
 /* LineTableTD */ .chroma .lntd { vertical-align:top;padding:0;margin:0;border:0; }
 /* LineTable */ .chroma .lntable { border-spacing:0;padding:0;margin:0;border:0; }
@@ -35,8 +49,10 @@
 /* NameConstant */ .chroma .no { color:#0550ae }
 /* NameDecorator */ .chroma .nd { color:#0550ae }
 /* NameEntity */ .chroma .ni { color:#6639ba }
+/* NameException */ .chroma .ne { color:#cf222e;font-weight:bold }
 /* NameLabel */ .chroma .nl { color:#900;font-weight:bold }
 /* NameNamespace */ .chroma .nn { color:#24292e }
+/* NameProperty */ .chroma .py { color:#0550ae }
 /* NameOther */ .chroma .nx { color:#1f2328 }
 /* NameTag */ .chroma .nt { color:#0550ae }
 /* NameBuiltin */ .chroma .nb { color:#6639ba }
@@ -48,6 +64,8 @@
 /* NameVariableMagic */ .chroma .vm { color:#953800 }
 /* NameFunction */ .chroma .nf { color:#6639ba }
 /* NameFunctionMagic */ .chroma .fm { color:#6639ba }
+/* Literal */ .chroma .l { color:#0a3069 }
+/* LiteralDate */ .chroma .ld { color:#0550ae }
 /* LiteralString */ .chroma .s { color:#0a3069 }
 /* LiteralStringAffix */ .chroma .sa { color:#0a3069 }
 /* LiteralStringBacktick */ .chroma .sb { color:#0a3069 }
@@ -81,10 +99,16 @@
 /* CommentPreprocFile */ .chroma .cpf { color:#57606a }
 /* GenericDeleted */ .chroma .gd { color:#82071e;background-color:#ffebe9 }
 /* GenericEmph */ .chroma .ge { color:#1f2328 }
+/* GenericError */ .chroma .gr { color:#82071e }
+/* GenericHeading */ .chroma .gh { color:#0550ae;font-weight:bold }
 /* GenericInserted */ .chroma .gi { color:#116329;background-color:#dafbe1 }
 /* GenericOutput */ .chroma .go { color:#1f2328 }
+/* GenericPrompt */ .chroma .gp { color:#57606a }
+/* GenericStrong */ .chroma .gs { font-weight:bold }
+/* GenericSubheading */ .chroma .gu { color:#0550ae }
+/* GenericTraceback */ .chroma .gt { color:#cf222e }
 /* GenericUnderline */ .chroma .gl { text-decoration:underline }
-/* TextWhitespace */ .chroma .w { color:#fff }
+/* TextWhitespace */ .chroma .w { color:#d6d3d1 }
 
 /* ---------- Dark (system preference, unless [data-theme="light"]) ---------- */
 @media (prefers-color-scheme: dark) {
