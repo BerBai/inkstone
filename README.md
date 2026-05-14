@@ -268,3 +268,7 @@ Issue 或 PR 欢迎到 [github.com/BerBai/inkstone](https://github.com/BerBai/in
 ## Author
 
 [Jason](https://github.com/BerBai)
+
+## 友链
+
+- [LINUX DO - 新的理想型社区](https://linux.do/)
