@@ -81,6 +81,14 @@ jobs:
             --baseURL "$DEMO_BASE_URL" \
             --gc \
             --minify
+          npx pagefind --site public
+          rm -f public/pagefind/pagefind-ui.js \
+                public/pagefind/pagefind-ui.css \
+                public/pagefind/pagefind-modular-ui.js \
+                public/pagefind/pagefind-modular-ui.css \
+                public/pagefind/pagefind-component-ui.js \
+                public/pagefind/pagefind-component-ui.css \
+                public/pagefind/pagefind-highlight.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -10,7 +10,6 @@ exampleSite/.hugo_build.lock
 
 # Node toolchain (Tailwind v4 CLI)
 node_modules/
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
