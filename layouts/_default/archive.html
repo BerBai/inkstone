@@ -21,7 +21,7 @@
             <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             {{ with .Params.tags }}
               <span class="posts-item-tags">
-                {{ range . }}<a class="tag-mini" href="/tags/{{ . | urlize }}/">#{{ . }}</a>{{ end }}
+                {{ range . }}<a class="tag-mini" href="{{ (printf "tags/%s/" (. | urlize)) | relLangURL }}">#{{ . }}</a>{{ end }}
               </span>
             {{ end }}
           </li>
