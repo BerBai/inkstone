@@ -35,14 +35,8 @@ git tag -a v0.2.0 -m "Inkstone v0.2.0"
 git push origin v0.2.0
 ```
 
-GitHub Release 通过 `gh` CLI 创建（或在 web UI 手动建）：
-
-```bash
-gh release create v0.2.0 \
-  --title "v0.2.0" \
-  --notes-file CHANGELOG-draft.md \
-  --verify-tag
-```
+push tag 后，GitHub Actions 会自动打包 `tar.gz` / `zip` 并创建 Release。
+如需手工补发，可直接重跑 `Release theme` workflow，或用 `gh release upload` 补资产。
 
 ## Release Note 模板
 

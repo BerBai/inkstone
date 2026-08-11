@@ -35,14 +35,9 @@ git tag -a v0.2.0 -m "Inkstone v0.2.0"
 git push origin v0.2.0
 ```
 
-Create the GitHub Release via the `gh` CLI (or manually in the web UI):
-
-```bash
-gh release create v0.2.0 \
-  --title "v0.2.0" \
-  --notes-file CHANGELOG-draft.md \
-  --verify-tag
-```
+After the tag push lands, GitHub Actions automatically packages `tar.gz` and
+`zip` assets and creates the Release. If you need to republish, rerun the
+`Release theme` workflow or upload assets with `gh release upload`.
 
 ## Release Note Template
 

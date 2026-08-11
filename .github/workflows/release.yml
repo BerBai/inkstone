@@ -1,0 +1,39 @@
+name: Release theme
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Package source archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          mkdir -p dist
+          git archive --format=tar --prefix="${tag#v}/" HEAD | gzip -9 > "dist/${tag}.tar.gz"
+          git archive --format=zip --prefix="${tag#v}/" HEAD -o "dist/${tag}.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
