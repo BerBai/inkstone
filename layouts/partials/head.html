@@ -68,9 +68,6 @@
     } catch (_) { /* private mode / storage disabled — fall back to prefers-color-scheme */ }
   })();
   (function () {
-    try {
-      if (sessionStorage.getItem("inkstone-fonts-ready") === "1") return;
-    } catch (_) {}
     document.documentElement.classList.add("fonts-pending");
     window.__inkstoneFontGateTimer = window.setTimeout(function () {
       document.documentElement.classList.remove("fonts-pending");

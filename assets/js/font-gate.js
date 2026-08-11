@@ -9,9 +9,6 @@
     }
     html.classList.remove('fonts-pending');
     html.classList.add('fonts-ready');
-    try {
-      sessionStorage.setItem('inkstone-fonts-ready', '1');
-    } catch (_) {}
   };
 
   if (!document.fonts || typeof document.fonts.load !== 'function') {
