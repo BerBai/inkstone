@@ -228,6 +228,76 @@ body:not(.article-page) #reading-mode-toggle {
 .content {
   max-width: var(--content-max);
   min-width: 0;
+  position: relative;
+}
+
+/* ============================================================
+ * Font gate skeleton
+ *
+ * On cold production visits the critical CJK serif can arrive after the
+ * browser has enough HTML/CSS to paint. Rather than exposing fallback text
+ * and then switching to the theme font, the early head bootstrap adds
+ * `html.fonts-pending`; font-gate.js removes it when Noto Serif SC is ready
+ * or after a short timeout. The shell remains visible while only local text
+ * regions are replaced by stable app-style placeholders.
+ * ============================================================ */
+html.fonts-pending .sidebar > *,
+html.fonts-pending .content > * {
+  opacity: 0;
+}
+
+html.fonts-pending .sidebar::after,
+html.fonts-pending .content::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: var(--radius-2);
+}
+
+html.fonts-pending .sidebar::after {
+  top: 0;
+  right: var(--space-8);
+  width: min(150px, calc(100% - var(--space-8)));
+  height: 230px;
+  background:
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) right 0 / 130px 34px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) right 52px / 150px 16px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) right 96px / 76px 14px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) right 128px / 92px 14px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) right 160px / 68px 14px no-repeat;
+}
+
+html.fonts-pending .content::before {
+  top: 0;
+  left: 0;
+  width: min(100%, 720px);
+  height: min(58vh, 520px);
+  background:
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 0 / 68% 42px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 68px / 52% 18px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 128px / 96% 15px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 158px / 88% 15px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 188px / 92% 15px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 238px / 34% 22px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 292px / 94% 15px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 322px / 82% 15px no-repeat,
+    linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 352px / 90% 15px no-repeat;
+}
+
+@media (max-width: 1023px) {
+  html.fonts-pending .sidebar {
+    position: relative;
+  }
+
+  html.fonts-pending .sidebar::after {
+    left: 0;
+    right: auto;
+    width: min(100%, 360px);
+    height: 88px;
+    background:
+      linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 0 / 128px 28px no-repeat,
+      linear-gradient(var(--color-bg-soft), var(--color-bg-soft)) 0 48px / 82% 14px no-repeat;
+  }
 }
 
 /* ============================================================

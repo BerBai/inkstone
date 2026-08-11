@@ -67,6 +67,15 @@
       }
     } catch (_) { /* private mode / storage disabled — fall back to prefers-color-scheme */ }
   })();
+  (function () {
+    try {
+      if (sessionStorage.getItem("inkstone-fonts-ready") === "1") return;
+    } catch (_) {}
+    document.documentElement.classList.add("fonts-pending");
+    window.__inkstoneFontGateTimer = window.setTimeout(function () {
+      document.documentElement.classList.remove("fonts-pending");
+    }, 1800);
+  })();
   window.antvG2Charts = window.antvG2Charts || [];
   window.getTheme = window.getTheme || function () {
     try {
@@ -101,6 +110,7 @@
 {{/* T10: interactivity JS — independent ES modules, defer-loaded.
      Reading-mode (legacy `:root.reading-mode` + localStorage) was retired
      in favor of `body.immersive-page` driven by immersive.js below. */}}
+{{ with resources.Get "js/font-gate.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 {{ with resources.Get "js/lightbox.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 {{ with resources.Get "js/theme.js" | fingerprint }}<script type="module" src="{{ .RelPermalink }}" defer></script>{{ end }}
 
