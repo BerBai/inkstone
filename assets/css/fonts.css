@@ -6,8 +6,10 @@
  *   - cjk-common (high-frequency CJK Unified Ideographs)
  *   - cjk-ext (CJK Extension A/B + supplementary planes)
  * Files live at /static/fonts/, served from /fonts/ at runtime.
- * `optional` prevents late CJK webfont swaps from shifting the layout
- * after first paint on real production networks.
+ * Noto Serif SC is render-critical for the theme identity. Use `block`
+ * so first paint does not expose a fallback-font layout that later turns
+ * into the webfont layout. Decorative LXGW faces stay `optional` below so
+ * non-critical metadata never delays the main reading surface.
  * ============================================================ */
 
 /* ---------- Noto Serif SC 400 — Latin ---------- */
@@ -15,7 +17,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-400-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
@@ -28,7 +30,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-400-cjk-common.woff2") format("woff2");
   unicode-range:
     U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
@@ -40,7 +42,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 400;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-400-cjk-ext.woff2") format("woff2");
   unicode-range:
     U+3400-4DBF, U+20000-2A6DF, U+2A700-2B73F, U+2B740-2B81F,
@@ -52,7 +54,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 600;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-600-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
@@ -65,7 +67,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 600;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-600-cjk-common.woff2") format("woff2");
   unicode-range:
     U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
@@ -77,7 +79,7 @@
   font-family: "Noto Serif SC";
   font-style: normal;
   font-weight: 600;
-  font-display: optional;
+  font-display: block;
   src: url("/fonts/noto-serif-sc-600-cjk-ext.woff2") format("woff2");
   unicode-range:
     U+3400-4DBF, U+20000-2A6DF, U+2A700-2B73F, U+2B740-2B81F,
