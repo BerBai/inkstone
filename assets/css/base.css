@@ -15,7 +15,11 @@
   /* ---------- Reset (cherry-pick) ---------- */
   *, *::before, *::after { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; tab-size: 4; }
-  body { margin: 0; min-height: 100vh; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
   img, picture, video, canvas, svg { display: block; max-width: 100%; }
   button, input, select, textarea { font: inherit; color: inherit; }
 

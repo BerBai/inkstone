@@ -32,6 +32,7 @@ html {
   margin: 0 auto;
   padding: var(--shell-pad);
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* 05-05-toc-sidebar-yield: when a TOC is rendered, bump the shell's
@@ -59,6 +60,7 @@ html {
   top: var(--shell-pad);
   height: max-content;
   min-height: calc(100vh - 2 * var(--shell-pad));
+  min-height: calc(100dvh - 2 * var(--shell-pad));
   display: flex;
   flex-direction: column;
   gap: var(--space-8);

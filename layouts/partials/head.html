@@ -82,6 +82,15 @@
     codeCollapse: {{ i18n "code_collapse" | jsonify | safeJS }}
   });
 </script>
+{{- $fontPreloads := slice
+  (dict "href" "/fonts/noto-serif-sc-400-latin.woff2" "weight" "400")
+  (dict "href" "/fonts/noto-serif-sc-400-cjk-common.woff2" "weight" "400")
+  (dict "href" "/fonts/noto-serif-sc-600-latin.woff2" "weight" "600")
+  (dict "href" "/fonts/noto-serif-sc-600-cjk-common.woff2" "weight" "600")
+-}}
+{{- range $fontPreloads }}
+  <link rel="preload" href="{{ .href }}" as="font" type="font/woff2" crossorigin>
+{{- end }}
 {{ with resources.Get "css/main.css" | css.TailwindCSS | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}">
 {{ end }}
