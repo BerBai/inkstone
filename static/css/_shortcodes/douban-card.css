@@ -3,8 +3,8 @@
   --color-shortcode-douban-card-tag-foreground: #999999;
   --color-shortcode-douban-card-green: #42be57;
 
-  --image-shortcode-douban-card-stars-1x: url("/images/_shortcodes/douban-card/douban-stars.png");
-  --image-shortcode-douban-card-stars-2x: url("/images/_shortcodes/douban-card/douban-stars@2x.png");
+  --color-shortcode-douban-card-stars-fill: #ffb02e;
+  --color-shortcode-douban-card-stars-empty: rgb(0 0 0 / 0.18);
 }
 
 /* Theme wiring — see admonition.css for the full contract rationale.
@@ -120,60 +120,22 @@
   display: inline-block;
   width: 75px;
   height: 15px !important;
-  background-image: var(--image-shortcode-douban-card-stars-1x);
-  background: -webkit-image-set(
-    var(--image-shortcode-douban-card-stars-1x) 1x,
-    var(--image-shortcode-douban-card-stars-2x) 2x
-    ) no-repeat;
+  background: linear-gradient(
+    90deg,
+    var(--color-shortcode-douban-card-stars-fill) var(--douban-rating-pct, 0%),
+    var(--color-shortcode-douban-card-stars-empty) var(--douban-rating-pct, 0%)
+  );
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg>");
+  -webkit-mask-repeat: repeat-x;
+          mask-repeat: repeat-x;
+  -webkit-mask-size: 15px 15px;
+          mask-size: 15px 15px;
   background-position: center center;
   overflow: hidden;
   margin-left: 0.6em;
   margin-top: 0.2em;
   text-align: center;
-}
-
-.shortcode-douban-card--stars-10 {
-  background-position: 0px 0px;
-}
-
-.shortcode-douban-card--stars-9 {
-  background-position: 0px -15px;
-}
-
-.shortcode-douban-card--stars-8 {
-  background-position: 0px -30px;
-}
-
-.shortcode-douban-card--stars-7 {
-  background-position: 0px -45px;
-}
-
-.shortcode-douban-card--stars-6 {
-  background-position: 0px -60px;
-}
-
-.shortcode-douban-card--stars-5 {
-  background-position: 0px -75px;
-}
-
-.shortcode-douban-card--stars-4 {
-  background-position: 0px -90px;
-}
-
-.shortcode-douban-card--stars-3 {
-  background-position: 0px -105px;
-}
-
-.shortcode-douban-card--stars-2 {
-  background-position: 0px -120px;
-}
-
-.shortcode-douban-card--stars-1 {
-  background-position: 0px -135px;
-}
-
-.shortcode-douban-card--stars-0 {
-  background-position: 0px -150px;
 }
 
 .shortcode-douban-card--rating {

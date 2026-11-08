@@ -1,4 +1,11 @@
 {{- $src := .Get "src" }}
+{{- if not $src }}
+  {{- errorf "iframe shortcode requires src: %s" .Position }}
+{{- end }}
+{{- $srcURL := urls.Parse $src }}
+{{- if not (or (eq $srcURL.Scheme "https") (eq $srcURL.Scheme "http")) }}
+  {{- errorf "iframe src must be an http(s) URL: %s" $src }}
+{{- end }}
 {{- $ratio := .Get "ratio" | default 0.5625 }}
 {{- $ratio = mul $ratio 100 }}
 
@@ -13,7 +20,9 @@
        silently fall through to the plain iframe path; the --color-bg +
        color-scheme tokens still cover the load/cross-origin/empty-src
        window so dark mode doesn't show UA-default white. */}}
-{{- $hosts := site.Data.iframe_theme_hosts.host }}
+{{- $compatData := false -}}
+{{- if lt hugo.Version "0.156.0" -}}{{- $compatData = site.Data -}}{{- else -}}{{- $compatData = hugo.Data -}}{{- end -}}
+{{- $hosts := index $compatData "iframe_theme_hosts" "host" }}
 {{- $matched := false }}
 {{- range $hosts }}
   {{- if strings.Contains $src .match }}{{ $matched = true }}{{ end }}

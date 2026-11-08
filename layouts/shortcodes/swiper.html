@@ -5,7 +5,7 @@
     type="text/css"
     href="{{ $.Site.Params.jsdelivrMirror }}/npm/swiper@{{ $.Site.Params.swiperVersion }}/swiper-bundle.min.css"
   />
-  <link rel="stylesheet" type="text/css" href="/css/_shortcodes/swiper.css" />
+  <link rel="stylesheet" type="text/css" href="{{ "css/_shortcodes/swiper.css" | relURL }}" />
   <script src="{{ $.Site.Params.jsdelivrMirror }}/npm/swiper@{{ $.Site.Params.swiperVersion }}/swiper-bundle.min.js"></script>
 {{- end }}
 

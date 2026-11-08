@@ -1,6 +1,8 @@
 <footer class="footer">
   {{- $themeVersion := "" -}}
-  {{- with hugo.Data.inkstone -}}
+  {{- $data := false -}}
+    {{- if lt hugo.Version "0.156.0" -}}{{- $data = site.Data -}}{{- else -}}{{- $data = hugo.Data -}}{{- end -}}
+  {{- with index $data "inkstone" -}}
     {{- with .version -}}{{- $themeVersion = . -}}{{- end -}}
   {{- end -}}
   <p>

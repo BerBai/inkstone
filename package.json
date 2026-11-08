@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "hugo server -s exampleSite --themesDir ../..",
     "build": "hugo --gc --minify -s exampleSite --themesDir ../..",
-    "clean": "rm -rf exampleSite/public exampleSite/resources resources public"
+    "clean": "rm -rf exampleSite/public exampleSite/public-0.128 exampleSite/resources resources public tests/.work",
+    "test": "tests/validate.sh"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.0",

@@ -88,7 +88,9 @@
   <script>
     document.addEventListener("themechange", function (e) {
       var theme = e.detail && e.detail.theme === "dark" ? "dark" : "light";
-      var HOSTS = {{ site.Data.iframe_theme_hosts.host | jsonify | safeJS }};
+      {{- $data := false -}}
+    {{- if lt hugo.Version "0.156.0" -}}{{- $data = site.Data -}}{{- else -}}{{- $data = hugo.Data -}}{{- end -}}
+      var HOSTS = {{ index $data "iframe_theme_hosts" "host" | jsonify | safeJS }};
       document.querySelectorAll("iframe[data-theme-bridge]").forEach(function (el) {
         try {
           var u = new URL(el.src);

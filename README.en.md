@@ -14,6 +14,10 @@
 - 🔍 **Pagefind search** — Built-in `⌘K` modal; index opt-in via your build pipeline
 - 🌓 **Dark mode** — Respects `prefers-color-scheme`, toggle persists to `localStorage`
 
+## Stable contract
+
+Before upgrading or overriding the theme, read [`SHORT-CONTRACT.md`](./SHORT-CONTRACT.md). It lists stable layouts, partials, shortcodes, params, CSS behavior, and files that are implementation details.
+
 ## Quick Start
 
 ### Option 1: git submodule (recommended)
@@ -218,9 +222,9 @@ Colors, spacing, font sizes, font stacks are declared in `assets/css/variable.cs
 }
 ```
 
-### Override partials / shortcodes
+### Override base template / partials / shortcodes
 
-Hugo's theme inheritance: drop a file with the same name into your site's `layouts/partials/` or `layouts/shortcodes/` to override the theme's version. Example custom footer:
+Hugo's theme inheritance: drop a same-named file into your site's `layouts/partials/` or `layouts/shortcodes/` to replace the theme version. Example:
 
 ```html
 <!-- layouts/partials/footer.html -->
@@ -228,6 +232,19 @@ Hugo's theme inheritance: drop a file with the same name into your site's `layou
   <p>© {{ now.Format "2006" }} {{ .Site.Params.author }}. Custom footer here.</p>
 </footer>
 ```
+
+When overriding `head.html`, `sidebar.html`, `scripts.html`, or a shortcode, the whole file is replaced. The theme does not automatically restore the CSS, JS, meta, or interaction logic it contains. To append, copy the theme file first and edit it. An old `layouts/baseof.html` override must move to `layouts/_default/baseof.html`.
+
+If you override `assets/css/main.css`, you also replace the theme style entry. Copy [`assets/css/main.css`](./assets/css/main.css) before adding your own `@theme` or rules.
+
+## Testing
+
+```bash
+npm ci
+npm test
+```
+
+The suite builds with Hugo 0.128 and 0.161, checks fixture sites, generated HTML, RSS, sitemap, local links, CSS assets, `html-validate`, headless Chrome, axe, interaction behavior, and the performance budget. For Linux CI Chrome, set `CHROME_PATH=/usr/bin/google-chrome`. Full boundaries are in [`SHORT-CONTRACT.md`](./SHORT-CONTRACT.md).
 
 ## Enabling Pagefind search
 

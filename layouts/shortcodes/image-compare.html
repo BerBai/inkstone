@@ -8,8 +8,17 @@
   <link
     rel="stylesheet"
     type="text/css"
-    href="/css/_shortcodes/image-compare.css"
+    href="{{ "css/_shortcodes/image-compare.css" | relURL }}"
   />
+{{- end }}
+
+{{- $altBefore := or (.Get "alt-before") (.Get "alt") }}
+{{- $altAfter := or (.Get "alt-after") (.Get "alt") }}
+{{- if not $altBefore }}
+  {{- errorf "image-compare requires alt or alt-before: %s" .Position }}
+{{- end }}
+{{- if not $altAfter }}
+  {{- errorf "image-compare requires alt or alt-after: %s" .Position }}
 {{- end }}
 
 
@@ -33,7 +42,7 @@
     {{- with .Get "large-max-width" | default "100%" }} data-large-max-width="{{ . }}" {{- end }}
     {{- with .Get "middle-max-width" | default "100%" }} data-middle-max-width="{{ . }}" {{- end }}
     {{- with .Get "small-max-width" | default "100%" }} data-small-max-width="{{ . }}" {{- end }}>
-    <img src="{{ .Get "image-before" }}" />
-    <img src="{{ .Get "image-after" }}" />
+    <img src="{{ .Get "image-before" }}" alt="{{ $altBefore }}" />
+    <img src="{{ .Get "image-after" }}" alt="{{ $altAfter }}" />
   </div>
 </div>

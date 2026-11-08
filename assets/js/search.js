@@ -115,6 +115,25 @@
       close();
       return;
     }
+    if (e.key === 'Tab') {
+      const focusables = Array.from(
+        modal.querySelectorAll('input, button, a[href], [tabindex]:not([tabindex="-1"])'),
+      ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+      if (!focusables.length) {
+        e.preventDefault();
+        input.focus();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       moveSelection(1);

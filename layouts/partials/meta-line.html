@@ -56,7 +56,7 @@
                our CSS expects them. The whole card is already clickable. */}}
           <span class="tag">#{{ . }}</span>
         {{- else }}
-          <a class="tag" href="/tags/{{ . | urlize }}/">#{{ . }}</a>
+          <a class="tag" href="{{ (printf "tags/%s/" (. | urlize)) | relLangURL }}">#{{ . }}</a>
         {{- end }}
       {{- end }}
     </span>

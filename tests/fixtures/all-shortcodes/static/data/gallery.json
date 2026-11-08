@@ -1,0 +1,8 @@
+{
+  "items": [
+    {"src": "/img/fixture.svg", "thumb": "/img/fixture.svg", "alt": "Fixture image"},
+    {"src": "/img/before.svg", "thumb": "/img/before.svg", "alt": "Before image"}
+  ],
+  "justifiedGalleryOptions": {"rowHeight": 120, "margins": 4},
+  "lightGalleryOptions": {"speed": 400}
+}

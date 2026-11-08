@@ -6,14 +6,15 @@
       that matches the new language; never a 404)
   Bails to nothing when only one language is configured.
 
-  Default language detection: first entry of hugo.Sites (sorted by language
-  weight). hugo.Sites is the project-level collection introduced in v0.156
-  to replace site.Languages, which carried a misleading per-site contract.
+  Default language detection: first entry of site.Sites (sorted by language
+  weight). `label` is read from each language's params, keeping the same
+  template compatible with Hugo versions that reject custom language keys.
   See partials/head.html hreflang block for the same convention.
 */}}
 {{- $cur := . -}}
-{{- if gt (len hugo.Sites) 1 -}}
-  {{- $defaultLang := (index hugo.Sites 0).Language.Lang -}}
+{{- $sites := false -}}
+{{- if lt hugo.Version "0.156.0" -}}{{- $sites = site.Sites -}}{{- else -}}{{- $sites = hugo.Sites -}}{{- end -}}
+{{- if gt (len $sites) 1 -}}
   {{- /* Per-language icon. Keyed by full Hugo Lang code so future regional
         variants (e.g. en-gb) can map distinctly. Falls back to the generic
         `languages` glyph when an unmapped language is added — fail visible
@@ -29,19 +30,15 @@
     {{- $translations = merge $translations (dict .Lang .RelPermalink) -}}
   {{- end -}}
   <div class="language-switcher" role="group" aria-label="{{ i18n "language_switcher_label" }}">
-    {{- range hugo.Sites -}}
-      {{- $lang := .Language -}}
+    {{- range $sites -}}
+      {{- $site := . -}}
+      {{- $lang := $site.Language -}}
       {{- if ne $lang.Lang $cur.Language.Lang -}}
         {{- $href := index $translations $lang.Lang -}}
         {{- if not $href -}}
-          {{- /* No translation for this page; link to that language's home.
-                With defaultContentLanguageInSubdir=false the default language
-                lives at /, every other language at /<lang>/. */ -}}
-          {{- if eq $lang.Lang $defaultLang -}}
-            {{- $href = "/" -}}
-          {{- else -}}
-            {{- $href = printf "/%s/" $lang.Lang -}}
-          {{- end -}}
+          {{- /* No translation for this page; link to that language's home,
+                respecting baseURL and language subdirectory config. */ -}}
+          {{- $href = $site.Home.RelPermalink -}}
         {{- end -}}
         {{- $iconName := index $iconMap $lang.Lang -}}
         {{- if not $iconName -}}{{- $iconName = "languages" -}}{{- end -}}
@@ -49,8 +46,8 @@
            href="{{ $href }}"
            hreflang="{{ $lang.Lang }}"
            lang="{{ $lang.Lang }}"
-           aria-label="{{ $lang.Label }}"
-           title="{{ $lang.Label }}">{{ partial "icon.html" $iconName }}</a>
+           aria-label="{{ or $lang.Params.label $lang.Language.LanguageName $lang.Language.Lang }}"
+           title="{{ or $lang.Params.label $lang.Language.LanguageName $lang.Language.Lang }}">{{ partial "icon.html" $iconName }}</a>
       {{- end -}}
     {{- end -}}
   </div>

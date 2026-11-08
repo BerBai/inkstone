@@ -3,7 +3,7 @@
   <link
     rel="stylesheet"
     type="text/css"
-    href="/css/_shortcodes/antv.css"
+    href="{{ "css/_shortcodes/antv.css" | relURL }}"
   />
   <script src="{{ $.Site.Params.jsdelivrMirror }}/npm/@antv/g2@{{ $.Site.Params.g2Version }}/dist/g2.min.js"></script>
 {{- end }}
@@ -22,7 +22,14 @@
 {{- $margin := .Get "margin" | default 16 }}
 {{- $caption := or (.Get "caption") (.Get "title") }}
 {{- $footnote := .Get "footnote" }}
-{{- $script := .Get "script" | resources.Get }}
+{{- $scriptPath := .Get "script" }}
+{{- if not $scriptPath }}
+  {{- errorf "antv-g2 shortcode requires script: %s" .Position }}
+{{- end }}
+{{- $script := resources.Get $scriptPath }}
+{{- if not $script }}
+  {{- errorf "antv-g2 script not found: %s (%s)" $scriptPath .Position }}
+{{- end }}
 
 <div class="antv-container" data-pagefind-ignore>
   <div class="antv-g2-container" id="{{ $containerId }}" style="height: {{ $height }};"></div>

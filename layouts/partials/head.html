@@ -1,30 +1,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ block "title" . }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}{{ end }}</title>
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
-<meta name="author" content="{{ .Site.Params.author }}">
+{{- $description := or .Description (.Summary | plainify | chomp) .Site.Params.description "" }}
+<meta name="description" content="{{ $description }}">
+{{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
 
 {{/* Open Graph */}}
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
-<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:description" content="{{ $description }}">
 <meta property="og:url" content="{{ .Permalink }}">
-<meta property="og:locale" content="{{ .Site.Params.ogLocale | default "zh_CN" }}">
+<meta property="og:locale" content="{{ or .Site.Params.ogLocale .Site.Language.Lang }}">
 <meta property="og:site_name" content="{{ .Site.Title }}">
 
 {{/* Twitter Card */}}
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
-<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta name="twitter:description" content="{{ $description }}">
 
 {{/* Favicon */}}
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32.png" | relURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "favicon-180.png" | relURL }}">
 
 {{/* Canonical + sitemap */}}
 <link rel="canonical" href="{{ .Permalink }}">
-<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<link rel="sitemap" type="application/xml" href="{{ "sitemap.xml" | relLangURL }}">
 
 {{/* hreflang alternates — emits one <link rel="alternate"> per language that
      exists for this page (including self) plus an x-default pointing at the
@@ -34,13 +35,14 @@
      changed across versions; the explicit `gt 1` guard keeps the output
      correct even if that contract shifts again).
 
-     Default language is identified as the first entry of hugo.Sites — Hugo
+     Default language is identified as the first entry of site.Sites — Hugo
      sorts that slice by language weight (config gives the default language
-     weight=1). hugo.Sites is the project-level collection that replaced
-     `site.Languages` in v0.156. */}}
+     weight=1). */}}
 {{- $allT := .AllTranslations -}}
 {{- if gt (len $allT) 1 -}}
-  {{- $defaultLang := (index hugo.Sites 0).Language.Lang -}}
+  {{- $sites := false -}}
+  {{- if lt hugo.Version "0.156.0" -}}{{- $sites = site.Sites -}}{{- else -}}{{- $sites = hugo.Sites -}}{{- end -}}
+  {{- $defaultLang := (index $sites 0).Language.Lang -}}
   {{- range $allT -}}
     <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
   {{- end -}}
@@ -89,13 +91,13 @@
   });
 </script>
 {{- $fontPreloads := slice
-  (dict "href" "/fonts/noto-serif-sc-400-latin.woff2" "weight" "400")
-  (dict "href" "/fonts/noto-serif-sc-400-cjk-common.woff2" "weight" "400")
-  (dict "href" "/fonts/noto-serif-sc-600-latin.woff2" "weight" "600")
-  (dict "href" "/fonts/noto-serif-sc-600-cjk-common.woff2" "weight" "600")
+  (dict "href" "fonts/noto-serif-sc-400-latin.woff2" "weight" "400")
+  (dict "href" "fonts/noto-serif-sc-400-cjk-common.woff2" "weight" "400")
+  (dict "href" "fonts/noto-serif-sc-600-latin.woff2" "weight" "600")
+  (dict "href" "fonts/noto-serif-sc-600-cjk-common.woff2" "weight" "600")
 -}}
 {{- range $fontPreloads }}
-  <link rel="preload" href="{{ .href }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ .href | relURL }}" as="font" type="font/woff2" crossorigin>
 {{- end }}
 {{ with resources.Get "css/main.css" | css.TailwindCSS | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}">

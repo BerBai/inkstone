@@ -1,11 +1,11 @@
 {{- if not ($.Page.Store.Get "shortcode-tab") }}
   {{- $.Page.Store.Add "shortcode-tab" 1 }}
-  <link rel="stylesheet" type="text/css" href="/css/_shortcodes/tab.css" />
+  <link rel="stylesheet" type="text/css" href="{{ "css/_shortcodes/tab.css" | relURL }}" />
 {{- end }}
 
 {{- with .Inner }}{{/* don't do anything, just call it */}}{{- end }}
 {{- $tabId := .Get "id" | default time.Now.UnixMicro }}
-{{- $tabItemsLength := .Store.Get "shortcode-tab-items" | len }}
+{{- $tabItemsLength := $.Page.Store.Get "shortcode-tab-items" | len }}
 {{- $position := .Get "position" | default "center" }}
 {{- if eq $position "start" }}
   {{- $position = "flex-start" }}
@@ -15,8 +15,8 @@
 
 
 <div class="shortcode-tab" style="justify-content: {{ $position }};">
-  {{- range $idx, $tabItem := .Store.Get "shortcode-tab-items" }}
-    {{- $value := .label | plainify | safeHTMLAttr | strings.TrimSpace }}
+  {{- range $idx, $tabItem := $.Page.Store.Get "shortcode-tab-items" }}
+    {{- $value := trim (.label | plainify) " \n\r\t" }}
     <input
       type="radio"
       class="shortcode-tab-input"

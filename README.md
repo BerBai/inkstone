@@ -14,6 +14,10 @@
 - 🔍 **Pagefind 搜索** — 内置 `⌘K` modal，搜索索引按需启用
 - 🌓 **深色模式** — 尊重 `prefers-color-scheme`，切换持久化到 `localStorage`
 
+## 稳定契约
+
+升级或覆盖主题前，请先阅读 [`SHORT-CONTRACT.md`](./SHORT-CONTRACT.md)。它列出稳定 layouts、partials、shortcodes、params、CSS 行为，以及哪些文件属于内部实现。
+
 ## Quick Start
 
 ### 方式一：git submodule（推荐）
@@ -218,9 +222,9 @@ UI 字符串在 `themes/inkstone/i18n/en.toml` 和 `zh-cn.toml`，需要新增�
 }
 ```
 
-### 替换 partial / shortcode
+### Override base template / partials / shortcodes
 
-Hugo 主题继承机制：在你站点 `layouts/partials/` 或 `layouts/shortcodes/` 下放同名文件即可覆盖主题版本。例如自定义页脚：
+Hugo 的主题继承：把同名文件放进站点 `layouts/partials/` 或 `layouts/shortcodes/` 即可替换主题版本。示例自定义页脚：
 
 ```html
 <!-- layouts/partials/footer.html -->
@@ -228,6 +232,19 @@ Hugo 主题继承机制：在你站点 `layouts/partials/` 或 `layouts/shortcod
   <p>© {{ now.Format "2006" }} {{ .Site.Params.author }}. Custom footer here.</p>
 </footer>
 ```
+
+覆盖 `head.html`、`sidebar.html`、`scripts.html` 或某个 shortcode 时，整个文件会被替换；主题不会再自动补回其中的 CSS、JS、meta 或交互逻辑。要追加时，请先复制主题文件再修改。旧版本 `layouts/baseof.html` 覆盖文件应迁移到 `layouts/_default/baseof.html`。
+
+如果覆盖 `assets/css/main.css`，它也会整体替换主题样式入口；应先复制 [`assets/css/main.css`](./assets/css/main.css)，再添加自己的 `@theme` 或规则。
+
+## Testing
+
+```bash
+npm ci
+npm test
+```
+
+验证包括 Hugo 0.128 / 0.161 构建、fixture 站点、生成 HTML、RSS、sitemap、本地链接、CSS 资源、`html-validate`、headless Chrome、axe、交互行为和性能预算。CI 若使用 Linux Chrome，可设置 `CHROME_PATH=/usr/bin/google-chrome`。完整边界见 [`SHORT-CONTRACT.md`](./SHORT-CONTRACT.md)。
 
 ## 启用 Pagefind 搜索
 

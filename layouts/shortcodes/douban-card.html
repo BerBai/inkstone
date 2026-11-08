@@ -3,7 +3,7 @@
   <link
     rel="stylesheet"
     type="text/css"
-    href="/css/_shortcodes/douban-card.css"
+    href="{{ "css/_shortcodes/douban-card.css" | relURL }}"
   />
 {{- end }}
 
@@ -19,7 +19,7 @@
     <div class="shortcode-douban-card--stars-rating">
       <span class="shortcode-douban-card--logo-dou">豆</span>
       <span class="shortcode-douban-card--logo-rating">豆瓣评分</span>
-      <div class="shortcode-douban-card--stars shortcode-douban-card--stars-{{ math.Round (.Get "rating") }}"></div>
+      <div class="shortcode-douban-card--stars" style="--douban-rating-pct: {{ div (math.Round (.Get "rating" | default 0)) 10 | mul 100 }}%;"></div>
       <span class="shortcode-douban-card--rating">{{ .Get "rating" }}</span>
     </div>
     <div class="shortcode-douban-card--tags">

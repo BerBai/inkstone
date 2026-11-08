@@ -1,0 +1,26 @@
+baseURL = "https://example.com/blog/"
+title = "Inkstone Bilingual Fixture"
+theme = "inkstone"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = true
+enableRobotsTXT = true
+hasCJKLanguage = true
+
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    label = "English"
+    description = "Bilingual fixture in a baseURL subpath."
+    tagline = "Subpath fixture"
+    ogLocale = "en_US"
+
+[languages.zh-cn]
+  weight = 2
+  [languages.zh-cn.params]
+    label = "中文"
+    description = "部署在子路径下的双语 fixture。"
+    tagline = "子路径 fixture"
+    ogLocale = "zh_CN"
+
+[taxonomies]
+  tag = "tags"

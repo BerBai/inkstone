@@ -261,7 +261,7 @@ shortcode 接收 `image-before` 和 `image-after`（注意带前缀，是底层�
 {{</* image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" */>}}
 ```
 
-{{< image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" >}}
+{{< image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" alt="对比示例的前后两张图" >}}
 
 ### `gallery` —— 等高网格 + 灯箱
 

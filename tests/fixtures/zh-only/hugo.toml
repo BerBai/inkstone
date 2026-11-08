@@ -1,0 +1,17 @@
+baseURL = "https://example.com/zh-only/"
+title = "Inkstone 中文 Fixture"
+theme = "inkstone"
+defaultContentLanguage = "zh-cn"
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+hasCJKLanguage = true
+
+[languages.zh-cn]
+  weight = 1
+  [languages.zh-cn.params]
+    label = "中文"
+    description = "只有中文的最小站点 fixture。"
+    tagline = "中文最小 fixture"
+
+[taxonomies]
+  tag = "tags"

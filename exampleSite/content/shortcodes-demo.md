@@ -261,7 +261,7 @@ The shortcode takes `image-before` and `image-after` (note the prefix — requir
 {{</* image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" */>}}
 ```
 
-{{< image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" >}}
+{{< image-compare image-before="/img/compare-before.svg" image-after="/img/compare-after.svg" alt="Before and after demo images" >}}
 
 ### `gallery` — justified grid + lightbox
 

@@ -62,7 +62,7 @@
   {{- if $loop }}
     {{- $params = merge $params (dict "playlist" $id) }}
   {{- end }}
-  {{- with querify $params }}
+  {{- with querify "autoplay" $autoplay "controls" $controls "end" $end "mute" $mute "start" $start "loop" $loop }}
     {{- $src = printf "%s?%s" $src . }}
   {{- end }}
 

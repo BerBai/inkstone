@@ -3,7 +3,7 @@
   <link
     rel="stylesheet"
     type="text/css"
-    href="/css/_shortcodes/rating.css"
+    href="{{ "css/_shortcodes/rating.css" | relURL }}"
   />
 {{- end }}
 {{- $value := .Get "value" | default "0" | float -}}

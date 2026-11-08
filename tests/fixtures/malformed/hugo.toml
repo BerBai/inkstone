@@ -1,0 +1,15 @@
+baseURL = "https://example.com/malformed/"
+title = "Inkstone Malformed Fixture"
+theme = "inkstone"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    label = "English"
+    description = "Fixture that intentionally uses invalid shortcode arguments."
+    tagline = "Malformed fixture"
+
+[taxonomies]
+  tag = "tags"

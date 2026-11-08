@@ -1,0 +1,17 @@
+baseURL = "https://example.com/en-only/"
+title = "Inkstone English Fixture"
+theme = "inkstone"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+hasCJKLanguage = false
+
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    label = "English"
+    description = "English-only fixture with minimal site params."
+    tagline = "English-only fixture"
+
+[taxonomies]
+  tag = "tags"

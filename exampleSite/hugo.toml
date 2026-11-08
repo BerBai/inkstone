@@ -9,10 +9,9 @@ hasCJKLanguage = true
 
 [languages]
   [languages.en]
-    label = "English"
-    locale = "en"
     weight = 1
     [languages.en.params]
+      label = "English"
       description = "A minimal bilingual Hugo template for longreads."
       tagline = "A quiet writing space. Notes, thoughts, longreads."
       ogLocale = "en_US"
@@ -35,10 +34,9 @@ hasCJKLanguage = true
         weight = 4
 
   [languages.zh-cn]
-    label = "中文"
-    locale = "zh-cn"
     weight = 2
     [languages.zh-cn.params]
+      label = "中文"
       description = "极简双语 Hugo 写作模板，为长读、慢写而生。"
       tagline = "一方极简的写字处。笔记、思考、长读。"
       ogLocale = "zh_CN"

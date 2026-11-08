@@ -1,5 +1,5 @@
 {{- if $.Page.Store.Get "shortcode-pseudocode" }}
-  <script src="/js/_shortcodes/pseudocode.min.js"></script>
+  <script src="{{ "js/_shortcodes/pseudocode.min.js" | relURL }}"></script>
   <script type="text/javascript">
     let pseudocodeCaptionCount = 0;
     (function (d) {

@@ -59,7 +59,7 @@
     "t" $t
     "danmaku" $danmaku
   }}
-  {{- with querify $params }}
+  {{- with querify "bvid" $bvid "poster" $poster "autoplay" $autoplay "muted" $muted "t" $t "danmaku" $danmaku }}
     {{- $src = printf "%s?%s" $src . }}
   {{- end }}
 

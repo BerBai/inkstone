@@ -1,9 +1,10 @@
 {{- $label := .Get "label" }}
 
-{{- if not (.Parent.Store.Get "shortcode-tab-items") }}
-  {{- .Parent.Store.Set "shortcode-tab-items" slice }}
+{{- $parent := .Parent }}
+{{- if not ($parent.Page.Store.Get "shortcode-tab-items") }}
+  {{- $parent.Page.Store.Set "shortcode-tab-items" slice }}
 {{- end }}
 
 {{- with .Inner }}
-  {{- $.Parent.Store.Add "shortcode-tab-items" (dict "label" $label "content" . ) }}
+  {{- $parent.Page.Store.Add "shortcode-tab-items" (dict "label" $label "content" . ) }}
 {{- end }}

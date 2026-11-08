@@ -1,0 +1,22 @@
+baseURL = "https://example.com/all/"
+title = "Inkstone Shortcode Contract"
+theme = "inkstone"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+hasCJKLanguage = true
+
+[languages.en]
+  weight = 1
+  [languages.en.params]
+    label = "English"
+    description = "One-page smoke fixture for every built-in shortcode."
+    tagline = "Shortcode contract fixture"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[taxonomies]
+  tag = "tags"
