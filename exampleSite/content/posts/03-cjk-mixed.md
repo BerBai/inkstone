@@ -1,42 +1,37 @@
 ---
 title: "Mixing CJK and Latin Text"
-description: "How Inkstone handles typography when Chinese, Japanese, or Korean text mixes with Latin scripts."
+description: "A few thoughts on making Chinese and English read comfortably in the same article."
 date: 2026-04-15
 tags: ["cjk", "typography", "i18n"]
 ---
 
-This post is the English companion to a real CJK demo. Inkstone is opinionated about mixed-script typography — here's what the theme does for you when an article mixes 中文 with English.
+If you write in Chinese, dropping a few English words into a sentence is second nature. The hard part isn't writing — it's reading. Chinese characters are taller and fuller than Latin letters, and the moment the two sit side by side, a paragraph can start to feel cramped, or break in awkward places.
 
-## What Inkstone does for CJK
+Inkstone makes a few quiet defaults so you don't have to fuss over it:
 
-1. **Word counting respects characters, not whitespace tokens.** With `hasCJKLanguage = true` set site-wide, Hugo's `.WordCount` counts CJK characters individually instead of trying (and failing) to whitespace-tokenize them.
-2. **Reading time uses 501 chars/min on CJK pages**, the constant Hugo derives from CJK reading speed studies. Latin pages stay on the 213 word/min default.
-3. **Font stack prefers `LXGW WenKai`**, falling back through `Noto Serif SC` to system serif — chosen to keep CJK and Latin glyphs at compatible weights.
-4. **Line-height bumps to 1.7** on CJK pages (vs. 1.6 for pure Latin) to compensate for taller character bodies.
+- Body text uses a serif face that holds up over long reading, with Chinese and Latin kept at a similar weight.
+- Line spacing is generous, so your eyes don't tire as quickly.
+- The reading time at the top is estimated by counting Chinese characters rather than splitting on spaces, so the "min read" is closer to how long it actually takes.
+- Quotes, lists, and code blocks keep the same breathing room in both light and dark mode.
 
-## Why this matters in practice
+## A longer paragraph
 
-Mixed-script paragraphs are where naive themes break. A sentence like "我读了 Borges 的 *Ficciones*" has three writing systems and an italic stretch — and most themes either let the browser produce a fake oblique on CJK glyphs (ugly) or force a single font for everything (worse).
+A good piece of writing often begins with one precise sentence. Borges wrote, "my feet touch the shadow you are stepping on" — a line carrying an almost weightless little ontology. Translating that into English is hard, because English leans toward subject-verb-object while Chinese can tuck the action of "stepping" between subject and predicate, letting the shadow's "being stepped on" flare up for an instant.
 
-Inkstone scopes `font-style: normal` to the CJK-detected ranges in prose, so the Latin italics still render properly while the CJK characters stay upright in their natural form.
+What mixed scripts really test is rhythm. Chinese sentences can run long, carried by punctuation and pause; English words are more easily broken apart by spaces. Good typography doesn't try to "correct" either one — it lets each keep its own shape, so reading is never interrupted.
 
-## Punctuation and spacing
+## Quotes
 
-The `.prose` region opts into:
+> 「书是人类进步的阶梯。」——高尔基
 
-- `font-feature-settings: "palt"` for proportional alternates on CJK punctuation — `，` `。` `？` `！` collapse the half-em "air" they ship with by default.
-- `text-spacing-trim` to handle leading/trailing punctuation at line breaks.
-- A 0.15em soft gap between CJK characters and adjacent Latin/numeric runs (Pangu-style), scoped to prose only — UI chrome is left alone.
+> "Reading furnishes the mind only with materials of knowledge; it is thinking that makes what we read ours." — John Locke
 
-## Try it on a real Chinese post
+Chinese and English quotations can share the same page without either one having to give way; they just need to read as one continuous voice.
 
-The translation of this post — `03-cjk-mixed.zh-cn.md` — is where you can actually see the typography work. Switch the language toggle to view it.
+## Small details
 
-```text
-content/posts/03-cjk-mixed.md         # this English post
-content/posts/03-cjk-mixed.zh-cn.md   # the Chinese demo post
-```
+Chinese has no true italics, so emphasis in Chinese reads better as bold than as slanted type. And you don't need to force spaces between numbers, English abbreviations, and Chinese characters — as long as the spacing overall is even, nothing feels jumpy.
 
 ## Summary
 
-If you write a lot of bilingual prose, Inkstone aims to remove the typography distractions so you can focus on what the words are doing. Most of these decisions are scoped to `.prose` and won't bleed into UI chrome, so they're safe to compose with other themes' design tokens if you fork.
+If you write a lot of bilingual prose, hopefully these understated defaults take a little attention away from the page and put it back on the words.

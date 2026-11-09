@@ -149,6 +149,22 @@
     pointer-events: auto;
     transform: translateX(-50%) translateY(0) scale(1);
   }
+  /* Mobile: anchor the popover to the trigger's right edge so a centered
+   * 256px panel cannot push the document wider than the viewport
+   * (WCAG 2.2 1.4.10 reflow). Desktop keeps the centered layout. */
+  @media (max-width: 640px) {
+    .wechat-qr-popover {
+      left: auto;
+      right: 0;
+      transform: translateY(4px) scale(0.96);
+      transform-origin: bottom right;
+    }
+    .wechat-qr:hover .wechat-qr-popover,
+    .wechat-qr:focus-within .wechat-qr-popover {
+      transform: translateY(0) scale(1);
+    }
+    .wechat-qr-popover::after { left: auto; right: 1rem; transform: none; }
+  }
 }
 
 /* Callout title margins live OUTSIDE @layer components on purpose.

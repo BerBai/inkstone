@@ -69,12 +69,8 @@
       }
     } catch (_) { /* private mode / storage disabled — fall back to prefers-color-scheme */ }
   })();
-  (function () {
-    document.documentElement.classList.add("fonts-pending");
-    window.__inkstoneFontGateTimer = window.setTimeout(function () {
-      document.documentElement.classList.remove("fonts-pending");
-    }, 1800);
-  })();
+  /* font gate disabled: font-display:swap paints the fallback immediately,
+     so hiding content until the webfont arrives only delayed LCP. */
   window.antvG2Charts = window.antvG2Charts || [];
   window.getTheme = window.getTheme || function () {
     try {

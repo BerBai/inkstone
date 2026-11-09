@@ -42,12 +42,15 @@
         {{- end -}}
         {{- $iconName := index $iconMap $lang.Lang -}}
         {{- if not $iconName -}}{{- $iconName = "languages" -}}{{- end -}}
+        {{- $lbl := $lang.Params.label -}}
+        {{- if not $lbl -}}{{- if lt hugo.Version "0.158.0" -}}{{- $lbl = $lang.LanguageName -}}{{- else -}}{{- $lbl = $lang.Label -}}{{- end -}}{{- end -}}
+        {{- if not $lbl -}}{{- $lbl = $lang.Lang -}}{{- end -}}
         <a class="language-switcher__link"
            href="{{ $href }}"
            hreflang="{{ $lang.Lang }}"
            lang="{{ $lang.Lang }}"
-           aria-label="{{ or $lang.Params.label $lang.Language.LanguageName $lang.Language.Lang }}"
-           title="{{ or $lang.Params.label $lang.Language.LanguageName $lang.Language.Lang }}">{{ partial "icon.html" $iconName }}</a>
+           aria-label="{{ $lbl }}"
+           title="{{ $lbl }}">{{ partial "icon.html" $iconName }}</a>
       {{- end -}}
     {{- end -}}
   </div>

@@ -9,7 +9,7 @@ Inkstone is built for **longreads**. This post showcases the prose typography ru
 
 ## Headings
 
-The theme uses `LXGW WenKai` for body text in CJK contexts and falls back to `Noto Serif SC` and system serif fonts. Headings inherit the same family by default but can be re-styled per project via `assets/css/variable.css` design tokens.
+Body text uses a serif face chosen for long reading, with Chinese and Latin kept at a similar weight. Headings share the same family and can be restyled site-wide through the design variables.
 
 ### Third-level heading
 
@@ -21,7 +21,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 
 ## Paragraph spacing
 
-The default rhythm is 1.6× line-height with a comfortable max-width that keeps line length around 65–75 characters. This is tuned for desktop reading; on mobile the layout collapses to a single column with adjusted spacing.
+Line spacing is generous and paragraphs are clearly separated, so a long read doesn't tire the eyes. The text column stays narrow enough that the eye doesn't have to travel far across each line; on mobile it collapses to a single column.
 
 For mixed CJK/Latin text, the theme bumps line-height slightly to accommodate the taller character box of Chinese glyphs without making English paragraphs feel airy.
 
