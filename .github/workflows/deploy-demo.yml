@@ -1,8 +1,12 @@
 # Deploy exampleSite/ as the inkstone theme demo to GitHub Pages.
 # Custom domain: inkstone.125520.xyz (via CNAME file in exampleSite/static/).
 #
-# Trigger: any push to main that touches theme code or exampleSite.
-# Also runs on tag pushes (semver releases) and manual dispatch.
+# Trigger: any push to main that touches theme code or exampleSite, plus manual
+# dispatch. Tag pushes are deliberately NOT a trigger: the github-pages
+# environment only allows the `main` branch to deploy (deployment branch policy
+# = main), so a `v*` run could only ever end in "Tag is not allowed to deploy to
+# github-pages due to environment protection rules". A release tag points at a
+# commit already on main, which deploys through the normal push below.
 
 name: Deploy demo site
 
@@ -22,7 +26,6 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy-demo.yml'
-    tags: ['v*']
   workflow_dispatch:
 
 permissions:
