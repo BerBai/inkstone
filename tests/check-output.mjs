@@ -27,14 +27,17 @@ function walk(directory) {
 walk(root);
 
 function localPathsFromHTML(html) {
-  const attributes = [...html.matchAll(/\b(?:href|src)\s*=\s*["']([^"']+)["']/g)]
-    .map((match) => match[1]);
+  // Hugo --minify strips attribute quotes, so accept quoted AND unquoted values.
+  const attributes = [...html.matchAll(/\b(?:href|src)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/g)]
+    .map((match) => match[1] ?? match[2] ?? match[3]);
   return attributes;
 }
 
 function checkLocalPath(path, source) {
   if (path.startsWith('/')) {
-    let withoutBase = path;
+    // Percent-encoded non-ASCII paths (/tags/%E5%B7%A5%E5%85%B7/) map to UTF-8
+    // directory names on disk; decode before the existence check.
+    let withoutBase = decodeURIComponent(path.replace(/[?#].*$/, ''));
     if (basePath !== '/' && withoutBase.startsWith(basePath)) {
       withoutBase = withoutBase.slice(basePath.length - 1);
     }
