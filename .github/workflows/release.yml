@@ -10,13 +10,33 @@ permissions:
   contents: write
 
 jobs:
+  # Gate: a release tag must pass the same suite as a main push before anything
+  # is published. The workflow is reused rather than copied so the two never
+  # drift apart.
+  validate:
+    uses: ./.github/workflows/validate.yml
+
   release:
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout tag
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Assert package.json version matches the tag
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          pkg="$(python3 -c "import json; print(json.load(open('package.json'))['version'])")"
+          echo "tag=${tag} package.json=${pkg}"
+          if [ "v${pkg}" != "${tag}" ]; then
+            echo "::error::tag ${tag} does not match package.json version ${pkg} — bump package.json before tagging"
+            exit 1
+          fi
 
       - name: Package source archives
         shell: bash

@@ -1,0 +1,10 @@
+# Excluded from `git archive` output — i.e. from the release .tar.gz / .zip
+# assets attached by .github/workflows/release.yml.
+#
+# export-ignore does NOT affect cloning: submodule users, Hugo Modules consumers
+# and themes.gohugo.io all read the git tree, so nothing they need is removed.
+# exampleSite/ is kept on purpose so a downloaded archive can still be built.
+
+tests/      export-ignore
+.github/    export-ignore
+AUDIT-*.md  export-ignore

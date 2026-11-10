@@ -19,6 +19,7 @@
 - [ ] `images/screenshot.png`（≥1500×1000，3:2）+ `images/tn.png`（≥900×600，3:2）尺寸校验通过
 - [ ] README.md / README.en.md 双语同步、所有图片用 `https://raw.githubusercontent.com/BerBai/inkstone/main/...` 绝对路径
 - [ ] 破坏性变更已在 release note 顶部 ⚠️ 标注 + 提供 migration 步骤
+- [ ] `package.json` 的 `version` 已 bump 到本次 tag（`v0.2.1` ↔ `0.2.1`，CI 会硬校验）
 - [ ] 本地 `git status` 干净，所有改动已合并到 `main`
 
 ## 打 tag + 发 Release
@@ -35,7 +36,12 @@ git tag -a v0.2.0 -m "Inkstone v0.2.0"
 git push origin v0.2.0
 ```
 
-push tag 后，GitHub Actions 会自动打包 `tar.gz` / `zip` 并创建 Release。
+push tag 后 GitHub Actions 顺序做三件事，任何一步失败都不发 Release：
+
+1. **先跑 `Validate theme`**（与 main 上同一份 `tests/validate.sh`，通过 `workflow_call` 复用，`needs` 卡住）；失败则 Release job 不启动。
+2. 校验 `package.json` 的 `version` 与 tag 一致（`v0.2.1` ↔ `0.2.1`），不一致直接 `exit 1`。
+3. 打包 `tar.gz` / `zip` 并创建 Release（`git archive`，`tests/`、`.github/`、`AUDIT-*.md` 由 `.gitattributes` 排除；`static/fonts/` 全量字体是构建输入，必须留在包里）。
+
 如需手工补发，可直接重跑 `Release theme` workflow，或用 `gh release upload` 补资产。
 
 ## Release Note 模板
