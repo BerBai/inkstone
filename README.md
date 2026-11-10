@@ -68,6 +68,7 @@ hugo server
 - **Tailwind v4 CLI**（详见下方 [Tailwind v4 Setup](#tailwind-v4-setup) 章节）
 - **Node.js**（仅当用 npm 装 Tailwind 时；standalone CLI 无需 Node）
 - **Pagefind**（可选，仅用搜索时）：`npm install -D pagefind`，构建时 `pagefind --site public`
+- **fontTools + brotli**（可选，`pip install fonttools brotli`）：`npm run build` 会在 `hugo` 之后运行 `scripts/subset-fonts.mjs`，把随主题发布的 CJK 字体裁到站点实际用到的字形（实测 −75%～−87% 字节），并给字体/样式表加内容指纹以配合 `immutable` 缓存。没有 Python 环境时该步骤自动跳过，构建仍成功，只是字体保持全尺寸、文件名不带指纹。
 
 ## Tailwind v4 Setup
 

@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "hugo server -s exampleSite --themesDir ../..",
-    "build": "hugo --gc --minify -s exampleSite --themesDir ../..",
+    "build": "hugo --gc --minify -s exampleSite --themesDir ../.. && node scripts/subset-fonts.mjs exampleSite/public",
     "clean": "rm -rf exampleSite/public exampleSite/public-0.128 exampleSite/resources resources public tests/.work",
     "test": "tests/validate.sh"
   },

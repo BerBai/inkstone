@@ -150,4 +150,21 @@ css_bytes="$(wc -c < "$main_css" | tr -d '[:space:]')"
 [[ "$font_bytes" -le 1410000 ]] || { echo "preloaded fonts exceed 1410000 bytes: $font_bytes"; exit 1; }
 echo "Performance budget passed: HTML=$html_bytes CSS=$css_bytes core JS=$core_js_bytes preloaded fonts=$font_bytes"
 
+echo "==> Checking D2 font subsetting (needs python3 + fontTools + brotli)"
+sum_fonts() { local t=0 f; for f in "$WORK/example-current/fonts/"*.woff2; do t=$((t + $(wc -c < "$f"))); done; echo "$t"; }
+fonts_before="$(sum_fonts)"
+node "$THEME_ROOT/scripts/subset-fonts.mjs" "$WORK/example-current"
+fonts_after="$(sum_fonts)"
+echo "fonts/ total: $fonts_before -> $fonts_after bytes"
+if python3 -c 'import fontTools, brotli' 2>/dev/null; then
+  [[ "$fonts_after" -lt "$fonts_before" ]] || { echo "subset step did not shrink fonts/ ($fonts_before -> $fonts_after)"; exit 1; }
+  # every reference must still resolve
+  missing="$(grep -rhoE 'fonts/[a-z0-9.-]+\.woff2' "$WORK/example-current" \
+    --include='*.html' --include='*.css' --include='*.js' | sort -u \
+    | while read -r ref; do [[ -f "$WORK/example-current/$ref" ]] || echo "$ref"; done)"
+  [[ -z "$missing" ]] || { echo "dangling font refs: $missing"; exit 1; }
+else
+  echo "fontTools unavailable — subset step skipped (expected on machines without Python)"
+fi
+
 echo "ALL VALIDATION PASSED"

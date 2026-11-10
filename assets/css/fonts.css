@@ -1,10 +1,13 @@
 /* ============================================================
  * Self-hosted webfonts — T3
  * Noto Serif SC (400 / 600) + LXGW WenKai Lite
- * Each weight split into 3 unicode-range segments for lazy loading:
- *   - latin (basic ASCII + extended punctuation)
- *   - cjk-common (high-frequency CJK Unified Ideographs)
+ * Each weight split into unicode-range segments for lazy loading:
+ *   - latin (ASCII, extended punctuation, fullwidth forms)
+ *   - cjk-common (high-frequency CJK Unified Ideographs + arrows)
  *   - cjk-ext (CJK Extension A/B + supplementary planes)
+ * Each range must only claim code points the file actually contains, otherwise
+ * the browser skips the whole family for that character and renders it in the
+ * fallback face (visible font mixing).
  * Files live at /static/fonts/, served from /fonts/ at runtime.
  * Noto Serif SC is render-critical for the theme identity. Use `block`
  * so first paint does not expose a fallback-font layout that later turns
@@ -21,8 +24,8 @@
   src: url("../fonts/noto-serif-sc-400-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2212, U+2215, U+FEFF, U+FFFD, U+FF00-FFEF;
 }
 
 /* ---------- Noto Serif SC 400 — CJK common (high-frequency) ---------- */
@@ -33,7 +36,7 @@
   font-display: swap;
   src: url("../fonts/noto-serif-sc-400-cjk-common.woff2") format("woff2");
   unicode-range:
-    U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
+    U+2190-2193, U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
     U+4E00-9FFF;
 }
 
@@ -48,8 +51,8 @@
   src: url("../fonts/noto-serif-sc-600-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2212, U+2215, U+FEFF, U+FFFD, U+FF00-FFEF;
 }
 
 /* ---------- Noto Serif SC 600 — CJK common ---------- */
@@ -60,7 +63,7 @@
   font-display: swap;
   src: url("../fonts/noto-serif-sc-600-cjk-common.woff2") format("woff2");
   unicode-range:
-    U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
+    U+2190-2193, U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
     U+4E00-9FFF;
 }
 
@@ -85,7 +88,7 @@
   src: url("../fonts/lxgw-wenkai-lite-latin.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+2000-206F, U+20AC, U+2122, U+FEFF, U+FFFD;
+    U+2000-206F, U+20AC, U+2122, U+FEFF, U+FFFD, U+FF00-FFEF;
 }
 
 /* ---------- LXGW WenKai Lite — CJK common ---------- */
@@ -96,7 +99,7 @@
   font-display: optional;
   src: url("../fonts/lxgw-wenkai-lite-cjk-common.woff2") format("woff2");
   unicode-range:
-    U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
+    U+2190-2193, U+3000-303F, U+3041-309F, U+30A0-30FF, U+FF00-FFEF,
     U+4E00-9FFF;
 }
 
