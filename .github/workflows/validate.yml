@@ -37,6 +37,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Assert version files agree
+        # data/inkstone.toml is rendered in the footer; package.json is what the
+        # release job checks. They drifted at v0.2.1 and shipped "v0.2.0" on a
+        # v0.2.1 site, so keep them locked together on every push instead.
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(python3 -c "import json; print(json.load(open('package.json'))['version'])")"
+          data="$(sed -n 's/^version[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' data/inkstone.toml)"
+          echo "package.json=${pkg} data/inkstone.toml=${data}"
+          if [ "${pkg}" != "${data}" ]; then
+            echo "::error::package.json (${pkg}) and data/inkstone.toml (${data}) disagree"
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22

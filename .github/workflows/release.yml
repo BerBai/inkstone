@@ -25,18 +25,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Assert package.json version matches the tag
+      - name: Assert version files match the tag
         if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
+          # data/inkstone.toml is what the footer renders, so a tag that bumps
+          # only package.json ships a site that still claims the old version.
           tag="${GITHUB_REF_NAME}"
           pkg="$(python3 -c "import json; print(json.load(open('package.json'))['version'])")"
-          echo "tag=${tag} package.json=${pkg}"
-          if [ "v${pkg}" != "${tag}" ]; then
-            echo "::error::tag ${tag} does not match package.json version ${pkg} — bump package.json before tagging"
-            exit 1
-          fi
+          data="$(sed -n 's/^version[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' data/inkstone.toml)"
+          echo "tag=${tag} package.json=${pkg} data/inkstone.toml=${data}"
+          for v in "${pkg}" "${data}"; do
+            if [ "v${v}" != "${tag}" ]; then
+              echo "::error::tag ${tag} does not match ${v} — bump both package.json and data/inkstone.toml before tagging"
+              exit 1
+            fi
+          done
 
       - name: Package source archives
         shell: bash

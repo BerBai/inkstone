@@ -19,7 +19,7 @@ During the `0.x` phase, small breakages are allowed within MINOR (Hugo theme con
 - [ ] `images/screenshot.png` (≥1500×1000, 3:2) and `images/tn.png` (≥900×600, 3:2) dimension checks pass
 - [ ] README.md / README.en.md kept in sync; all images use absolute `https://raw.githubusercontent.com/BerBai/inkstone/main/...` URLs
 - [ ] Breaking changes ⚠️-flagged at the top of the release note with migration steps
-- [ ] `package.json` `version` bumped to this tag (`v0.2.1` ↔ `0.2.1`; CI enforces it)
+- [ ] `package.json` **and** `data/inkstone.toml` `version` (the value the footer renders) both bumped to this tag (`v0.2.1` ↔ `0.2.1`; CI enforces both against the tag)
 - [ ] Local `git status` clean, all changes merged into `main`
 
 ## Tag and Release
@@ -42,7 +42,7 @@ failure in any of them stops the Release:
 1. **Runs `Validate theme` first** — the same `tests/validate.sh` used on `main`,
    reused via `workflow_call` and gated with `needs`; if it fails, the Release
    job never starts.
-2. Asserts `package.json`'s `version` matches the tag (`v0.2.1` ↔ `0.2.1`) and
+2. Asserts `package.json`'s and `data/inkstone.toml`'s `version` both match the tag (`v0.2.1` ↔ `0.2.1`) and
    exits 1 on a mismatch.
 3. Packages the `tar.gz` / `zip` (`git archive`) and creates the Release.
    `tests/`, `.github/` and `AUDIT-*.md` are excluded via `.gitattributes`;
